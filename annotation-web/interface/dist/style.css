@@ -20,22 +20,32 @@
 }
 
 #waiter_doc_control_frame, #waiter_mtr_control_frame, #waiter_sec_control_frame, #waiter_mkb_control_frame {
-    display: flex;
-    margin-left: auto;
+    display: inline-block;
     margin-right: 20px;
-    margin-bottom: 10px;
 }
 
-#waiter_snip {
-    width: 800px;
+.div_snip {
     background-color: #FFFFFF;
     box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
-    display: inline-block;
     font-size: 1.5em;
-    text-align: justify;
+    text-align: left;
     padding: 10px;
     margin-top: 20px;
     white-space: pre-line;
+}
+
+.tgt_snip {
+    display: inline-block;
+    width: 500px;
+}
+
+#src_snip {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    height: 300px;
+    overflow-y: scroll;
 }
 
 .waiter_highlight {
@@ -43,11 +53,11 @@
     border-radius: 3px;
 }
 
-#waiter_responses {
-    margin-left: auto;
-    margin-right: auto;
-    width: 600px;
+.waiter_responses {
+    margin-left: 20px;
+    width: 400px;
     font-size: 1.3em;
+    display: inline-block;
 }
 
 #save_button {
@@ -58,17 +68,18 @@
     margin-top: 20px;
 }
 
-#waiter_responses div {
-    display: flex;
+.waiter_responses div {
+    text-align: left;
 }
 
 .waiter_response_single {
-    display: inline-block;
     margin-left: auto;
+    width: 100%;
+    text-align: right !important;
 }
 
 input[type=range] {
-    width: 200px
+    width: 100px
 }
 
 .waiter_response_single div:last-child {

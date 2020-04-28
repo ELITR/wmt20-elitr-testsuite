@@ -1,17 +1,17 @@
-import { DocumentManager } from "./document_manager"
+import { DocumentManager, AnnotationDocument, DocumentArray } from "./document_manager"
 import * as $ from 'jquery'
-import { FILES as DOCS, MTS } from "./document_loader"
+import { FILES, MTS } from "./document_loader"
+import { WaiterDisplayer } from "./waiter_displayer"
 
 export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
-    private waiter_snip: JQuery<HTMLDivElement> = $('#waiter_snip')
+    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_tgt_table')
 
     private manager: DocumentManager
-    private CONTEXT_SIZE: number = 150
 
     private currentDoc: number
     private currentMarkable: number
-    private currentMT: number
+
     private currentSection: number
 
     public constructor(private AID: string) {
@@ -20,7 +20,6 @@ export class WaiterControl {
         // TODO
         this.currentDoc = 0
         this.currentMarkable = 0
-        this.currentMT = 0
         this.currentSection = 0
 
         $('#next_doc').click(() => this.move_doc(+1))
@@ -40,73 +39,56 @@ export class WaiterControl {
     }
 
     public display_current() {
-        this.display(MTS[this.currentMT], DOCS[this.currentDoc], this.currentMarkable, this.currentSection)
+        this.display(FILES[this.currentDoc], this.currentMarkable, this.currentSection)
     }
 
-    private display(mt: string, file: string, markable: number, index: number) {
-        let [content, position]: [string, number] = this.manager.documents.get(file).display(markable, index)
+    private display(file: string, markable: number, index: number) {
+        let snippets: Array<[string, string]> = this.manager.getAllMT(file).map(([key, doc]) => [key, doc.display(markable, index)])
+        let content = WaiterDisplayer.generateElements(snippets)
+        this.waiter_tgt_table.html(content)
+    }
 
-        // left context align to neares non-space
-        let offset_a = 0
-        if (position - this.CONTEXT_SIZE > 0) {
-            for (; offset_a < this.CONTEXT_SIZE; offset_a++) {
-                if (content[position - this.CONTEXT_SIZE + offset_a].match(/\s/)) {
-                    break
-                }
-            }
-            if (offset_a == this.CONTEXT_SIZE) {
-                throw new Error('Could not create reasonable left context')
-            }
-        }
+    private current_sig(): string {
+        return FILES[this.currentDoc]
+    }
 
-        // right context align to neares non-space
-        let offset_b = 0
-        if (position + this.CONTEXT_SIZE < content.length) {
-            for (; offset_b < this.CONTEXT_SIZE; offset_b++) {
-                if (content[position + this.CONTEXT_SIZE - offset_b].match(/\s/)) {
-                    break
-                }
-            }
-            if (offset_b == this.CONTEXT_SIZE) {
-                throw new Error('Could not create reasonable right context')
-            }
-        }
+    private current_docs(): DocumentArray {
+        return this.manager.documents.filter(([key, doc], index, arr) => key.startsWith(this.current_sig()))
+    }
 
-        content = content.substr(Math.max(0, position - this.CONTEXT_SIZE + offset_a), 2 * this.CONTEXT_SIZE - offset_b)
-        this.waiter_snip.html(content)
+    private example_doc() : AnnotationDocument {
+        // This should only work because I was promised there would be the same layout of markables in every doc given a single source
+        return this.current_docs()[0][1]
     }
 
     private move_doc(offset: number) {
-        if (this.currentDoc + offset < 0 || this.currentDoc + offset >= DOCS.length) {
+        if (this.currentDoc + offset < 0 || this.currentDoc + offset >= FILES.length) {
             throw Error('Document index out of bounds')
         }
         this.currentDoc += offset
         this.reset_mkb()
         this.reset_sec()
-        this.reset_mtr()
         this.display_current()
         this.update_stats()
     }
 
     private move_mkb(offset: number) {
-        const markable_keys = this.manager.documents.get(DOCS[this.currentDoc]).markable_keys
+        const markable_keys = this.example_doc().markable_keys
         if (this.currentMarkable + offset < 0 || this.currentMarkable + offset >= markable_keys.length) {
             throw Error('Markable index out of bounds')
         }
         this.currentMarkable += offset
         this.reset_sec()
-        this.reset_mtr()
         this.display_current()
         this.update_stats()
     }
 
     private move_sec(offset: number) {
-        const sections = this.manager.documents.get(DOCS[this.currentDoc]).get_sections(this.currentMarkable)
+        const sections = this.example_doc().get_sections(this.currentMarkable)
         if (this.currentSection + offset < 0 || this.currentSection + offset >= sections.length) {
             throw Error('Section index out of bounds')
         }
         this.currentSection += offset
-        this.reset_mtr()
         this.display_current()
         this.update_stats()
     }
@@ -115,20 +97,15 @@ export class WaiterControl {
         this.currentSection = 0
     }
 
-    private reset_mtr() {
-        this.currentMT = 0
-    }
-
     private reset_mkb() {
         this.currentMarkable = 0
     }
 
     private update_stats() {
-        let currentMarkables = this.manager.documents.get(DOCS[this.currentDoc]).markable_keys
-        let currentSections = this.manager.documents.get(DOCS[this.currentDoc]).get_sections(this.currentMarkable)
-        $('#totl_doc').text(`${this.currentDoc + 1}/${DOCS.length}`)
+        let currentMarkables = this.example_doc().markable_keys
+        let currentSections = this.example_doc().get_sections(this.currentMarkable)
+        $('#totl_doc').text(`${this.currentDoc + 1}/${FILES.length}`)
         $('#totl_mkb').text(`${this.currentMarkable + 1}/${currentMarkables.length}`)
         $('#totl_sec').text(`${this.currentSection + 1}/${currentSections.length}`)
-        $('#totl_mtr').text(`${this.currentMT + 1}/${MTS.length}`)
     }
 }

@@ -20,73 +20,50 @@
   </div>
 
   <div id='waiter_frame' style='margin-top: 10px; display: none;'>
-    <div id='waiter_doc_control_frame'>
-      <div style='margin-left: auto;'>
+    <div style='width: 100%; text-align: center'>
+      <div id='waiter_doc_control_frame'>
         <input id='prev_doc' type='button' class='text_button' value='PREV DOCUMENT'>
         <input id='next_doc' type='button' class='text_button' value='NEXT DOCUMENT'>
+        <span id='totl_doc' style='margin-left: 10px;'>Total: 5</span>
       </div>
-      <span id='totl_doc' style='margin-left: 10px;'>Total: 5</span>
-    </div>
 
-    <div id='waiter_mkb_control_frame'>
-      <div style='margin-left: auto;'>
+      <div id='waiter_mkb_control_frame'>
         <input id='prev_mkb' type='button' class='text_button' value='PREV MARKABLE'>
         <input id='next_mkb' type='button' class='text_button' value='NEXT MARKABLE'>
+        <span id='totl_mkb' style='margin-left: 10px;'>Total: 5</span>
       </div>
-      <span id='totl_mkb' style='margin-left: 10px;'>Total: 5</span>
-    </div>
 
-    <div id='waiter_sec_control_frame'>
-      <div style='margin-left: auto;'>
+      <div id='waiter_sec_control_frame'>
         <input id='prev_sec' type='button' class='text_button' value='PREV SECTION'>
         <input id='next_sec' type='button' class='text_button' value='NEXT SECTION'>
+        <span id='totl_sec' style='margin-left: 10px;'>Total: 6</span>
       </div>
-      <span id='totl_sec' style='margin-left: 10px;'>Total: 6</span>
+
     </div>
 
-    <div id='waiter_mtr_control_frame'>
-      <div style='margin-left: auto;'>
-        <input id='prev_mtr' type='button' class='text_button' value='PREV MT'>
-        <input id='next_mtr' type='button' class='text_button' value='NEXT MT'>
-      </div>
-      <span id='totl_mtr' style='margin-left: 10px;'>Total: 6</span>
-    </div>
-
-    <div style='text-align: center;'>
-      <div id='waiter_snip'></div>
-    </div>
-    
     <br>
 
-    <div id='waiter_responses'>
-      <div>
-        <span>Was it translated?</span>
-        <div class='waiter_response_single'>
-          <input id='val_trans' class='synctext' type='checkbox' checked='false'>
-          <div id='val_trans_text'>Yes</div>
-        </div>
-      </div>
-      <div>
-        <span>Acceptable translation?</span>
-        <div class='waiter_response_single'>
-          <input id='val_accpt' class='synctext' type='range' min='0', max='1', step='0.1' value='0.5'>
-          <div id='val_accpt_text'>0.7</div>
-        </div>
-      </div>
-      <div>
-        <span>Non-conflicting?</span>
-        <div class='waiter_response_single'>
-          <input id='val_nonconf' class='synctext' type='range' min='0', max='1', step='0.1' value='0.5'>
-          <div id='val_nonconf_text'>0.3</div>
-        </div>
-      </div>
-      <br>
-      <div>
-        Something else.. There's a lot of space from the UX point of view.
-      </div>
-      <input id='save_button' type='button' value='SAVE'>
+    <div id='src_snip' class='div_snip'>
+      Charles University, known also as Charles University in Prague (Czech: Univerzita Karlova; Latin: Universitas
+      Carolina; German: Karls-Universität) or historically as the University of Prague (Latin: Universitas Pragensis),
+      is the oldest and largest university in the Czech Republic. Founded in 1348, it was the first university in
+      Central Europe.[3] It is one of the oldest universities in Europe in continuous operation.[4] Today, the
+      university consists of 17 faculties located in Prague, Hradec Králové and Pilsen. Its academic publishing house is
+      Karolinum Press. The university also operates several museums and two botanical gardens.
+
+      Its seal shows its protector Emperor Charles IV, with his coats of arms as King of the Romans and King of Bohemia,
+      kneeling in front of Saint Wenceslas, the patron saint of Bohemia. It is surrounded by the inscription, Sigillum
+      Universitatis Scolarium Studii Pragensis (English: Seal of the Prague academia).[5]
     </div>
+
+    <div id='waiter_tgt_table' style='text-align: center;'></div>
+
+    <br>
+    <input id='save_button' type='button' value='SAVE'>
+
   </div>
+
+
 </body>
 
 </html>
