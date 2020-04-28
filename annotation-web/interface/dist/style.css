@@ -1,0 +1,78 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+.text_button:hover {
+    cursor: pointer;
+}
+
+.border_gap {
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    padding: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+}
+
+.border_gap div {
+    /* align top bar children to the bottom */
+    margin-top: auto;
+}
+
+#waiter_doc_control_frame, #waiter_mtr_control_frame, #waiter_sec_control_frame, #waiter_mkb_control_frame {
+    display: flex;
+    margin-left: auto;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+#waiter_snip {
+    width: 800px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    font-size: 1.5em;
+    text-align: justify;
+    padding: 10px;
+    margin-top: 20px;
+    white-space: pre-line;
+}
+
+.waiter_highlight {
+    background-color: rgb(255, 128, 128);
+    border-radius: 3px;
+}
+
+#waiter_responses {
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    font-size: 1.3em;
+}
+
+#save_button {
+    font-size: 1.2em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+#waiter_responses div {
+    display: flex;
+}
+
+.waiter_response_single {
+    display: inline-block;
+    margin-left: auto;
+}
+
+input[type=range] {
+    width: 200px
+}
+
+.waiter_response_single div:last-child {
+    width: 60px;
+    display: inline-block !important;
+    text-align: right;
+}
