@@ -1,23 +1,27 @@
-# WMT20 Elitr Annotation frontend
+# WMT20 Elitr Annotation Frontend
 
-Build with TS/Webpack.
+Built with TS/Webpack.
 
-## Issue tracker
+## Building WMT20 Elitr Annotation Project
 
-### Phase 1
+### Build interface
 
-- Sections of 5 sentences
-- Context of 1 sentence
+After `git clone` and `npm install` run the following command, which outputs the whole frontend to `interface/dist`.
 
-### Phase 2
+```
+npm run build
+```
 
-- Load source documents
-- Markables in the source document
-- Map markables?
-- Better context generation
-- Send an email about the progress
-- Default answers should be "None". Difference between not answered and answered.
+For development server (dev/debug purposes) run the following command. The server is then accessible locally and watches for source file changes.
 
-### Phase 3
+```
+npm run dev
+```
 
-- Non-conflicting
+### Prepare documents
+
+TODO
+
+### Load documents
+
+TODO

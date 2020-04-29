@@ -5,7 +5,7 @@ export { DEVMODE_ as DEVMODE }
 
 import { WaiterControl } from "./waiter_control"
 import * as $ from 'jquery'
-import { PageUtils } from "./page_utils"
+import { PageUtils } from "./misc/page_utils"
 
 $('#start_annotation').click(() => {
     let AIDEl = $('#annotator_id')
@@ -26,4 +26,3 @@ if (DEVMODE) {
     $('#start_annotation').trigger('click')
 }
 
-PageUtils.syncval()

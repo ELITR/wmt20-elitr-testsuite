@@ -1,10 +1,13 @@
-import { DocumentManager, AnnotationDocument, DocumentArray } from "./document_manager"
+import { DocumentManager, DocSrcArray, DocTgtArray } from "./documents/document_manager"
 import * as $ from 'jquery'
-import { FILES, MTS } from "./document_loader"
+import { FILES, MTS } from "./documents/document_loader"
 import { WaiterDisplayer } from "./waiter_displayer"
+import { PageUtils } from "./misc/page_utils"
+import { DocSrc, DocTgt } from "./documents/document"
 
 export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
+    private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
     private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_tgt_table')
 
     private manager: DocumentManager
@@ -33,9 +36,10 @@ export class WaiterControl {
         new Promise(async () => {
             await this.manager.load()
             this.update_stats()
-
             this.display_current()
+            this.update_buttons()
         })
+
     }
 
     public display_current() {
@@ -43,22 +47,29 @@ export class WaiterControl {
     }
 
     private display(file: string, markable: number, index: number) {
-        let snippets: Array<[string, string]> = this.manager.getAllMT(file).map(([key, doc]) => [key, doc.display(markable, index)])
+        let current_src = this.current_doc_src()
+        this.waiter_src_snip.html(current_src.display(markable, index))
+
+        let snippets: Array<[string, string]> = this.manager.getAllMT(file).map(
+            ([key, doc]) => [key, doc.display(current_src, markable, index)]
+        )
+
         let content = WaiterDisplayer.generateElements(snippets)
         this.waiter_tgt_table.html(content)
+        
+        PageUtils.syncval()
     }
 
     private current_sig(): string {
         return FILES[this.currentDoc]
     }
 
-    private current_docs(): DocumentArray {
+    private current_docs(): DocTgtArray {
         return this.manager.documents.filter(([key, doc], index, arr) => key.startsWith(this.current_sig()))
     }
 
-    private example_doc() : AnnotationDocument {
-        // This should only work because I was promised there would be the same layout of markables in every doc given a single source
-        return this.current_docs()[0][1]
+    private current_doc_src(): DocSrc {
+        return this.manager.documents_src.filter(([key, doc], index, arr) => key == FILES[this.currentDoc])[0][1]
     }
 
     private move_doc(offset: number) {
@@ -73,7 +84,7 @@ export class WaiterControl {
     }
 
     private move_mkb(offset: number) {
-        const markable_keys = this.example_doc().markable_keys
+        const markable_keys = this.current_doc_src().markable_keys
         if (this.currentMarkable + offset < 0 || this.currentMarkable + offset >= markable_keys.length) {
             throw Error('Markable index out of bounds')
         }
@@ -84,7 +95,7 @@ export class WaiterControl {
     }
 
     private move_sec(offset: number) {
-        const sections = this.example_doc().get_sections(this.currentMarkable)
+        const sections = this.current_doc_src().get_sections(this.currentMarkable)
         if (this.currentSection + offset < 0 || this.currentSection + offset >= sections.length) {
             throw Error('Section index out of bounds')
         }
@@ -102,10 +113,24 @@ export class WaiterControl {
     }
 
     private update_stats() {
-        let currentMarkables = this.example_doc().markable_keys
-        let currentSections = this.example_doc().get_sections(this.currentMarkable)
+        let currentMarkables = this.current_doc_src().markable_keys
+        let currentSections = this.current_doc_src().get_sections(this.currentMarkable)
         $('#totl_doc').text(`${this.currentDoc + 1}/${FILES.length}`)
         $('#totl_mkb').text(`${this.currentMarkable + 1}/${currentMarkables.length}`)
         $('#totl_sec').text(`${this.currentSection + 1}/${currentSections.length}`)
+        this.update_buttons()
+    }
+
+    private update_buttons() {
+        $('#next_doc').prop('disabled', this.currentDoc >= FILES.length - 1)
+        $('#prev_doc').prop('disabled', this.currentDoc <= 0)
+
+        const markable_keys = this.current_doc_src().markable_keys
+        $('#next_mkb').prop('disabled', this.currentMarkable >= markable_keys.length - 1)
+        $('#prev_mkb').prop('disabled', this.currentMarkable <= 0)
+
+        const sections = this.current_doc_src().get_sections(this.currentMarkable)
+        $('#next_sec').prop('disabled', this.currentSection >= sections.length - 1)
+        $('#prev_sec').prop('disabled', this.currentSection <= 0)
     }
 }

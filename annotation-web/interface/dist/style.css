@@ -37,6 +37,8 @@
 .tgt_snip {
     display: inline-block;
     width: 500px;
+    height: 250px;
+    overflow-y: scroll;
 }
 
 #src_snip {
@@ -48,9 +50,14 @@
     overflow-y: scroll;
 }
 
-.waiter_highlight {
+.waiter_highlight_src {
     background-color: rgb(255, 128, 128);
     border-radius: 3px;
+}
+
+.waiter_highlight_tgt {
+    text-decoration: underline;
+    text-decoration-style: dotted
 }
 
 .waiter_responses {
