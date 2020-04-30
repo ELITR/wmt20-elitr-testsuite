@@ -3,7 +3,7 @@ declare var DEVMODE: boolean;
 var DEVMODE_: boolean = DEVMODE
 export { DEVMODE_ as DEVMODE }
 
-import { WaiterControl } from "./waiter_control"
+import { WaiterControl } from "./waiter/waiter_control"
 import * as $ from 'jquery'
 import { PageUtils } from "./misc/page_utils"
 

@@ -20,7 +20,6 @@ export class DocSrc {
             let indexB = raw.indexOf('</m>', offset) - 6 - 2 - markableClass.length
             offset = indexB
             raw = raw.replace(MARKABLE_SEARCH, markableContent)
-            // console.log(markableClass, markableContent, indexA, indexB)
 
             if (this.markables.has(markableClass)) {
                 this.markables.get(markableClass).push([indexA, indexB])
@@ -40,7 +39,7 @@ export class DocSrc {
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
 
-        output = TextUtils.context(output, indicies[0], DocSrc.MIN_CHAR_CONTEXT, DocSrc.SENT_CONTEXT)
+        output = TextUtils.context(output, Math.round((indicies[0] + indicies[1]) / 2), DocSrc.MIN_CHAR_CONTEXT, DocSrc.SENT_CONTEXT)
 
         return output
     }
@@ -59,7 +58,9 @@ export class DocTgt {
     constructor(public raw: string) { }
 
     public display(doc_src: DocSrc, markable: number, index: number): string {
-        let position = doc_src.get_sections(markable)[index][0]
+        let indicies: [number, number] = doc_src.get_sections(markable)[index]
+        let position = Math.round((indicies[0] + indicies[1]) / 2)
+
         // very naive segment alignment
         let projection_position = position / doc_src.raw.length * this.raw.length
 

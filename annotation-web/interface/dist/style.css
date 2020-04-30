@@ -51,8 +51,9 @@
 }
 
 .waiter_highlight_src {
-    background-color: rgb(255, 128, 128);
+    background-color: #9fc0a0;
     border-radius: 3px;
+    border: 1px solid black;
 }
 
 .waiter_highlight_tgt {
@@ -60,11 +61,16 @@
     text-decoration-style: dotted
 }
 
-.waiter_responses {
+.waiter_response {
     margin-left: 20px;
+    margin-top: 50px;
     width: 400px;
     font-size: 1.3em;
     display: inline-block;
+
+    /* This is because it's inelegant to create a parent element */
+    position: relative;
+    top: -20px;
 }
 
 #save_button {
@@ -73,9 +79,10 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+    margin-bottom: 30px;
 }
 
-.waiter_responses div {
+.waiter_response div {
     text-align: left;
 }
 

@@ -1,27 +1,40 @@
 # WMT20 Elitr Annotation Frontend
 
-Built with TS/Webpack.
+Built with TypeScript/Webpack.
 
 ## Building WMT20 Elitr Annotation Project
 
-### Build interface
+### 1 Build interface
 
-After `git clone` and `npm install` run the following command, which outputs the whole frontend to `interface/dist`.
+After `git clone` and `npm install` run `npm run build`, which outputs the whole frontend to `interface/dist`.
 
-```
-npm run build
-```
+### 2 Specify markables
 
-For development server (dev/debug purposes) run the following command. The server is then accessible locally and watches for source file changes.
+Edit `processing/markables.yaml` so that it contains the list of markable codes and all the associated forms (used for source documents).
 
 ```
-npm run dev
+uni:
+  - university
+  - univerzita
+  - univerzit
+
+literature:
+  - literature
+  - literatura
+  - literatury
+  - literatuře
+
+...
 ```
 
-### Prepare documents
+### Prepare src documents
 
 TODO
 
 ### Load documents
 
-TODO
+TODO (Naming scheme)
+
+## Develpoment
+
+For development server (dev/debug purposes) run `npm run dev`. The server is then accessible locally and watches for source file changes.

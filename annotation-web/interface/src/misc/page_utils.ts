@@ -1,4 +1,5 @@
 import * as $ from 'jquery'
+import { WaiterControl } from '../waiter/waiter_control'
 
 export class PageUtils {
     public static syncval(): void {
@@ -7,15 +8,37 @@ export class PageUtils {
             let type: string = element.getAttribute('type')
             let element_val = $(element)
             if (type == 'range') {
-                $(element).on('change', () => {
+                element_val.on('input', () => {
                     element_text.text(element_val.val() as string)
                 })
-            } else if(type == 'checkbox') {
-                $(element).on('change', () => {
+            } else if (type == 'checkbox') {
+                element_val.on('input', () => {
                     element_text.text(element_val.prop('checked') ? 'Yes' : 'No')
                 })
             }
-            $(element).trigger('change')
+        })
+    }
+
+    public static indeterminate(): void {
+        $('.synctext[type="checkbox"]').each((index: number, element: HTMLElement) => {
+            (element as HTMLInputElement).indeterminate = true
+        })
+    }
+
+    public static syncmodel(controller: WaiterControl) {
+        $('.synctext').each((index: number, element: HTMLElement) => {
+            let element_val = $(element)
+
+            let true_index: number = +element_val.attr('index')
+            element_val.on('input', () => {
+                if (element.id.endsWith('accpt')) {
+                    controller.input_info('acceptable', true_index, element_val.val() as number)
+                } else if (element.id.endsWith('nonconf')) {
+                    controller.input_info('non-conflicting', true_index, element_val.val() as number)
+                } else if (element.id.endsWith('trans')) {
+                    controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
+                }
+            })
         })
     }
 }
