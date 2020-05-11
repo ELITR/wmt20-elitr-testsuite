@@ -1,6 +1,6 @@
 # WMT20 Elitr Annotation Frontend
 
-Built with TypeScript/Webpack.
+Built with TypeScript/Webpack frontend, Python/Flask backend.
 
 ## Building WMT20 Elitr Annotation Project
 
@@ -23,7 +23,6 @@ literature:
   - literatura
   - literatury
   - literatuře
-
 ...
 ```
 

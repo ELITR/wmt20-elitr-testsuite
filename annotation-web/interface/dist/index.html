@@ -5,7 +5,6 @@
   <title>WMT20 Test Suite</title>
   <link href="style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
   <script src="bundle.js" defer></script>
 </head>
 
@@ -13,36 +12,37 @@
   <div class='border_gap'>
     <span style='font-size: 2em;'>WMT20 Test Suite</span>
     <div>
-      <span style='margin-left: 50px;'>Annotator ID:</span>
+      <span style='margin-left: 30px;'>Annotator ID:</span>
       <input id='annotator_id' style='width: 100px;' type='text'>
       <input id='start_annotation' type='button' value="Start">
+    </div>
+
+    <div id='waiter_nav' style='margin-left: 30px; display: none;'>
+      <div id='waiter_doc_control_frame'>
+        <span>Document:</span>
+        <!-- <input id='prev_doc' type='button' class='text_button' value='PREV DOCUMENT'> -->
+        <!-- <input id='next_doc' type='button' class='text_button' value='NEXT DOCUMENT'> -->
+        <span id='totl_doc' style='margin-left: 5px;'>4</span>
+      </div>
+      
+      <div id='waiter_mkb_control_frame'>
+        <span id='text_mkb'>Markable:</span>
+        <!-- <input id='prev_mkb' type='button' class='text_button' value='PREV MARKABLE'> -->
+        <!-- <input id='next_mkb' type='button' class='text_button' value='NEXT MARKABLE'> -->
+        <span id='totl_mkb' style='margin-left: 5px;'>5</span>
+      </div>
+      
+      <div id='waiter_sec_control_frame'>
+        <span>Section:</span>
+        <!-- <input id='prev_sec' type='button' class='text_button' value='PREV SECTION'> -->
+        <!-- <input id='next_sec' type='button' class='text_button' value='NEXT SECTION'> -->
+        <span id='totl_sec' style='margin-left: 5px;'>6</span>
+      </div>
+
     </div>
   </div>
 
   <div id='waiter_frame' style='margin-top: 10px; display: none;'>
-    <div style='width: 100%; text-align: center'>
-      <div id='waiter_doc_control_frame'>
-        <input id='prev_doc' type='button' class='text_button' value='PREV DOCUMENT'>
-        <input id='next_doc' type='button' class='text_button' value='NEXT DOCUMENT'>
-        <span id='totl_doc' style='margin-left: 10px;'>Total: 5</span>
-      </div>
-
-      <div id='waiter_mkb_control_frame'>
-        <input id='prev_mkb' type='button' class='text_button' value='PREV MARKABLE'>
-        <input id='next_mkb' type='button' class='text_button' value='NEXT MARKABLE'>
-        <span id='totl_mkb' style='margin-left: 10px;'>Total: 5</span>
-      </div>
-
-      <div id='waiter_sec_control_frame'>
-        <input id='prev_sec' type='button' class='text_button' value='PREV SECTION'>
-        <input id='next_sec' type='button' class='text_button' value='NEXT SECTION'>
-        <span id='totl_sec' style='margin-left: 10px;'>Total: 6</span>
-      </div>
-
-    </div>
-
-    <br>
-
     <div id='src_snip' class='div_snip'></div>
 
     <div id='waiter_tgt_table' style='text-align: center;'></div>

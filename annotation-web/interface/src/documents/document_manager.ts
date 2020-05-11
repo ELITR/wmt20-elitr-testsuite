@@ -1,4 +1,4 @@
-import { DocumentLoader, UserIntroSync } from './document_loader';
+import { DocumentLoader, UserIntroSync, UserProgress } from './document_loader';
 import { DocTgt, DocSrc } from './document';
 
 export type DocTgtArray = Array<[string, DocTgt]>
@@ -8,9 +8,11 @@ export class DocumentManager {
     public data: UserIntroSync
     public constructor() { }
 
-    public async load(AID: string) {
-        this.data = await DocumentLoader.load(AID)
+    public async load(AID: string): Promise<UserProgress> {
+        let progress: UserProgress
+        [this.data, progress] = await DocumentLoader.load(AID)
         this.assertSameLength()
+        return progress
     }
 
     public getAllMT(file: string): DocTgtArray {

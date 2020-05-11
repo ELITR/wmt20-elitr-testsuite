@@ -1,45 +1,50 @@
-import { DocumentManager, DocSrcArray, DocTgtArray } from "../documents/document_manager"
+import { DocumentManager } from "../documents/document_manager"
 import * as $ from 'jquery'
 import { ModelSegement, ModelMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
+import { UserProgress } from "../documents/document_loader"
 
 export type QuestionType = 'translated' | 'acceptable' | 'non-conflicting'
 
 export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
+    private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
     private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_tgt_table')
 
     private manager: DocumentManager = new DocumentManager()
-    private driver: WaiterDriver = new WaiterDriver(this.manager)
+    private driver: WaiterDriver
     private model: ModelSegement
 
 
     public constructor(private AID: string) {
         this.waiter_frame.show()
+        this.waiter_nav.show()
 
-        $('#next_doc').click(() => { this.driver.move_doc(+1); this.display_current() })
-        $('#prev_doc').click(() => { this.driver.move_doc(-1); this.display_current() })
-        $('#next_mkb').click(() => { this.driver.move_mkb(+1); this.display_current() })
-        $('#prev_mkb').click(() => { this.driver.move_mkb(-1); this.display_current() })
-        $('#next_sec').click(() => { this.driver.move_sec(+1); this.display_current() })
-        $('#prev_sec').click(() => { this.driver.move_sec(-1); this.display_current() })
+        // $('#next_doc').click(() => { this.driver.move_doc(+1); this.display_current() })
+        // $('#prev_doc').click(() => { this.driver.move_doc(-1); this.display_current() })
+        // $('#next_mkb').click(() => { this.driver.move_mkb(+1); this.display_current() })
+        // $('#prev_mkb').click(() => { this.driver.move_mkb(-1); this.display_current() })
+        // $('#next_sec').click(() => { this.driver.move_sec(+1); this.display_current() })
+        // $('#prev_sec').click(() => { this.driver.move_sec(-1); this.display_current() })
 
         new Promise(async () => {
-            await this.manager.load(AID)
+            let progress: UserProgress = await this.manager.load(AID)
+            this.driver = new WaiterDriver(this.manager, progress)
+
             this.update_stats()
             this.display_current()
             this.update_buttons()
 
-            $('#save_button').click(this.save)
+            $('#save_button').click(() => this.save())
         })
     }
 
     public display_current() {
         this.update_stats()
-        this.display(this.manager.data.queue_doc[this.driver.currentDoc], this.driver.currentMarkable, this.driver.currentSection)
+        this.display(this.manager.data.queue_doc[this.driver.progress.doc], this.driver.progress.mkb, this.driver.progress.sec)
         this.model = new ModelSegement(this.manager.data.mts)
     }
 
@@ -63,29 +68,59 @@ export class WaiterControl {
 
     private update_stats() {
         let currentMarkables = this.driver.current_doc_src().markable_keys
-        let currentSections = this.driver.current_doc_src().get_sections(this.driver.currentMarkable)
-        $('#totl_doc').text(`${this.driver.currentDoc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_mkb').text(`${this.driver.currentMarkable + 1}/${currentMarkables.length}`)
-        $('#totl_sec').text(`${this.driver.currentSection + 1}/${currentSections.length}`)
+        let currentSections = this.driver.current_doc_src().get_sections(this.driver.progress.mkb)
+        $('#totl_doc').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
+        $('#totl_mkb').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
+        $('#totl_sec').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
+        $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
         this.update_buttons()
     }
 
     private update_buttons() {
-        $('#next_doc').prop('disabled', this.driver.currentDoc >= this.manager.data.queue_doc.length - 1)
-        $('#prev_doc').prop('disabled', this.driver.currentDoc <= 0)
+        $('#next_doc').prop('disabled', this.driver.progress.doc >= this.manager.data.queue_doc.length - 1)
+        $('#prev_doc').prop('disabled', this.driver.progress.doc <= 0)
 
         const markable_keys = this.driver.current_doc_src().markable_keys
-        $('#next_mkb').prop('disabled', this.driver.currentMarkable >= markable_keys.length - 1)
-        $('#prev_mkb').prop('disabled', this.driver.currentMarkable <= 0)
+        $('#next_mkb').prop('disabled', this.driver.progress.mkb >= markable_keys.length - 1)
+        $('#prev_mkb').prop('disabled', this.driver.progress.mkb <= 0)
 
-        const sections = this.driver.current_doc_src().get_sections(this.driver.currentMarkable)
-        $('#next_sec').prop('disabled', this.driver.currentSection >= sections.length - 1)
-        $('#prev_sec').prop('disabled', this.driver.currentSection <= 0)
+        const sections = this.driver.current_doc_src().get_sections(this.driver.progress.mkb)
+        $('#next_sec').prop('disabled', this.driver.progress.sec >= sections.length - 1)
+        $('#prev_sec').prop('disabled', this.driver.progress.sec <= 0)
     }
 
     private save() {
-        // TODO
-        throw new Error('Saving is not implemented yet')
+        this.model.save(
+            this.AID, 
+            this.driver.progress,
+            this.driver.advanced()
+        )
+        this.next()
+    }
+
+    private next() {
+        let refresh = true
+        if (this.driver.end_sec()) {
+            this.driver.reset_sec()
+            if (this.driver.end_mkb()) {
+                this.driver.reset_mkb()
+                if (this.driver.end_doc()) {
+                    refresh = false
+                    alert('All work finished.')
+                    window.setTimeout(() => window.location.reload(), 1000)
+                } else {
+                    this.driver.move_doc(+1)
+                }
+            } else {
+                this.driver.move_mkb(+1)
+            }
+        } else {
+            this.driver.move_sec(+1)
+        }
+
+        if (refresh) {
+            this.display_current()
+        }
     }
 
     public input_info(type: QuestionType, index: number, value: boolean | number) {
@@ -99,5 +134,9 @@ export class WaiterControl {
 
         let not_resolved = this.model.mts.some((value: ModelMT) => !value.resolved())
         $('#save_button').prop('disabled', not_resolved)
+    }
+
+    public end_sec() {
+
     }
 }
