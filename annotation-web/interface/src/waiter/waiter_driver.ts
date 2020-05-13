@@ -7,9 +7,7 @@ export class WaiterDriver {
     public constructor(
         private manager: DocumentManager,
         public progress: UserProgress
-    ) {
-        console.log(progress)
-    }
+    ) { }
 
     public current_sig(): string {
         return this.manager.data.queue_doc[this.progress.doc]

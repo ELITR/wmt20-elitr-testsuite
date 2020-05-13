@@ -1,0 +1,36 @@
+markables:
+  uni:
+    - university
+    - univerzita
+    - univerzit
+
+  literature:
+    - literature
+    - literatura
+    - literatury
+    - literatuře
+
+  czech:
+    - czech
+    - česky
+
+  prague:
+    - prague
+    - praha
+    - praze
+
+  lorem:
+    - lorem
+
+mts:
+  - "bing"
+  - "google"
+  - "lindat"
+
+docs:
+  - "doc1"
+  - "doc2"
+
+users:
+  - "vilda"
+  - "testuser"

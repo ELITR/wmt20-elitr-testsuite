@@ -18,11 +18,7 @@ export class WaiterControl {
     private driver: WaiterDriver
     private model: ModelSegement
 
-
     public constructor(private AID: string) {
-        this.waiter_frame.show()
-        this.waiter_nav.show()
-
         // $('#next_doc').click(() => { this.driver.move_doc(+1); this.display_current() })
         // $('#prev_doc').click(() => { this.driver.move_doc(-1); this.display_current() })
         // $('#next_mkb').click(() => { this.driver.move_mkb(+1); this.display_current() })
@@ -33,6 +29,9 @@ export class WaiterControl {
         new Promise(async () => {
             let progress: UserProgress = await this.manager.load(AID)
             this.driver = new WaiterDriver(this.manager, progress)
+
+            this.waiter_frame.show()
+            this.waiter_nav.show()
 
             this.update_stats()
             this.display_current()
@@ -91,7 +90,7 @@ export class WaiterControl {
 
     private save() {
         this.model.save(
-            this.AID, 
+            this.AID,
             this.driver.progress,
             this.driver.advanced()
         )

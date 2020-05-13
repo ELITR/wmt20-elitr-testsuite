@@ -1,1 +1,1 @@
-{"testuser": {"progress": {"doc": 0, "mkb": 1, "sec": 2}, "queue_doc": ["lorem", "cuni"], "queue_mkb": {"cuni": ["uni", "czech", "prague"], "lorem": ["lorem", "literature"]}}}
+{"vilda": {"progress": {"doc": 0, "mkb": 0, "sec": 0}, "queue_doc": ["doc1", "doc2"], "queue_mkb": {"doc1": ["literature", "lorem"], "doc2": ["czech", "prague", "uni"]}}, "testuser": {"progress": {"doc": 0, "mkb": 0, "sec": 0}, "queue_doc": ["doc1", "doc2"], "queue_mkb": {"doc1": ["literature", "lorem"], "doc2": ["uni", "czech", "prague"]}}}
