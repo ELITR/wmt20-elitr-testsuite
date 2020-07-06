@@ -60,6 +60,7 @@ export class DocumentLoader {
                 return data
             },
             error: (text) => {
+                alert('Error syncing with server. Is it up?')
                 throw new Error(`${DocumentLoader.baseURL} download sync error`)
             }
         })

@@ -1,10 +1,15 @@
 from flask import Flask, request, json
 from flask_cors import CORS
+import pathlib
+import re
 
 # create new Flask app
 app = Flask(__name__)
 # allow Cross-origin resource sharing access
 CORS(app)
+
+# create loging directory
+pathlib.Path('logs/ratings').mkdir(parents=True, exist_ok=True)
 
 
 @app.route('/')
@@ -26,7 +31,7 @@ def logService():
         queues = json.load(f)
 
     AID = request.json['AID']
-    content['progress'] = queues[AID]['progress'] 
+    content['progress'] = queues[AID]['progress']
     content['queue_doc'] = queues[AID]['queue_doc']
     content['queue_mkb'] = queues[AID]['queue_mkb']
     return json.jsonify(content)
@@ -40,31 +45,25 @@ def saveService():
         return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
 
     AID = request.json['AID']
+
+    if not re.match(r'[a-zA-Z0-9]+', AID):
+        return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
+
     print('SAVE', AID)
-    try:
-        with open('logs/rating_user.json', 'r') as f:
-            content = json.load(f)
-    except FileNotFoundError as _e:
-        content = {}
 
-    if not AID in content:
-        content[AID] = []
-
-    content[AID].append({
+    rating_obj = {
         'doc': request.json['current']['doc'],
         'mkb': request.json['current']['mkb'],
         'sec': request.json['current']['sec'],
         'rating': request.json['rating']
-    })
+    }
 
-    with open('logs/rating_user.json', 'w') as f:
-        json.dump(content, f)
+    with open(f'logs/ratings/{AID}.jlog', 'a+') as f:
+        f.write(json.dumps(rating_obj)+'\n')
 
-    with open('logs/queue_user.json', 'r') as f:
-        queues = json.load(f)
+    queues = json.load(open('logs/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    with open('logs/queue_user.json', 'w') as f:
-        json.dump(queues, f)
+    json.dump(queues, open('logs/queue_user.json', 'w'))
 
     return {'status': 'OK'}
 

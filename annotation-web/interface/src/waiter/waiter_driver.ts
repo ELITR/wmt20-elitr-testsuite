@@ -77,9 +77,9 @@ export class WaiterDriver {
         let next: UserProgress = {...this.progress}
 
         if (this.end_sec()) {
-            this.reset_sec()
+            next.sec = 0;
             if (this.end_mkb()) {
-                this.reset_mkb()
+                next.mkb = 0;
                 if (this.end_doc()) {
                     next.doc = next.mkb = next.sec = -1
                 } else {
