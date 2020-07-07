@@ -11,7 +11,7 @@ export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
 export class WaiterControlP2 {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p2_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p2_nav')
-    private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
+    private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p2')
     private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p2_tgt_table')
 
     private manager: DocumentManager = new DocumentManager()
@@ -35,7 +35,7 @@ export class WaiterControlP2 {
             this.display_current()
             this.update_buttons()
 
-            $('#save_button').click(() => this.save())
+            $('#save_button_p2').click(() => this.save())
         })
     }
 
@@ -61,7 +61,7 @@ export class WaiterControlP2 {
         PageUtils.syncval()
         PageUtils.indeterminate()
         PageUtils.syncmodelP2(this)
-        $('#save_button').prop('disabled', true)
+        $('#save_button_p2').prop('disabled', true)
     }
 
 
@@ -135,7 +135,7 @@ export class WaiterControlP2 {
         }
 
         let not_resolved = this.model.mt_models.some((value: ModelMT) => !value.resolved())
-        $('#save_button').prop('disabled', not_resolved)
+        $('#save_button_p2').prop('disabled', not_resolved)
     }
 
     public end_sec() {

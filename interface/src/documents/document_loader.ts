@@ -70,7 +70,7 @@ export class DocumentLoader {
 
         let data = await $.ajax({
             method: 'POST',
-            url: DocumentLoader.baseURL + 'login_p2',
+            url: DocumentLoader.baseURL + 'login_p1',
             data: JSON.stringify({ 'AID': AID }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',

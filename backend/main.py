@@ -74,7 +74,7 @@ def saveP2Service():
     rating_obj = {
         'doc': request.json['current']['doc'],
         'mkb': request.json['current']['mkb'],
-        'sec': request.json['current']['sec'],
+        'mtn': request.json['current']['mtn'],
         'rating': request.json['rating']
     }
 

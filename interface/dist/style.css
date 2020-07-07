@@ -50,13 +50,13 @@
     overflow-y: scroll;
 }
 
-.waiter_p2_highlight_src {
+.waiter_p1_highlight_src, .waiter_p2_highlight_src {
     background-color: #9fc0a0;
     border-radius: 3px;
     border: 1px solid black;
 }
 
-.waiter_p2_highlight_tgt {
+.waiter_p1_highlight_tgt, .waiter_p2_highlight_tgt {
     text-decoration: underline;
     text-decoration-style: dotted
 }
@@ -69,7 +69,7 @@
     display: inline-block;
 }
 
-#save_button {
+#save_button_p1, #save_button_p2 {
     font-size: 1.2em;
     display: block;
     margin-left: auto;

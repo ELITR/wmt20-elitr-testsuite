@@ -35,6 +35,7 @@ export class DocSrc {
     public display(markable: number, index: number): string {
         let output = this.raw
         let indicies = this.markables.get(this.markable_keys[markable])[index]
+        console.log(markable, index, this.markable_keys[markable])
         const STYLE_A = "<span class='waiter_p2_highlight_src'>"
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
@@ -75,4 +76,9 @@ export class DocTgt {
         output = TextUtils.context(output, projection_position, DocTgt.MIN_CHAR_CONTEXT, DocTgt.SENT_CONTEXT)
         return output
     }
+
+    public displayAll(doc_src: DocSrc, markable: number) : string {
+        return this.raw
+    }
+
 }

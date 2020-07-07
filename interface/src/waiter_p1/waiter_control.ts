@@ -11,8 +11,8 @@ export type QuestionType = 'nonconflicting' | 'coherent'
 export class WaiterControlP1 {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p1_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p1_nav')
-    private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
-    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p1_tgt_table')
+    private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p1')
+    private waiter_tgt_snip: JQuery<HTMLDivElement> = $('#tgt_snip_p1')
 
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
@@ -21,6 +21,7 @@ export class WaiterControlP1 {
     public constructor(private AID: string) {
         new Promise(async () => {
             let progress: UserProgressP1 = await this.manager.loadP1(AID)
+            console.log(progress)
             if(progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
@@ -35,7 +36,7 @@ export class WaiterControlP1 {
             this.display_current()
             this.update_buttons()
 
-            $('#save_button').click(() => this.save())
+            $('#save_button_p1').click(() => this.save())
         })
     }
 
@@ -55,12 +56,12 @@ export class WaiterControlP1 {
         )
 
         let content = WaiterDisplayer.generateElements(snippets)
-        this.waiter_tgt_table.html(content)
+        this.waiter_tgt_snip.html(this.manager.currentMT(file, index).displayAll(current_src, markable))
 
         PageUtils.syncval()
         PageUtils.indeterminate()
         PageUtils.syncmodelP1(this)
-        $('#save_button').prop('disabled', true)
+        $('#save_button_p1').prop('disabled', true)
     }
 
 
@@ -126,7 +127,7 @@ export class WaiterControlP1 {
         }
 
         let not_resolved = !this.model.resolved()
-        $('#save_button').prop('disabled', not_resolved)
+        $('#save_button_p1').prop('disabled', not_resolved)
     }
 
     public end_sec() {
