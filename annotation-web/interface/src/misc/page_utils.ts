@@ -31,10 +31,12 @@ export class PageUtils {
 
             let true_index: number = +element_val.attr('index')
             element_val.on('input', () => {
-                if (element.id.endsWith('accpt')) {
-                    controller.input_info('acceptable', true_index, element_val.val() as number)
-                } else if (element.id.endsWith('nonconf')) {
-                    controller.input_info('non-conflicting', true_index, element_val.val() as number)
+                if (element.id.endsWith('fluency')) {
+                    controller.input_info('fluency', true_index, element_val.val() as number)
+                } else if (element.id.endsWith('adequacy')) {
+                    controller.input_info('adequacy', true_index, element_val.val() as number)
+                } else if (element.id.endsWith('errors')) {
+                    controller.input_info('errors', true_index, element_val.val() as string)
                 } else if (element.id.endsWith('trans')) {
                     controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
                 }

@@ -1,5 +1,6 @@
 import { DocumentLoader, UserProgress } from "../documents/document_loader"
 import * as $ from 'jquery'
+import { DEVMODE } from "../main"
 
 export class Model {
     public documents: Array<[string, Array<ModelMarkable>]>
@@ -44,18 +45,21 @@ export class ModelSegement {
 
 export class ModelMT {
     public translated?: boolean
-    public acceptable?: number
-    public non_conflicting?: number
+    public adequacy?: number
+    public fluency?: number
+    public errors: string
 
     public resolved(): boolean {
-        return true
-        return (this.translated != undefined && this.acceptable != undefined && this.non_conflicting != undefined)
+        if (DEVMODE)
+            return true
+        else
+            return (this.translated != undefined && this.adequacy != undefined && this.fluency != undefined)
     }
 
     public toObject(): any {
         if (!this.resolved()) {
             throw new Error('Attempted to jsonify an unresolved model object')
         }
-        return { translated: this.translated as boolean, acceptable: this.acceptable as number, non_conflicting: this.non_conflicting as number }
+        return { translated: this.translated as boolean, adequacy: this.adequacy as number, fluency: this.fluency as number, errors: this.errors as string }
     }
 }

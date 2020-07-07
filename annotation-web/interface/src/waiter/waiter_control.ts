@@ -6,7 +6,7 @@ import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
 import { UserProgress } from "../documents/document_loader"
 
-export type QuestionType = 'translated' | 'acceptable' | 'non-conflicting'
+export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
 
 export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
@@ -28,6 +28,11 @@ export class WaiterControl {
 
         new Promise(async () => {
             let progress: UserProgress = await this.manager.load(AID)
+            if(progress.finished()) {
+                alert("You've already finished all stimuli. Exiting.")
+                return
+            }
+
             this.driver = new WaiterDriver(this.manager, progress)
 
             this.waiter_frame.show()
@@ -123,13 +128,15 @@ export class WaiterControl {
         }
     }
 
-    public input_info(type: QuestionType, index: number, value: boolean | number) {
+    public input_info(type: QuestionType, index: number, value: boolean | number | string) {
         if (type == 'translated') {
             this.model.mts[index].translated = value as boolean
-        } else if (type == 'acceptable') {
-            this.model.mts[index].acceptable = value as number
-        } else if (type == 'non-conflicting') {
-            this.model.mts[index].non_conflicting = value as number
+        } else if (type == 'adequacy') {
+            this.model.mts[index].adequacy = value as number
+        } else if (type == 'fluency') {
+            this.model.mts[index].fluency = value as number
+        } else if (type == 'errors') {
+            this.model.mts[index].errors = value as string
         }
 
         let not_resolved = this.model.mts.some((value: ModelMT) => !value.resolved())

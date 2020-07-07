@@ -74,7 +74,7 @@ export class WaiterDriver {
     }
 
     public advanced(): UserProgress {
-        let next: UserProgress = {...this.progress}
+        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mkb, this.progress.sec)
 
         if (this.end_sec()) {
             next.sec = 0;
