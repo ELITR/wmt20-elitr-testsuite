@@ -1,0 +1,8 @@
+{"doc": 0, "mkb": 0, "rating": {"adequacy": "0.4"}, "sec": 0}
+{"doc": 0, "mkb": 0, "rating": {"adequacy": "0.5", "fluency": "0.5", "translated": true}, "sec": 1}
+{"doc": 0, "mkb": 1, "rating": {"adequacy": "0.3", "fluency": "0.3"}, "sec": 0}
+{"doc": 0, "mkb": 1, "rating": {"adequacy": "0.4"}, "sec": 1}
+{"doc": 0, "mkb": 1, "rating": {"adequacy": "0.4", "fluency": "0.4"}, "sec": 2}
+{"doc": 0, "mkb": 1, "rating": {"adequacy": "0.1", "fluency": "0.2"}, "sec": 3}
+{"doc": 1, "mkb": 0, "rating": {"bing": {"adequacy": "0.5", "fluency": "0.5"}, "google": {"adequacy": "0.7"}, "lindat": {"fluency": "0.4"}}, "sec": 0}
+{"doc": 1, "mkb": 0, "rating": {"bing": {}, "google": {}, "lindat": {"adequacy": "0.3"}}, "sec": 1}

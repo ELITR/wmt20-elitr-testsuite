@@ -9,7 +9,8 @@ app = Flask(__name__)
 CORS(app)
 
 # create loging directory
-pathlib.Path('logs/ratings').mkdir(parents=True, exist_ok=True)
+pathlib.Path('logs/p2/ratings').mkdir(parents=True, exist_ok=True)
+pathlib.Path('logs/p1/ratings').mkdir(parents=True, exist_ok=True)
 
 
 @app.route('/')
@@ -17,8 +18,8 @@ def index():
     return 'This is the WMT20 ELITR server. For info about this project or the API please see the <a href="https://github.com/ELITR/wmt20-elitr-testsuite">documentation</a>.'
 
 
-@app.route('/login', methods=['POST'])
-def logService():
+@app.route('/login_p2', methods=['POST'])
+def logP2Service():
     try:
         assertArgsJ(request, 'AID')
     except Exception as e:
@@ -27,7 +28,26 @@ def logService():
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
 
-    with open('logs/queue_user.json', 'r') as f:
+    with open('logs/p2/queue_user.json', 'r') as f:
+        queues = json.load(f)
+
+    AID = request.json['AID']
+    content['progress'] = queues[AID]['progress']
+    content['queue_doc'] = queues[AID]['queue_doc']
+    content['queue_mkb'] = queues[AID]['queue_mkb']
+    return json.jsonify(content)
+
+@app.route('/login_p1', methods=['POST'])
+def logP1Service():
+    try:
+        assertArgsJ(request, 'AID')
+    except Exception as e:
+        return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
+    print('LOGIN', request.json['AID'])
+    with open('logs/content.json', 'r') as f:
+        content = json.load(f)
+
+    with open('logs/p1/queue_user.json', 'r') as f:
         queues = json.load(f)
 
     AID = request.json['AID']
@@ -37,8 +57,8 @@ def logService():
     return json.jsonify(content)
 
 
-@app.route('/save', methods=['POST'])
-def saveService():
+@app.route('/save_p2', methods=['POST'])
+def saveP2Service():
     try:
         assertArgsJ(request, ['AID', 'progress', 'current', 'rating'])
     except Exception as e:
@@ -58,12 +78,12 @@ def saveService():
         'rating': request.json['rating']
     }
 
-    with open(f'logs/ratings/{AID}.jlog', 'a+') as f:
+    with open(f'logs/p2/ratings/{AID}.jlog', 'a+') as f:
         f.write(json.dumps(rating_obj)+'\n')
 
-    queues = json.load(open('logs/queue_user.json', 'r'))
+    queues = json.load(open('logs/p2/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/queue_user.json', 'w'))
+    json.dump(queues, open('logs/p2/queue_user.json', 'w'))
 
     return {'status': 'OK'}
 

@@ -11,16 +11,19 @@ export class ModelMarkable {
 }
 
 export class ModelSegement {
-    public mts: Array<ModelMT>
+    public mt_models: Array<ModelMT>
 
     public constructor(mts: string[]) {
-        this.mts = mts.map(() => new ModelMT())
+        this.mt_models = mts.map((name:string) => new ModelMT(name))
     }
 
     public save(AID: string, current: UserProgress, progress: UserProgress) {
+        let rating_serialized: { [key: string]: any } = {}
+        this.mt_models.forEach((model: ModelMT) => rating_serialized[model.name] = model.toObject())
+
         $.ajax({
             method: 'POST',
-            url: DocumentLoader.baseURL + 'save',
+            url: DocumentLoader.baseURL + 'save_p2',
             data: JSON.stringify({
                 'AID': AID,
                 'current': {
@@ -33,7 +36,7 @@ export class ModelSegement {
                     'mkb': progress.mkb,
                     'sec': progress.sec,
                 },
-                'rating': this.mts.map((value: ModelMT) => value.toObject())
+                'rating': rating_serialized,
             }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',
@@ -48,6 +51,12 @@ export class ModelMT {
     public adequacy?: number
     public fluency?: number
     public errors: string
+
+    public name: string
+
+    public constructor(name: string) {
+        this.name = name
+    }
 
     public resolved(): boolean {
         if (DEVMODE)

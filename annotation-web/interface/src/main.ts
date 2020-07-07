@@ -1,28 +1,43 @@
 declare var DEVMODE: boolean;
-
 var DEVMODE_: boolean = DEVMODE
 export { DEVMODE_ as DEVMODE }
 
-import { WaiterControl } from "./waiter/waiter_control"
+import { WaiterControlP2 } from "./waiter_p2/waiter_control"
+// import { WaiterControlP1 } from "./waiter_p1/waiter_control";
 import * as $ from 'jquery'
-import { PageUtils } from "./misc/page_utils"
 
-$('#start_annotation').click(() => {
+function validateAID() : string {
     let AIDEl = $('#annotator_id')
+    
     let AID = AIDEl.val() as string
-    if (AID.length == 0) {
+    if (!(/^[a-zA-Z0-9]+$/.test(AID))) {
         alert('Invalid Annotator ID')
-        return
+        return undefined
     }
 
-    // Start the main routing
     AIDEl.prop('disabled', true)
-    $('#start_annotation').hide()
-    new WaiterControl(AID)
+    $('#start_annotation_p1').hide()
+    $('#start_annotation_p2').hide()
+    return AID
+}
+
+$('#start_annotation_p2').click(() => {
+    let AID: string = validateAID()
+    if(AID) {
+        // Start the main routing
+        new WaiterControlP2(AID)
+    }
 })
+
+// $('#start_annotation_p1').click(() => {
+//     let AID: string = validateAID()
+//     if(AID) {
+//         // Start the main routing
+//         new WaiterControlP1(AID)
+//     }
+// })
 
 if (DEVMODE) {
     $('#annotator_id').val('testuser')
-    $('#start_annotation').trigger('click')
+    $('#start_annotation_p1').trigger('click')
 }
-

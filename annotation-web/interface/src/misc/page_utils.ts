@@ -1,5 +1,5 @@
 import * as $ from 'jquery'
-import { WaiterControl } from '../waiter/waiter_control'
+import { WaiterControlP2 } from '../waiter_p2/waiter_control'
 
 export class PageUtils {
     public static syncval(): void {
@@ -25,7 +25,7 @@ export class PageUtils {
         })
     }
 
-    public static syncmodel(controller: WaiterControl) {
+    public static syncmodelP2(controller: WaiterControlP2) {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_val = $(element)
 

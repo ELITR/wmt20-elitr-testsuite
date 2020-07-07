@@ -8,7 +8,7 @@ import { UserProgress } from "../documents/document_loader"
 
 export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
 
-export class WaiterControl {
+export class WaiterControlP2 {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
@@ -19,13 +19,6 @@ export class WaiterControl {
     private model: ModelSegement
 
     public constructor(private AID: string) {
-        // $('#next_doc').click(() => { this.driver.move_doc(+1); this.display_current() })
-        // $('#prev_doc').click(() => { this.driver.move_doc(-1); this.display_current() })
-        // $('#next_mkb').click(() => { this.driver.move_mkb(+1); this.display_current() })
-        // $('#prev_mkb').click(() => { this.driver.move_mkb(-1); this.display_current() })
-        // $('#next_sec').click(() => { this.driver.move_sec(+1); this.display_current() })
-        // $('#prev_sec').click(() => { this.driver.move_sec(-1); this.display_current() })
-
         new Promise(async () => {
             let progress: UserProgress = await this.manager.load(AID)
             if(progress.finished()) {
@@ -49,14 +42,16 @@ export class WaiterControl {
     public display_current() {
         this.update_stats()
         this.display(this.manager.data.queue_doc[this.driver.progress.doc], this.driver.progress.mkb, this.driver.progress.sec)
-        this.model = new ModelSegement(this.manager.data.mts)
+        this.model = new ModelSegement(this.manager.data.mts.shuffle())
     }
 
     private display(file: string, markable: number, index: number) {
         let current_src = this.driver.current_doc_src()
         this.waiter_src_snip.html(current_src.display(markable, index))
 
-        let snippets: Array<[string, string]> = this.manager.getAllMT(file).map(
+        let files_shuffled = this.manager.getAllMT(file).shuffle()
+
+        let snippets: Array<[string, string]> = files_shuffled.map(
             ([key, doc]) => [key, doc.display(current_src, markable, index)]
         )
 
@@ -65,7 +60,7 @@ export class WaiterControl {
 
         PageUtils.syncval()
         PageUtils.indeterminate()
-        PageUtils.syncmodel(this)
+        PageUtils.syncmodelP2(this)
         $('#save_button').prop('disabled', true)
     }
 
@@ -130,16 +125,16 @@ export class WaiterControl {
 
     public input_info(type: QuestionType, index: number, value: boolean | number | string) {
         if (type == 'translated') {
-            this.model.mts[index].translated = value as boolean
+            this.model.mt_models[index].translated = value as boolean
         } else if (type == 'adequacy') {
-            this.model.mts[index].adequacy = value as number
+            this.model.mt_models[index].adequacy = value as number
         } else if (type == 'fluency') {
-            this.model.mts[index].fluency = value as number
+            this.model.mt_models[index].fluency = value as number
         } else if (type == 'errors') {
-            this.model.mts[index].errors = value as string
+            this.model.mt_models[index].errors = value as string
         }
 
-        let not_resolved = this.model.mts.some((value: ModelMT) => !value.resolved())
+        let not_resolved = this.model.mt_models.some((value: ModelMT) => !value.resolved())
         $('#save_button').prop('disabled', not_resolved)
     }
 
