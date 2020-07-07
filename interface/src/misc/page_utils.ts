@@ -1,5 +1,6 @@
 import * as $ from 'jquery'
 import { WaiterControlP2 } from '../waiter_p2/waiter_control'
+import { WaiterControlP1 } from '../waiter_p1/waiter_control'
 
 export class PageUtils {
     public static syncval(): void {
@@ -40,6 +41,26 @@ export class PageUtils {
                 } else if (element.id.endsWith('trans')) {
                     controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
                 }
+            })
+        })
+    }
+
+    public static syncmodelP1(controller: WaiterControlP1) {
+        $('.synctext').each((index: number, element: HTMLElement) => {
+            let element_val = $(element)
+
+            let true_index: number = +element_val.attr('index')
+            element_val.on('input', () => {
+                throw new Error("syncmodelP1 handlers are unimplemented")
+                // if (element.id.endsWith('fluency')) {
+                //     controller.input_info('fluency', true_index, element_val.val() as number)
+                // } else if (element.id.endsWith('adequacy')) {
+                //     controller.input_info('adequacy', true_index, element_val.val() as number)
+                // } else if (element.id.endsWith('errors')) {
+                //     controller.input_info('errors', true_index, element_val.val() as string)
+                // } else if (element.id.endsWith('trans')) {
+                //     controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
+                // }
             })
         })
     }

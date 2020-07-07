@@ -1,4 +1,4 @@
-import { DocumentLoader, UserProgress } from "../documents/document_loader"
+import { DocumentLoader, UserProgressP1 } from "../documents/document_loader"
 import * as $ from 'jquery'
 import { DEVMODE } from "../main"
 
@@ -7,13 +7,13 @@ export class Model {
 }
 
 export class ModelDocumentMT {
-    public mt: string
+    public name: string
 
-    public constructor(mt: string) {
-        this.mt = mt
+    public constructor(name: string) {
+        this.name = name
     }
 
-    public save(AID: string, current: UserProgress, progress: UserProgress) {
+    public save(AID: string, current: UserProgressP1, progress: UserProgressP1) {
         $.ajax({
             method: 'POST',
             url: DocumentLoader.baseURL + 'save_p1',
@@ -22,12 +22,14 @@ export class ModelDocumentMT {
                 'current': {
                     'doc': current.doc,
                     'mkb': current.mkb,
+                    'mtn': current.mtn,
                 },
                 'progress': {
                     'doc': progress.doc,
                     'mkb': progress.mkb,
+                    'mtn': progress.mtn,
                 },
-                'mt': this.mt,
+                'mt_name': this.name,
                 'rating': this.toObject()
             }),
             crossDomain: true,

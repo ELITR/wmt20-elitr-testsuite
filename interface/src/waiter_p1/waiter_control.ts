@@ -4,15 +4,15 @@ import { ModelDocumentMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
-import { UserProgress } from "../documents/document_loader"
+import { UserProgressP1 } from "../documents/document_loader"
 
 export type QuestionType = 'nonconflicting' | 'coherent'
 
 export class WaiterControlP1 {
-    private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
-    private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_nav')
+    private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p1_frame')
+    private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p1_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
-    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_tgt_table')
+    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p1_tgt_table')
 
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
@@ -20,7 +20,7 @@ export class WaiterControlP1 {
 
     public constructor(private AID: string) {
         new Promise(async () => {
-            let progress: UserProgress = await this.manager.load(AID)
+            let progress: UserProgressP1 = await this.manager.loadP1(AID)
             if(progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
@@ -41,9 +41,9 @@ export class WaiterControlP1 {
 
     public display_current() {
         this.update_stats()
-        this.display(this.manager.data.queue_doc[this.driver.progress.doc], this.driver.progress.mkb, this.driver.progress.sec)
+        this.display(this.manager.data.queue_doc[this.driver.progress.doc], this.driver.progress.mkb, this.driver.progress.mtn)
         // TODO: get model name
-        this.model = new ModelDocumentMT(this.driver.progress.mt)
+        this.model = new ModelDocumentMT(this.manager.data.mts[this.driver.progress.mtn])
     }
 
     private display(file: string, markable: number, index: number) {
@@ -69,7 +69,7 @@ export class WaiterControlP1 {
         let currentSections = this.driver.current_doc_src().get_sections(this.driver.progress.mkb)
         $('#totl_doc').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mkb').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
-        $('#totl_sec').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
+        $('#totl_sec').text(`${this.driver.progress.mtn + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
         this.update_buttons()
     }
@@ -94,8 +94,8 @@ export class WaiterControlP1 {
 
     private next() {
         let refresh = true
-        if (this.driver.end_sec()) {
-            this.driver.reset_sec()
+        if (this.driver.end_mtn()) {
+            this.driver.reset_mtn()
             if (this.driver.end_mkb()) {
                 this.driver.reset_mkb()
                 if (this.driver.end_doc()) {
@@ -118,14 +118,14 @@ export class WaiterControlP1 {
         }
     }
 
-    public input_info(type: QuestionType, index: number, value: boolean | number | string) {
+    public input_info(type: QuestionType, value: boolean | number | string) {
         if (type == 'nonconflicting') {
-            this.model.mts[index].nonconflicting = value as boolean
+            this.model.nonconflicting = value as boolean
         } else if (type == 'coherent') {
-            this.model.mts[index].coherent = value as number
+            this.model.coherent = value as number
         }
 
-        let not_resolved = this.model.mts.some((value: ModelMT) => !value.resolved())
+        let not_resolved = !this.model.resolved()
         $('#save_button').prop('disabled', not_resolved)
     }
 

@@ -1,12 +1,12 @@
 import { DocumentManager } from "../documents/document_manager"
 import { DocSrc } from "../documents/document"
-import { UserProgress } from "../documents/document_loader"
+import { UserProgressP2 } from "../documents/document_loader"
 
 export class WaiterDriver {
 
     public constructor(
         private manager: DocumentManager,
-        public progress: UserProgress
+        public progress: UserProgressP2
     ) { }
 
     public current_sig(): string {
@@ -73,8 +73,8 @@ export class WaiterDriver {
         console.log(this.progress.doc, this.progress.mkb, this.progress.sec)
     }
 
-    public advanced(): UserProgress {
-        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mkb, this.progress.sec)
+    public advanced(): UserProgressP2 {
+        let next: UserProgressP2 = new UserProgressP2(this.progress.doc, this.progress.mkb, this.progress.sec)
 
         if (this.end_sec()) {
             next.sec = 0;

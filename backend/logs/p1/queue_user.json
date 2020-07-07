@@ -3,7 +3,7 @@
         "progress": {
             "doc": 0,
             "mkb": 0,
-            "sec": 0
+            "mtn": 0
         },
         "queue_doc": [
             "doc1",
@@ -25,7 +25,7 @@
         "progress": {
             "doc": 0,
             "mkb": 0,
-            "sec": 0
+            "mtn": 0
         },
         "queue_doc": [
             "doc1",

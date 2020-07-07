@@ -19,24 +19,36 @@ export interface UserIntroRaw {
     mts: string[],
     content_src: { [key: string]: string },
     content_mt: { [doc: string]: { [tgt: string]: string } },
-    progress: UserProgress,
+    progress: UserProgressP2,
 }
-export class UserProgress {
+
+export class UserProgressP1 {
     constructor(
         public doc: number,
         public mkb: number,
-        public sec: number
+        public mtn: number
     ) {}
 
     public finished(): boolean {
-        return this.doc == -1 && this.mkb == -1 && this.sec == -1;
+        return this.doc == -1 && this.mkb == -1
+    }
+}
+export class UserProgressP2 {
+    constructor(
+        public doc: number,
+        public mkb: number,
+        public sec: number,
+    ) {}
+
+    public finished(): boolean {
+        return this.doc == -1 && this.mkb == -1 && this.sec == -1
     }
 }
 
 export class DocumentLoader {
     public static baseURL: string = DEVMODE ? 'http://localhost:8001/' : 'http://localhost:8001/'
 
-    public static async load(AID: string): Promise<[UserIntroSync, UserProgress]> {
+    public static async loadP1(AID: string): Promise<[UserIntroSync, UserProgressP1]> {
         let convertRaw: (data: UserIntroRaw) => UserIntroSync = (data: UserIntroRaw) => {
             return {
                 queue_doc: data.queue_doc,
@@ -70,6 +82,43 @@ export class DocumentLoader {
                 throw new Error(`${DocumentLoader.baseURL} download sync error`)
             }
         })
-        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mkb, data.progress.sec)]
+        return [convertRaw(data), new UserProgressP1(data.progress.doc, data.progress.mkb, data.progress.mtn)]
+    }
+
+    public static async loadP2(AID: string): Promise<[UserIntroSync, UserProgressP2]> {
+        let convertRaw: (data: UserIntroRaw) => UserIntroSync = (data: UserIntroRaw) => {
+            return {
+                queue_doc: data.queue_doc,
+                queue_mkb: data.queue_mkb,
+                mts: data.mts,
+                content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
+                    (key: string) => [key, new DocSrc(data.content_src[key])]
+                )),
+                content_mt: new Map<string, Map<string, DocTgt>>(Object.keys(data.content_mt).map(
+                    (docKey: string) => [
+                        docKey,
+                        new Map<string, DocTgt>(Object.keys(data.content_mt[docKey]).map(
+                            (tgtKey: string) => [tgtKey, new DocTgt(data.content_mt[docKey][tgtKey])]
+                        ))
+                    ]
+                ))
+            }
+        }
+
+        let data = await $.ajax({
+            method: 'POST',
+            url: DocumentLoader.baseURL + 'login_p2',
+            data: JSON.stringify({ 'AID': AID }),
+            crossDomain: true,
+            contentType: 'application/json; charset=utf-8',
+            success: (data: UserIntroRaw) => {
+                return data
+            },
+            error: (text) => {
+                alert('Error syncing with server. Is it up?')
+                throw new Error(`${DocumentLoader.baseURL} download sync error`)
+            }
+        })
+        return [convertRaw(data), new UserProgressP2(data.progress.doc, data.progress.mkb, data.progress.sec)]
     }
 }

@@ -3,7 +3,7 @@ var DEVMODE_: boolean = DEVMODE
 export { DEVMODE_ as DEVMODE }
 
 import { WaiterControlP2 } from "./waiter_p2/waiter_control"
-// import { WaiterControlP1 } from "./waiter_p1/waiter_control";
+import { WaiterControlP1 } from "./waiter_p1/waiter_control";
 import * as $ from 'jquery'
 
 function validateAID() : string {
@@ -29,15 +29,15 @@ $('#start_annotation_p2').click(() => {
     }
 })
 
-// $('#start_annotation_p1').click(() => {
-//     let AID: string = validateAID()
-//     if(AID) {
-//         // Start the main routing
-//         new WaiterControlP1(AID)
-//     }
-// })
+$('#start_annotation_p1').click(() => {
+    let AID: string = validateAID()
+    if(AID) {
+        // Start the main routing
+        new WaiterControlP1(AID)
+    }
+})
 
 if (DEVMODE) {
     $('#annotator_id').val('testuser')
-    $('#start_annotation_p1').trigger('click')
+    $('#start_annotation_p2').trigger('click')
 }

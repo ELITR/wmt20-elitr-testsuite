@@ -4,15 +4,15 @@ import { ModelSegement, ModelMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
-import { UserProgress } from "../documents/document_loader"
+import { UserProgressP2 } from "../documents/document_loader"
 
 export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
 
 export class WaiterControlP2 {
-    private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_frame')
-    private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_nav')
+    private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p2_frame')
+    private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p2_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip')
-    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_tgt_table')
+    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p2_tgt_table')
 
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
@@ -20,7 +20,7 @@ export class WaiterControlP2 {
 
     public constructor(private AID: string) {
         new Promise(async () => {
-            let progress: UserProgress = await this.manager.load(AID)
+            let progress: UserProgressP2 = await this.manager.loadP2(AID)
             if(progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
