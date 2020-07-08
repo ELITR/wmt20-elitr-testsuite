@@ -6,13 +6,14 @@ import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
 import { UserProgressP1 } from "../documents/document_loader"
 
-export type QuestionType = 'nonconflicting' | 'coherent'
+export type QuestionType = 'nonconf' | 'coherent' | 'lexical' | 'errors'
 
 export class WaiterControlP1 {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p1_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p1_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p1')
     private waiter_tgt_snip: JQuery<HTMLDivElement> = $('#tgt_snip_p1')
+    private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p1_tgt_table')
 
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
@@ -21,7 +22,6 @@ export class WaiterControlP1 {
     public constructor(private AID: string) {
         new Promise(async () => {
             let progress: UserProgressP1 = await this.manager.loadP1(AID)
-            console.log(progress)
             if(progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
@@ -47,16 +47,15 @@ export class WaiterControlP1 {
         this.model = new ModelDocumentMT(this.manager.data.mts[this.driver.progress.mtn])
     }
 
-    private display(file: string, markable: number, index: number) {
+    private display(file: string, markable: number, mtn: number) {
         let current_src = this.driver.current_doc_src()
-        this.waiter_src_snip.html(current_src.display(markable, index))
+        this.waiter_src_snip.html(current_src.displayAll(markable))
 
-        let snippets: Array<[string, string]> = this.manager.getAllMT(file).map(
-            ([key, doc]) => [key, doc.display(current_src, markable, index)]
-        )
+        let response_content = WaiterDisplayer.generateElements()
+        this.waiter_tgt_table.html(response_content)
 
-        let content = WaiterDisplayer.generateElements(snippets)
-        this.waiter_tgt_snip.html(this.manager.currentMT(file, index).displayAll(current_src, markable))
+        let current_tgt = this.manager.currentMT(file, mtn)
+        this.waiter_tgt_snip.html(current_tgt.displayAll(current_src, markable))
 
         PageUtils.syncval()
         PageUtils.indeterminate()
@@ -66,11 +65,12 @@ export class WaiterControlP1 {
 
 
     private update_stats() {
+        console.warn('updating stats')
         let currentMarkables = this.driver.current_doc_src().markable_keys
         let currentSections = this.driver.current_doc_src().get_sections(this.driver.progress.mkb)
-        $('#totl_doc').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_mkb').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
-        $('#totl_sec').text(`${this.driver.progress.mtn + 1}/${currentSections.length}`)
+        $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
+        $('#totl_mkb_p1').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
+        $('#totl_mtn_p1').text(`${this.driver.progress.mtn + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
         this.update_buttons()
     }
@@ -120,10 +120,14 @@ export class WaiterControlP1 {
     }
 
     public input_info(type: QuestionType, value: boolean | number | string) {
-        if (type == 'nonconflicting') {
+        if (type == 'nonconf') {
             this.model.nonconflicting = value as boolean
         } else if (type == 'coherent') {
             this.model.coherent = value as number
+        } else if (type == 'errors') {
+            this.model.errors = value as string
+        } else if (type == 'lexical') {
+            this.model.lexical = value as number
         }
 
         let not_resolved = !this.model.resolved()

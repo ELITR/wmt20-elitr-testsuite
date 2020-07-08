@@ -49,18 +49,16 @@ export class PageUtils {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_val = $(element)
 
-            let true_index: number = +element_val.attr('index')
             element_val.on('input', () => {
-                throw new Error("syncmodelP1 handlers are unimplemented")
-                // if (element.id.endsWith('fluency')) {
-                //     controller.input_info('fluency', true_index, element_val.val() as number)
-                // } else if (element.id.endsWith('adequacy')) {
-                //     controller.input_info('adequacy', true_index, element_val.val() as number)
-                // } else if (element.id.endsWith('errors')) {
-                //     controller.input_info('errors', true_index, element_val.val() as string)
-                // } else if (element.id.endsWith('trans')) {
-                //     controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
-                // }
+                if (element.id.endsWith('coherent')) {
+                    controller.input_info('coherent', element_val.val() as string)
+                } else if (element.id.endsWith('lexical')) {
+                    controller.input_info('lexical', element_val.val() as number)
+                } else if (element.id.endsWith('errors')) {
+                    controller.input_info('errors', element_val.val() as string)
+                } else if (element.id.endsWith('nonconf')) {
+                    controller.input_info('nonconf', element_val.prop('checked') as boolean)
+                }
             })
         })
     }

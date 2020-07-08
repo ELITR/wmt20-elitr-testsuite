@@ -68,9 +68,9 @@ export class WaiterControlP2 {
     private update_stats() {
         let currentMarkables = this.driver.current_doc_src().markable_keys
         let currentSections = this.driver.current_doc_src().get_sections(this.driver.progress.mkb)
-        $('#totl_doc').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_mkb').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
-        $('#totl_sec').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
+        $('#totl_doc_p2').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
+        $('#totl_mkb_p2').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
+        $('#totl_sec_p2').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
         this.update_buttons()
     }

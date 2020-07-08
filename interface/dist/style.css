@@ -19,7 +19,8 @@
     display: inline-block;
 }
 
-#waiter_p2_doc_control_frame, #waiter_p2_mtr_control_frame, #waiter_p2_sec_control_frame, #waiter_p2_mkb_control_frame {
+#waiter_p2_doc_control_frame, #waiter_p2_mtr_control_frame, #waiter_p2_sec_control_frame, #waiter_p2_mkb_control_frame,
+#waiter_p1_doc_control_frame, #waiter_p1_mtr_control_frame, #waiter_p2_mtn_control_frame, #waiter_p1_mkb_control_frame {
     display: inline-block;
     margin-right: 20px;
 }
@@ -34,14 +35,32 @@
     white-space: pre-line;
 }
 
-.tgt_snip {
+#tgt_snip_p1 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.tgt_snip_p2 {
     display: inline-block;
     width: 500px;
     height: 250px;
     overflow-y: scroll;
 }
 
-#src_snip {
+#src_snip_p1 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+#src_snip_p2 {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -88,17 +107,35 @@
     text-align: right !important;
 }
 
+.waiter_p1_response div {
+    text-align: left;
+}
+
+.waiter_p1_response_single {
+    margin-left: auto;
+    width: 100%;
+    text-align: right !important;
+}
+
 input[type=range] {
     width: 100px
 }
 
-.waiter_p2_response_single div:last-child {
+.waiter_p2_response_single div:last-child, .waiter_p1_response_single div:last-child {
     width: 60px;
     display: inline-block !important;
     text-align: right;
 }
 
-.waiter_p2_response_single textarea {
+.waiter_p2_response_single textarea, .waiter_p1_response_single textarea {
     width: 300px;
     height: 50px;
+}
+
+#waiter_p1_tgt_table { 
+    display: block;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
 }

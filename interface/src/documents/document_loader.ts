@@ -30,7 +30,7 @@ export class UserProgressP1 {
     ) {}
 
     public finished(): boolean {
-        return this.doc == -1 && this.mkb == -1
+        return this.doc == -1 && this.mkb == -1 && this.mtn == -1
     }
 }
 export class UserProgressP2 {

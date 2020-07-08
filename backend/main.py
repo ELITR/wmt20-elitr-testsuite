@@ -24,7 +24,9 @@ def logP2Service():
         assertArgsJ(request, 'AID')
     except Exception as e:
         return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
-    print('LOGIN', request.json['AID'])
+    
+    print('P2 LOGIN', request.json['AID'])
+    
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
 
@@ -43,7 +45,9 @@ def logP1Service():
         assertArgsJ(request, 'AID')
     except Exception as e:
         return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
-    print('LOGIN', request.json['AID'])
+
+    print('P1 LOGIN', request.json['AID'])
+
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
 
@@ -66,15 +70,15 @@ def saveP2Service():
 
     AID = request.json['AID']
 
-    if not re.match(r'[a-zA-Z0-9]+', AID):
+    if not validate_AID(AID):
         return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
 
-    print('SAVE', AID)
+    print('P2 SAVE', AID)
 
     rating_obj = {
         'doc': request.json['current']['doc'],
         'mkb': request.json['current']['mkb'],
-        'mtn': request.json['current']['mtn'],
+        'sec': request.json['current']['sec'],
         'rating': request.json['rating']
     }
 
@@ -87,6 +91,39 @@ def saveP2Service():
 
     return {'status': 'OK'}
 
+@app.route('/save_p1', methods=['POST'])
+def saveP1Service():
+    try:
+        assertArgsJ(request, ['AID', 'progress', 'current', 'rating', 'mt_name'])
+    except Exception as e:
+        return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
+
+    AID = request.json['AID']
+
+    if not validate_AID(AID):
+        return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
+
+    print('P1 SAVE', AID)
+
+    rating_obj = {
+        'doc': request.json['current']['doc'],
+        'mkb': request.json['current']['mkb'],
+        'mtn': request.json['current']['mtn'],
+        'rating': request.json['rating'],
+        'mt_name': request.json['mt_name']
+    }
+
+    with open(f'logs/p1/ratings/{AID}.jlog', 'a+') as f:
+        f.write(json.dumps(rating_obj)+'\n')
+
+    queues = json.load(open('logs/p1/queue_user.json', 'r'))
+    queues[AID]['progress'] = request.json['progress']
+    json.dump(queues, open('logs/p1/queue_user.json', 'w'))
+
+    return {'status': 'OK'}
+
+def validate_AID(AID):
+    return re.match(r'[a-zA-Z0-9]+', AID)
 
 def assertArgs(args, assertees):
     """

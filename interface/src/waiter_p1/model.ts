@@ -42,6 +42,8 @@ export class ModelDocumentMT {
 
     public nonconflicting?: boolean
     public coherent?: number
+    public lexical?: number
+    public errors?: string
 
     public resolved(): boolean {
         if (DEVMODE)
@@ -54,6 +56,11 @@ export class ModelDocumentMT {
         if (!this.resolved()) {
             throw new Error('Attempted to jsonify an unresolved model object')
         }
-        return { nonconflicting: this.nonconflicting as boolean, coherent: this.coherent as number }
+        return {
+            nonconflicting: this.nonconflicting as boolean,
+            coherent: this.coherent as number,
+            lexical: this.lexical as number,
+            errors: this.errors as string
+        }
     }
 }
