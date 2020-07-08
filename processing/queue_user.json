@@ -1,1 +1,0 @@
-{"vilda": {"progress": {"doc": 0, "mkb": 0, "sec": 0}, "queue_doc": ["doc1", "doc2"], "queue_mkb": {"doc1": ["literature", "lorem"], "doc2": ["uni", "prague", "czech"]}}, "testuser": {"progress": {"doc": 0, "mkb": 0, "sec": 0}, "queue_doc": ["doc1", "doc2"], "queue_mkb": {"doc1": ["literature", "lorem"], "doc2": ["prague", "uni", "czech"]}}}

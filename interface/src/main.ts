@@ -2,8 +2,8 @@ declare var DEVMODE: boolean;
 var DEVMODE_: boolean = DEVMODE
 export { DEVMODE_ as DEVMODE }
 
-import { WaiterControlP2 } from "./waiter_p2/waiter_control"
-import { WaiterControlP1 } from "./waiter_p1/waiter_control";
+import { WaiterControl as WaiterControlP2 } from "./waiter_p2/waiter_control"
+import { WaiterControl as WaiterControlP1 } from "./waiter_p1/waiter_control";
 import * as $ from 'jquery'
 
 function validateAID() : string {

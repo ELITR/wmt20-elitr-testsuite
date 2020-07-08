@@ -1,12 +1,12 @@
-import { DocumentManager } from "../documents/document_manager"
+import { DocumentManager } from "./document_manager"
 import { DocSrc } from "../documents/document"
-import { UserProgressP1 } from "../documents/document_loader"
+import { UserProgress } from "./document_loader"
 
 export class WaiterDriver {
 
     public constructor(
         private manager: DocumentManager,
-        public progress: UserProgressP1
+        public progress: UserProgress
     ) { }
 
     public current_sig(): string {
@@ -17,8 +17,8 @@ export class WaiterDriver {
         return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
     }
 
-    public current_sections(): Array<[number, number]> {
-        return this.current_doc_src().get_sections(this.progress.mkb)
+    public current_mts(): Array<string> {
+        return this.manager.data.queue_mts[this.current_sig()]
     }
 
     public move_doc(offset: number) {
@@ -39,10 +39,10 @@ export class WaiterDriver {
         this.reset_mtn()
     }
 
-    public move_sec(offset: number) {
-        const sections = this.current_sections()
-        if (this.progress.mtn + offset < 0 || this.progress.mtn + offset >= sections.length) {
-            throw Error('Section index out of bounds')
+    public move_mtn(offset: number) {
+        const mts = this.current_mts()
+        if (this.progress.mtn + offset < 0 || this.progress.mtn + offset >= mts.length) {
+            throw Error('MT model index out of bounds')
         }
         this.progress.mtn += offset
     }
@@ -57,8 +57,8 @@ export class WaiterDriver {
     }
 
     public end_mtn() {
-        const sections = this.current_sections()
-        return this.progress.mtn >= sections.length - 1
+        const mts = this.current_mts()
+        return this.progress.mtn >= mts.length - 1
     }
 
     public reset_mtn() {
@@ -73,8 +73,8 @@ export class WaiterDriver {
         console.log(this.progress.doc, this.progress.mkb, this.progress.mtn)
     }
 
-    public advanced(): UserProgressP1 {
-        let next: UserProgressP1 = new UserProgressP1(this.progress.doc, this.progress.mkb, this.progress.mtn)
+    public advanced(): UserProgress {
+        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mkb, this.progress.mtn)
 
         if (this.end_mtn()) {
             next.mtn = 0;

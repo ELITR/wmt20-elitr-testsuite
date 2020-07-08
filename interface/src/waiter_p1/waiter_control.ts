@@ -1,14 +1,14 @@
-import { DocumentManager } from "../documents/document_manager"
+import { DocumentManager } from "./document_manager"
 import * as $ from 'jquery'
 import { ModelDocumentMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
-import { UserProgressP1 } from "../documents/document_loader"
+import { UserProgress } from "./document_loader"
 
 export type QuestionType = 'nonconf' | 'coherent' | 'lexical' | 'errors'
 
-export class WaiterControlP1 {
+export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p1_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p1_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p1')
@@ -21,7 +21,7 @@ export class WaiterControlP1 {
 
     public constructor(private AID: string) {
         new Promise(async () => {
-            let progress: UserProgressP1 = await this.manager.loadP1(AID)
+            let progress: UserProgress = await this.manager.load(AID)
             if(progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
@@ -67,10 +67,12 @@ export class WaiterControlP1 {
     private update_stats() {
         console.warn('updating stats')
         let currentMarkables = this.driver.current_doc_src().markable_keys
-        let currentSections = this.driver.current_doc_src().get_sections(this.driver.progress.mkb)
+        // TODO
+        let currentMts = this.driver.current_mts()
+        console.warn('Current MTS:', currentMts)
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mkb_p1').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
-        $('#totl_mtn_p1').text(`${this.driver.progress.mtn + 1}/${currentSections.length}`)
+        $('#totl_mtn_p1').text(`${this.driver.progress.mtn + 1}/${currentMts.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
         this.update_buttons()
     }
@@ -111,7 +113,7 @@ export class WaiterControlP1 {
                 this.driver.move_mkb(+1)
             }
         } else {
-            this.driver.move_sec(+1)
+            this.driver.move_mtn(+1)
         }
 
         if (refresh) {
@@ -132,9 +134,5 @@ export class WaiterControlP1 {
 
         let not_resolved = !this.model.resolved()
         $('#save_button_p1').prop('disabled', not_resolved)
-    }
-
-    public end_sec() {
-
     }
 }

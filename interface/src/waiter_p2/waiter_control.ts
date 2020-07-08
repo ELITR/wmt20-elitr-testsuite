@@ -1,14 +1,14 @@
-import { DocumentManager } from "../documents/document_manager"
+import { DocumentManager } from "./document_manager"
 import * as $ from 'jquery'
 import { ModelSegement, ModelMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
-import { UserProgressP2 } from "../documents/document_loader"
+import { UserProgress } from "./document_loader"
 
 export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
 
-export class WaiterControlP2 {
+export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p2_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p2_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p2')
@@ -20,7 +20,7 @@ export class WaiterControlP2 {
 
     public constructor(private AID: string) {
         new Promise(async () => {
-            let progress: UserProgressP2 = await this.manager.loadP2(AID)
+            let progress: UserProgress = await this.manager.load(AID)
             if(progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return

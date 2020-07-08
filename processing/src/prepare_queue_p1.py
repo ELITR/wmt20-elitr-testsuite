@@ -17,11 +17,12 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     with open(args.experiment_def, 'r') as f:
-        def_experiment = yaml.load(f)
+        def_experiment = yaml.safe_load(f)
 
     def_markables = def_experiment['markables']
     def_docs = def_experiment['docs']
     def_users = def_experiment['users']
+    def_mts = def_experiment['mts']
 
     content = {}
     doc_markables = {}
@@ -36,13 +37,16 @@ if __name__ == '__main__':
         obj['progress'] = {
             "doc": 0,
             "mkb": 0,
-            "sec": 0
+            "mtn": 0
         }
         obj['queue_doc'] = random.sample(def_docs, len(def_docs))
         obj['queue_mkb'] = {}
         for doc in def_docs:
             target_markables = doc_markables[doc]
             obj['queue_mkb'][doc] = random.sample(target_markables, len(target_markables))
+        obj['queue_mts'] = {}
+        for doc in def_docs:
+            obj['queue_mts'][doc] = random.sample(def_mts, len(def_mts))
 
         content[user] = obj
 

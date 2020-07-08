@@ -16,7 +16,7 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     with open(args.experiment_def, 'r') as f:
-        def_experiment = yaml.load(f)
+        def_experiment = yaml.safe_load(f)
 
     def_markables = def_experiment['markables']
     def_mts = def_experiment['mts']

@@ -58,6 +58,7 @@ def logP1Service():
     content['progress'] = queues[AID]['progress']
     content['queue_doc'] = queues[AID]['queue_doc']
     content['queue_mkb'] = queues[AID]['queue_mkb']
+    content['queue_mts'] = queues[AID]['queue_mts']
     return json.jsonify(content)
 
 

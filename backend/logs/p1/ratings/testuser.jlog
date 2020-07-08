@@ -7,3 +7,8 @@
 {"doc": 1, "mkb": 1, "mt_name": "lindat", "mtn": 2, "rating": {"coherent": "0.7", "errors": "brrbbbb", "lexical": "0.7", "nonconflicting": true}}
 {"doc": 0, "mkb": 0, "mt_name": "bing", "mtn": 0, "rating": {"lexical": "0.4"}}
 {"doc": 0, "mkb": 0, "mt_name": "google", "mtn": 1, "rating": {"lexical": "0.3"}}
+{"doc": 0, "mkb": 0, "mt_name": "bing", "mtn": 0, "rating": {"lexical": "0.6"}}
+{"doc": 0, "mkb": 0, "mt_name": "google", "mtn": 1, "rating": {"lexical": "0.5"}}
+{"doc": 0, "mkb": 0, "mt_name": "lindat", "mtn": 2, "rating": {"lexical": "0.4"}}
+{"doc": 0, "mkb": 1, "mt_name": "bing", "mtn": 0, "rating": {"lexical": "0.3"}}
+{"doc": 0, "mkb": 1, "mt_name": "google", "mtn": 1, "rating": {"lexical": "0.6"}}

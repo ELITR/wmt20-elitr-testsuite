@@ -1,6 +1,6 @@
 import * as $ from 'jquery'
-import { WaiterControlP2 } from '../waiter_p2/waiter_control'
-import { WaiterControlP1 } from '../waiter_p1/waiter_control'
+import { WaiterControl as WaiterControlP2 } from '../waiter_p2/waiter_control'
+import { WaiterControl as WaiterControlP1 } from '../waiter_p1/waiter_control'
 
 export class PageUtils {
     public static syncval(): void {

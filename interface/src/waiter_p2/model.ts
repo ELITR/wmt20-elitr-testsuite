@@ -1,4 +1,4 @@
-import { DocumentLoader, UserProgressP2 } from "../documents/document_loader"
+import { DocumentLoader, UserProgress } from "./document_loader"
 import * as $ from 'jquery'
 import { DEVMODE } from "../main"
 
@@ -17,7 +17,7 @@ export class ModelSegement {
         this.mt_models = mts.map((name:string) => new ModelMT(name))
     }
 
-    public save(AID: string, current: UserProgressP2, progress: UserProgressP2) {
+    public save(AID: string, current: UserProgress, progress: UserProgress) {
         let rating_serialized: { [key: string]: any } = {}
         this.mt_models.forEach((model: ModelMT) => rating_serialized[model.name] = model.toObject())
 
