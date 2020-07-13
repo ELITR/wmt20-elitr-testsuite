@@ -1,18 +1,19 @@
 
 mts:
-  - "bing"
-  - "google"
-  - "lindat"
+  - bing
+  - google
+  - lindat
 
 docs:
-  - "doc1"
-  - "doc2"
+  - doc1
+  - doc2
 
 users:
-  - "vilda"
-  - "testuser"
+  - vilda
+  - testuser
 
 markables:
+  # au1tc
   - 
     - automobil
     - auto

@@ -12,7 +12,6 @@ CORS(app)
 pathlib.Path('logs/p2/ratings').mkdir(parents=True, exist_ok=True)
 pathlib.Path('logs/p1/ratings').mkdir(parents=True, exist_ok=True)
 
-
 @app.route('/')
 def index():
     return 'This is the WMT20 ELITR server. For info about this project or the API please see the <a href="https://github.com/ELITR/wmt20-elitr-testsuite">documentation</a>.'

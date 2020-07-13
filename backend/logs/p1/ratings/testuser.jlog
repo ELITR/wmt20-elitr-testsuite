@@ -12,3 +12,4 @@
 {"doc": 0, "mkb": 0, "mt_name": "lindat", "mtn": 2, "rating": {"lexical": "0.4"}}
 {"doc": 0, "mkb": 1, "mt_name": "bing", "mtn": 0, "rating": {"lexical": "0.3"}}
 {"doc": 0, "mkb": 1, "mt_name": "google", "mtn": 1, "rating": {"lexical": "0.6"}}
+{"doc": 0, "mkb": 1, "mt_name": "lindat", "mtn": 2, "rating": {"coherent": "0.4", "lexical": "0.2", "nonconflicting": true}}
