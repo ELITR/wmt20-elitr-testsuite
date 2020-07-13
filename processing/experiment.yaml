@@ -1,26 +1,3 @@
-markables:
-  uni:
-    - university
-    - univerzita
-    - univerzit
-
-  literature:
-    - literature
-    - literatura
-    - literatury
-    - literatuře
-
-  czech:
-    - czech
-    - česky
-
-  prague:
-    - prague
-    - praha
-    - praze
-
-  lorem:
-    - lorem
 
 mts:
   - "bing"
@@ -34,3 +11,91 @@ docs:
 users:
   - "vilda"
   - "testuser"
+
+markables:
+  - 
+    - automobil
+    - auto
+  - 
+    - den
+    - den
+    - dne
+    - dnů
+    - dnem
+  - 
+    - dohodnutý
+    - dohodnutý
+    - dohodnutých
+    - dohodnutou
+  - 
+    - doporučovat
+    - doporučovat
+    - doporučuje
+  -
+    - evidence
+    - evidence
+    - evidenci
+  -
+    - jenž
+    - jenž
+    - jejichž
+    - nichž
+  -
+    - který
+    - která
+  - 
+    - kupní
+  -
+    - nemohl
+    - nemohla
+    - mohl
+    - mohla
+    - může
+  - 
+    - podpis
+    - podpisu
+    - podspiy
+    - podpisem
+  -
+    - prodej
+    - prodeji
+    - prohlašuje
+  - 
+    - průkaz
+    - průkazu
+  -
+    - předmět
+    - předmětu
+  -
+    - smlouva
+    - smlouvy
+    - smlouvou
+    - smlouvu
+  -
+    - strana
+    - straně
+    - stranami
+  -
+    - uvedený
+    - uvedeného
+    - uvedené
+  - 
+    - vada
+    - vady
+    - vad
+  -
+    - všechny
+    - všemi
+    - všechen
+    - vše
+  -
+    - zaplacení
+    - zaplacením
+  -
+    - zejména
+  -
+    - článek
+    - čl
+  -
+    - číslo
+    - č

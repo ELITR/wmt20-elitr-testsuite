@@ -49,13 +49,15 @@ export class WaiterControl {
 
     private display(file: string, markable: number, mtn: number) {
         let current_src = this.driver.current_doc_src()
-        this.waiter_src_snip.html(current_src.displayAll(markable))
+        // this.waiter_src_snip.html(current_src.displayAll(markable))
+        this.waiter_src_snip.html(current_src.displaySimple())
 
         let response_content = WaiterDisplayer.generateElements()
         this.waiter_tgt_table.html(response_content)
 
         let current_tgt = this.manager.currentMT(file, mtn)
-        this.waiter_tgt_snip.html(current_tgt.displayAll(current_src, markable))
+        // this.waiter_tgt_snip.html(current_tgt.displayAll(current_src, markable))
+        this.waiter_tgt_snip.html(current_tgt.displaySimple())
 
         PageUtils.syncval()
         PageUtils.indeterminate()
@@ -65,11 +67,8 @@ export class WaiterControl {
 
 
     private update_stats() {
-        console.warn('updating stats')
         let currentMarkables = this.driver.current_doc_src().markable_keys
-        // TODO
         let currentMts = this.driver.current_mts()
-        console.warn('Current MTS:', currentMts)
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mkb_p1').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
         $('#totl_mtn_p1').text(`${this.driver.progress.mtn + 1}/${currentMts.length}`)

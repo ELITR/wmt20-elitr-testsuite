@@ -59,6 +59,10 @@ export class DocSrc {
         return output
     }
 
+    public displaySimple(): string {
+        return this.raw;
+    }
+
     public get_sections(markable: number): Array<[number, number]> {
         return this.markables.get(this.markable_keys[markable])
     }
@@ -114,4 +118,7 @@ export class DocTgt {
         return output
     }
 
+    public displaySimple(): string {
+        return this.raw;
+    }
 }
