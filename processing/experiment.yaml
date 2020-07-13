@@ -13,6 +13,13 @@ users:
   - testuser
 
 markables:
+  # demo
+  - 
+    - Lóřem
+    - lorem
+  -
+    - Emperor
+    - Panovník
   # au1tc
   - 
     - automobil

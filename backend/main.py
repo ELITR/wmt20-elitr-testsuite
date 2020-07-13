@@ -73,12 +73,11 @@ def saveP1Service():
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}"
     rating_obj[location_signature] = request.json['rating']
 
-    with open(ratings_file, 'w') as f:
-        f.write(json.dumps(rating_obj))
+    json.dump(rating_obj, open(ratings_file, 'w'), ensure_ascii=False)
 
     queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/p1/queue_user.json', 'w'))
+    json.dump(queues, open('logs/p1/queue_user.json', 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
 
@@ -96,15 +95,14 @@ def saveP2Service():
         with open(ratings_file, 'r') as f:
             rating_obj = json.loads(f.read())
 
-    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb']}-{request.json['current']['sec']}"
+    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
     rating_obj[location_signature] = request.json['rating']
 
-    with open(ratings_file, 'w') as f:
-        f.write(json.dumps(rating_obj))
+    json.dump(rating_obj, open(ratings_file, 'w'), ensure_ascii=False)
 
     queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/p1/queue_user.json', 'w'))
+    json.dump(queues, open('logs/p1/queue_user.json', 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
 

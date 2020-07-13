@@ -12,11 +12,14 @@ export class ModelMarkable {
 
 export class ModelSegement {
     public mtModels: Array<ModelMT>
+    
+    // These strings and the progress object now create two sources of truth, which is bad
+    public mkbName: string
     public docName: string
 
-
-    public constructor(mts: string[], docName: string) {
+    public constructor(mts: string[], mkbName: string, docName: string) {
         this.mtModels = mts.map((name: string) => new ModelMT(name))
+        this.mkbName = mkbName
         this.docName = docName
     }
 
@@ -33,7 +36,8 @@ export class ModelSegement {
                     'doc': current.doc,
                     'mkb': current.mkb,
                     'sec': current.sec,
-                    'doc_name': this.docName
+                    'mkb_name': this.mkbName,
+                    'doc_name': this.docName,
                 },
                 'progress': {
                     'doc': progress.doc,

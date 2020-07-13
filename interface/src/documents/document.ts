@@ -68,7 +68,6 @@ export class DocSrc {
     }
 }
 
-
 export class DocTgt {
     private static MIN_CHAR_CONTEXT: number = 150
     private static UNDERLINE_CHAR_CONTEXT: number = 20

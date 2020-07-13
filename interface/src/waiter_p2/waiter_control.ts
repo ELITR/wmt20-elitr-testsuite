@@ -21,7 +21,7 @@ export class WaiterControl {
     public constructor(private AID: string) {
         new Promise(async () => {
             let progress: UserProgress = await this.manager.load(AID)
-            if(progress.finished()) {
+            if (progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
             }
@@ -41,9 +41,11 @@ export class WaiterControl {
 
     public display_current() {
         this.update_stats()
-        let docName = this.manager.data.queue_doc[this.driver.progress.doc]
+        let docName: string = this.manager.data.queue_doc[this.driver.progress.doc]
+        let mkbName: string = this.driver.current_doc_src().markable_keys[this.driver.progress.mkb]
+
         this.display(docName, this.driver.progress.mkb, this.driver.progress.sec)
-        this.model = new ModelSegement(this.manager.data.mts.shuffle(), docName)
+        this.model = new ModelSegement(this.manager.data.mts.shuffle(), mkbName, docName)
     }
 
     private display(file: string, markable: number, index: number) {

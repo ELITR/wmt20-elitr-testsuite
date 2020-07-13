@@ -26,15 +26,20 @@ def annotate(text, markables, sensitive=False):
 
     return text
 
+def occurences_context(hay, value, sensitive=False):
+    if sensitive:
+        return len(re.findall(f'(^|[^>a-zA-Z])({value})($|[^<a-zA-Z])', hay))
+    else:
+        return len(re.findall(f'(^|[^>a-zA-Z])({value})($|[^<a-zA-Z])', hay, flags=re.IGNORECASE))
+
 def distribution(text, markables, sensitive=False):
     markablesInv = inv_markable(markables)
-
     dist = defaultdict(int)
 
     for value, code in markablesInv.items():
         if sensitive:
-            dist[code] += text.count(value)
+            dist[code] += occurences_context(text, value, True)
         else:
-            dist[code] += text.lower().count(value.lower())
-
+            dist[code] += occurences_context(text, value, False)
+    
     return dist
