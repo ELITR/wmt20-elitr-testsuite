@@ -7,10 +7,12 @@ export class Model {
 }
 
 export class ModelDocumentMT {
-    public name: string
+    public mtName: string
+    public docName: string
 
-    public constructor(name: string) {
-        this.name = name
+    public constructor(mtName: string, docName: string) {
+        this.mtName = mtName
+        this.docName = docName
     }
 
     public save(AID: string, current: UserProgress, progress: UserProgress) {
@@ -21,15 +23,14 @@ export class ModelDocumentMT {
                 'AID': AID,
                 'current': {
                     'doc': current.doc,
-                    'mkb': current.mkb,
                     'mtn': current.mtn,
+                    'mt_name': this.mtName,
+                    'doc_name': this.docName,
                 },
                 'progress': {
                     'doc': progress.doc,
-                    'mkb': progress.mkb,
                     'mtn': progress.mtn,
                 },
-                'mt_name': this.name,
                 'rating': this.toObject()
             }),
             crossDomain: true,

@@ -36,14 +36,9 @@ if __name__ == '__main__':
         obj = {}
         obj['progress'] = {
             "doc": 0,
-            "mkb": 0,
             "mtn": 0
         }
         obj['queue_doc'] = random.sample(def_docs, len(def_docs))
-        obj['queue_mkb'] = {}
-        for doc in def_docs:
-            target_markables = doc_markables[doc]
-            obj['queue_mkb'][doc] = random.sample(target_markables, len(target_markables))
         obj['queue_mts'] = {}
         for doc in def_docs:
             obj['queue_mts'][doc] = random.sample(def_mts, len(def_mts))

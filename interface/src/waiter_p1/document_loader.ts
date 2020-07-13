@@ -4,7 +4,6 @@ import { DocSrc, DocTgt } from '../documents/document'
 
 export interface UserIntroSync {
     queue_doc: string[],
-    queue_mkb: { [key: string]: Array<string> },
     queue_mts: { [key: string]: Array<string> },
     mts: string[],
     content_src: Map<string, DocSrc>,
@@ -12,7 +11,6 @@ export interface UserIntroSync {
 }
 export interface UserIntroRaw {
     queue_doc: string[],
-    queue_mkb: { [key: string]: Array<string> },
     queue_mts: { [key: string]: Array<string> },
     mts: string[],
     content_src: { [key: string]: string },
@@ -23,12 +21,11 @@ export interface UserIntroRaw {
 export class UserProgress {
     constructor(
         public doc: number,
-        public mkb: number,
         public mtn: number
     ) {}
 
     public finished(): boolean {
-        return this.doc == -1 && this.mkb == -1 && this.mtn == -1
+        return this.doc == -1 && this.mtn == -1
     }
 }
 
@@ -39,7 +36,6 @@ export class DocumentLoader {
         let convertRaw: (data: UserIntroRaw) => UserIntroSync = (data: UserIntroRaw) => {
             return {
                 queue_doc: data.queue_doc,
-                queue_mkb: data.queue_mkb,
                 queue_mts: data.queue_mts,
                 mts: data.mts,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
@@ -70,6 +66,6 @@ export class DocumentLoader {
                 throw new Error(`${DocumentLoader.baseURL} download sync error`)
             }
         })
-        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mkb, data.progress.mtn)]
+        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mtn)]
     }
 }

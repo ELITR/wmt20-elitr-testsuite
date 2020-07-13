@@ -26,16 +26,6 @@ export class WaiterDriver {
             throw Error('Document index out of bounds')
         }
         this.progress.doc += offset
-        this.reset_mkb()
-        this.reset_mtn()
-    }
-
-    public move_mkb(offset: number) {
-        const markable_keys = this.current_doc_src().markable_keys
-        if (this.progress.mkb + offset < 0 || this.progress.mkb + offset >= markable_keys.length) {
-            throw Error('Markable index out of bounds')
-        }
-        this.progress.mkb += offset
         this.reset_mtn()
     }
 
@@ -51,11 +41,6 @@ export class WaiterDriver {
         return this.progress.doc >= this.manager.data.queue_doc.length - 1
     }
 
-    public end_mkb() {
-        const markable_keys = this.current_doc_src().markable_keys
-        return this.progress.mkb >= markable_keys.length - 1
-    }
-
     public end_mtn() {
         const mts = this.current_mts()
         return this.progress.mtn >= mts.length - 1
@@ -65,28 +50,19 @@ export class WaiterDriver {
         this.progress.mtn = 0
     }
 
-    public reset_mkb() {
-        this.progress.mkb = 0
-    }
-
     public log_progress() {
-        console.log(this.progress.doc, this.progress.mkb, this.progress.mtn)
+        console.log(this.progress.doc, this.progress.mtn)
     }
 
     public advanced(): UserProgress {
-        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mkb, this.progress.mtn)
+        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mtn)
 
         if (this.end_mtn()) {
             next.mtn = 0;
-            if (this.end_mkb()) {
-                next.mkb = 0;
-                if (this.end_doc()) {
-                    next.doc = next.mkb = next.mtn = -1
-                } else {
-                    next.doc += 1
-                }
+            if (this.end_doc()) {
+                next.doc = next.mtn = -1
             } else {
-                next.mkb += 1
+                next.doc += 1
             }
         } else {
             next.mtn += 1

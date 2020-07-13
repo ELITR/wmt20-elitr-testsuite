@@ -22,7 +22,7 @@ export class WaiterControl {
     public constructor(private AID: string) {
         new Promise(async () => {
             let progress: UserProgress = await this.manager.load(AID)
-            if(progress.finished()) {
+            if (progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
             }
@@ -34,7 +34,6 @@ export class WaiterControl {
 
             this.update_stats()
             this.display_current()
-            this.update_buttons()
 
             $('#save_button_p1').click(() => this.save())
         })
@@ -42,12 +41,12 @@ export class WaiterControl {
 
     public display_current() {
         this.update_stats()
-        this.display(this.manager.data.queue_doc[this.driver.progress.doc], this.driver.progress.mkb, this.driver.progress.mtn)
-        // TODO: get model name
-        this.model = new ModelDocumentMT(this.manager.data.mts[this.driver.progress.mtn])
+        let docName = this.manager.data.queue_doc[this.driver.progress.doc]
+        this.display(docName, this.driver.progress.mtn)
+        this.model = new ModelDocumentMT(this.manager.data.mts[this.driver.progress.mtn], docName)
     }
 
-    private display(file: string, markable: number, mtn: number) {
+    private display(file: string, mtn: number) {
         let current_src = this.driver.current_doc_src()
         // this.waiter_src_snip.html(current_src.displayAll(markable))
         this.waiter_src_snip.html(current_src.displaySimple())
@@ -70,19 +69,7 @@ export class WaiterControl {
         let currentMarkables = this.driver.current_doc_src().markable_keys
         let currentMts = this.driver.current_mts()
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_mkb_p1').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
         $('#totl_mtn_p1').text(`${this.driver.progress.mtn + 1}/${currentMts.length}`)
-        $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
-        this.update_buttons()
-    }
-
-    private update_buttons() {
-        $('#next_doc').prop('disabled', this.driver.progress.doc >= this.manager.data.queue_doc.length - 1)
-        $('#prev_doc').prop('disabled', this.driver.progress.doc <= 0)
-
-        const markable_keys = this.driver.current_doc_src().markable_keys
-        $('#next_mkb').prop('disabled', this.driver.progress.mkb >= markable_keys.length - 1)
-        $('#prev_mkb').prop('disabled', this.driver.progress.mkb <= 0)
     }
 
     private save() {
@@ -98,18 +85,13 @@ export class WaiterControl {
         let refresh = true
         if (this.driver.end_mtn()) {
             this.driver.reset_mtn()
-            if (this.driver.end_mkb()) {
-                this.driver.reset_mkb()
-                if (this.driver.end_doc()) {
-                    refresh = false
-                    alert('All work finished. Wait a few moments for the page to refresh.')
-                    // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
-                    window.setTimeout(() => window.location.reload(), 3000)
-                } else {
-                    this.driver.move_doc(+1)
-                }
+            if (this.driver.end_doc()) {
+                refresh = false
+                alert('All work finished. Wait a few moments for the page to refresh.')
+                // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
+                window.setTimeout(() => window.location.reload(), 3000)
             } else {
-                this.driver.move_mkb(+1)
+                this.driver.move_doc(+1)
             }
         } else {
             this.driver.move_mtn(+1)
