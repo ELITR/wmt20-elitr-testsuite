@@ -25,8 +25,6 @@ def logP1Service():
     except Exception as e:
         return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
 
-    print('P1 LOGIN', request.json['AID'])
-
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
 
@@ -46,8 +44,6 @@ def logP2Service():
     except Exception as e:
         return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
     
-    print('P2 LOGIN', request.json['AID'])
-    
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
 
@@ -62,17 +58,9 @@ def logP2Service():
 
 @app.route('/save_p1', methods=['POST'])
 def saveP1Service():
-    try:
-        assertArgsJ(request, ['AID', 'progress', 'current', 'rating'])
-    except Exception as e:
-        return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
-
     AID = request.json['AID']
-
     if not validate_AID(AID):
         return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
-
-    print('P1 SAVE', AID)
 
     ratings_file = f'logs/p1/ratings/{AID}.json'
 
@@ -96,31 +84,27 @@ def saveP1Service():
 
 @app.route('/save_p2', methods=['POST'])
 def saveP2Service():
-    try:
-        assertArgsJ(request, ['AID', 'progress', 'current', 'rating'])
-    except Exception as e:
-        return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
-
     AID = request.json['AID']
-
     if not validate_AID(AID):
         return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
 
-    print('P2 SAVE', AID)
+    ratings_file = f'logs/p2/ratings/{AID}.json'
 
-    rating_obj = {
-        'doc': request.json['current']['doc'],
-        'mkb': request.json['current']['mkb'],
-        'sec': request.json['current']['sec'],
-        'rating': request.json['rating']
-    }
+    if not os.path.isfile(ratings_file):
+        rating_obj = {}
+    else:
+        with open(ratings_file, 'r') as f:
+            rating_obj = json.loads(f.read())
 
-    with open(f'logs/p2/ratings/{AID}.jlog', 'a+') as f:
-        f.write(json.dumps(rating_obj)+'\n')
+    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb']}-{request.json['current']['sec']}"
+    rating_obj[location_signature] = request.json['rating']
 
-    queues = json.load(open('logs/p2/queue_user.json', 'r'))
+    with open(ratings_file, 'w') as f:
+        f.write(json.dumps(rating_obj))
+
+    queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/p2/queue_user.json', 'w'))
+    json.dump(queues, open('logs/p1/queue_user.json', 'w'))
 
     return {'status': 'OK'}
 

@@ -11,15 +11,18 @@ export class ModelMarkable {
 }
 
 export class ModelSegement {
-    public mt_models: Array<ModelMT>
+    public mtModels: Array<ModelMT>
+    public docName: string
 
-    public constructor(mts: string[]) {
-        this.mt_models = mts.map((name:string) => new ModelMT(name))
+
+    public constructor(mts: string[], docName: string) {
+        this.mtModels = mts.map((name: string) => new ModelMT(name))
+        this.docName = docName
     }
 
     public save(AID: string, current: UserProgress, progress: UserProgress) {
         let rating_serialized: { [key: string]: any } = {}
-        this.mt_models.forEach((model: ModelMT) => rating_serialized[model.name] = model.toObject())
+        this.mtModels.forEach((model: ModelMT) => rating_serialized[model.name] = model.toObject())
 
         $.ajax({
             method: 'POST',
@@ -30,6 +33,7 @@ export class ModelSegement {
                     'doc': current.doc,
                     'mkb': current.mkb,
                     'sec': current.sec,
+                    'doc_name': this.docName
                 },
                 'progress': {
                     'doc': progress.doc,

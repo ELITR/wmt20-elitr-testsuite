@@ -41,8 +41,9 @@ export class WaiterControl {
 
     public display_current() {
         this.update_stats()
-        this.display(this.manager.data.queue_doc[this.driver.progress.doc], this.driver.progress.mkb, this.driver.progress.sec)
-        this.model = new ModelSegement(this.manager.data.mts.shuffle())
+        let docName = this.manager.data.queue_doc[this.driver.progress.doc]
+        this.display(docName, this.driver.progress.mkb, this.driver.progress.sec)
+        this.model = new ModelSegement(this.manager.data.mts.shuffle(), docName)
     }
 
     private display(file: string, markable: number, index: number) {
@@ -125,16 +126,16 @@ export class WaiterControl {
 
     public input_info(type: QuestionType, index: number, value: boolean | number | string) {
         if (type == 'translated') {
-            this.model.mt_models[index].translated = value as boolean
+            this.model.mtModels[index].translated = value as boolean
         } else if (type == 'adequacy') {
-            this.model.mt_models[index].adequacy = value as number
+            this.model.mtModels[index].adequacy = value as number
         } else if (type == 'fluency') {
-            this.model.mt_models[index].fluency = value as number
+            this.model.mtModels[index].fluency = value as number
         } else if (type == 'errors') {
-            this.model.mt_models[index].errors = value as string
+            this.model.mtModels[index].errors = value as string
         }
 
-        let not_resolved = this.model.mt_models.some((value: ModelMT) => !value.resolved())
+        let not_resolved = this.model.mtModels.some((value: ModelMT) => !value.resolved())
         $('#save_button_p2').prop('disabled', not_resolved)
     }
 
