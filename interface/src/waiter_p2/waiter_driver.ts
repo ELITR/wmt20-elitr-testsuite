@@ -9,16 +9,20 @@ export class WaiterDriver {
         public progress: UserProgress
     ) { }
 
-    public current_docName(): string {
+    public currentDocName(): string {
         return this.manager.data.queue_doc[this.progress.doc]
     }
 
-    public current_doc(): DocSrc {
+    public currentDoc(): DocSrc {
         return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
     }
 
-    public current_sections(): Array<[number, number]> {
-        return this.current_doc().get_sections(this.progress.mkb)
+    public currentMarkableName() : string {
+        return this.manager.data.queue_mkb.get(this.currentDocName())[this.progress.mkb]
+    }
+
+    public currentSections(): Array<[number, number]> {
+        return this.currentDoc().get_sections(this.currentMarkableName())
     }
 
     public move_doc(offset: number) {
@@ -31,7 +35,7 @@ export class WaiterDriver {
     }
 
     public move_mkb(offset: number) {
-        const markable_keys = this.current_doc().markable_keys
+        const markable_keys = this.currentDoc().markable_keys
         if (this.progress.mkb + offset < 0 || this.progress.mkb + offset >= markable_keys.length) {
             throw Error('Markable index out of bounds')
         }
@@ -40,7 +44,7 @@ export class WaiterDriver {
     }
 
     public move_sec(offset: number) {
-        const sections = this.current_sections()
+        const sections = this.currentSections()
         if (this.progress.sec + offset < 0 || this.progress.sec + offset >= sections.length) {
             throw Error('Section index out of bounds')
         }
@@ -52,12 +56,12 @@ export class WaiterDriver {
     }
 
     public end_mkb() {
-        const markable_keys = this.current_doc().markable_keys
+        const markable_keys = this.currentDoc().markable_keys
         return this.progress.mkb >= markable_keys.length - 1
     }
 
     public end_sec() {
-        const sections = this.current_sections()
+        const sections = this.currentSections()
         return this.progress.sec >= sections.length - 1
     }
 
@@ -94,13 +98,16 @@ export class WaiterDriver {
                     let prevDocName = this.manager.data.queue_doc[prev.doc]
                     let prevDoc = this.manager.data.content_src.get(prevDocName)
                     prev.mkb = prevDoc.markable_keys.length - 1
-                    prev.sec = prevDoc.get_sections(prev.mkb).length -= 1
+
+                    let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)[prev.mkb]
+                    prev.sec = prevDoc.get_sections(prevMarkableName).length - 1
                 }
             } else {
                 prev.mkb -= 1
                 let prevDocName = this.manager.data.queue_doc[prev.doc]
                 let prevDoc = this.manager.data.content_src.get(prevDocName)
-                prev.sec = prevDoc.get_sections(prev.mkb).length -= 1
+                let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)[prev.mkb]
+                prev.sec = prevDoc.get_sections(prevMarkableName).length - 1
             }
         } else {
             prev.sec -= 1

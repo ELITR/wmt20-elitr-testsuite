@@ -31,9 +31,9 @@ export class DocSrc {
         this.raw = raw
     }
 
-    public display(markable: number, index: number): string {
+    public display(markable: string, index: number): string {
         let output = this.raw
-        let indicies = this.markables.get(this.markable_keys[markable])[index]
+        let indicies = this.markables.get(markable)[index]
         const STYLE_A = "<span class='waiter_p2_highlight_src'>"
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
@@ -43,13 +43,13 @@ export class DocSrc {
         return output
     }
 
-    public displayAll(markable: number): string {
+    public displayAll(markable: string): string {
         let output = this.raw
         const STYLE_A = "<span class='waiter_p1_highlight_src'>"
         const STYLE_B = "</span>"
         const STYLE_LEN = STYLE_A.length + STYLE_B.length
 
-        this.markables.get(this.markable_keys[markable]).forEach((indicies: [number, number], indiciesI: number) => {
+        this.markables.get(markable).forEach((indicies: [number, number], indiciesI: number) => {
             // This assumes, that the indicies are linearly ordered 
             let offset = STYLE_LEN * indiciesI
             output = output.slice(0, indicies[0] + offset) + STYLE_A + output.slice(indicies[0] + offset, indicies[1] + offset) + STYLE_B + output.slice(indicies[1] + offset)
@@ -62,9 +62,9 @@ export class DocSrc {
         return this.raw
     }
 
-    public get_sections(markable: number): Array<[number, number]> {
+    public get_sections(markable: string): Array<[number, number]> {
         // creates a copy, because other code may modify it
-        return this.markables.get(this.markable_keys[markable]).map((value: [number, number]) => [value[0], value[1]])
+        return this.markables.get(markable).map((value: [number, number]) => [value[0], value[1]])
     }
 }
 
@@ -75,7 +75,7 @@ export class DocTgt {
 
     constructor(public raw: string) { }
 
-    public display(doc_src: DocSrc, markable: number, index: number): string {
+    public display(doc_src: DocSrc, markable: string, index: number): string {
         let indicies: [number, number] = doc_src.get_sections(markable)[index]
         let position = Math.round((indicies[0] + indicies[1]) / 2)
 
@@ -94,7 +94,7 @@ export class DocTgt {
         return output
     }
 
-    public displayAll(doc_src: DocSrc, markable: number): string {
+    public displayAll(doc_src: DocSrc, markable: string): string {
         let output = this.raw
         const STYLE_A = "<span class='waiter_p1_highlight_tgt'>"
         const STYLE_B = "</span>"
