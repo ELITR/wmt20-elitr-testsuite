@@ -162,6 +162,7 @@ export class WaiterControl {
 
     private sync_next_button() {
         let not_resolved = !this.model.resolved()
-        $('#next_button_p1').prop('disabled', not_resolved)
+        // $('#next_button_p1').prop('disabled', not_resolved)
+        $('#next_button_p1').prop('disabled', false)
     }
 }

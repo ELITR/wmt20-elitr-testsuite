@@ -4,7 +4,7 @@ import { WaiterControl as WaiterControlP1 } from '../waiter_p1/waiter_control'
 import { DEVMODE } from '../main'
 
 export class PageUtils {
-    public static baseURL: string = DEVMODE ? 'http://locahost:8001/' : 'http://localhost:8001/'
+    public static baseURL: string = DEVMODE ? 'http://locahost:8001/' : 'https://quest.ms.mff.cuni.cz/testsuite/'
 
     public static syncval(): void {
         $('.synctext').each((index: number, element: HTMLElement) => {

@@ -187,6 +187,7 @@ export class WaiterControl {
 
     private sync_next_button() {
         let not_resolved = this.model.mtModels.some((value: ModelMT) => !value.resolved())
-        $('#next_button_p2').prop('disabled', not_resolved)
+        // $('#next_button_p2').prop('disabled', not_resolved)
+        $('#next_button_p2').prop('disabled', false)
     }
 }

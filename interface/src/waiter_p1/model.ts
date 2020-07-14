@@ -58,7 +58,7 @@ export class ModelDocumentMT {
     }
 
     public toObject(): any {
-        if (!this.resolved()) {
+        if (false && !this.resolved()) {
             throw new Error('Attempted to serialize an unresolved model object')
         }
         return {

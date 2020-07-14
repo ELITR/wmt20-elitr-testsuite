@@ -74,7 +74,7 @@ export class ModelMT {
     }
 
     public toObject(): any {
-        if (!this.resolved()) {
+        if (false && !this.resolved()) {
             throw new Error('Attempted to serialize an unresolved model object')
         }
         return { translated: this.translated as boolean, adequacy: this.adequacy as number, fluency: this.fluency as number, errors: this.errors as string }
