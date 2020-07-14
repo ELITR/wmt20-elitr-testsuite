@@ -19,11 +19,6 @@ export class DocumentManager {
         return this.data.mts.map((value: string, index: number) => [value, this.data.content_mt.get(file).get(value)])
     }
 
-    public currentMT(docName: string, mtName: string): DocTgt {
-        return this.data.content_mt.get(docName).get(mtName)
-    }
-
-
     public assertSameLength() {
         console.warn('assertSameLength not implemented')
     }

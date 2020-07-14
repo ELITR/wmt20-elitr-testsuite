@@ -21,22 +21,6 @@ export class WaiterDriver {
         return this.manager.data.queue_mt[this.current_docName()]
     }
 
-    public move_doc(offset: number) {
-        if (this.progress.doc + offset < 0 || this.progress.doc + offset >= this.manager.data.queue_doc.length) {
-            throw Error('Document index out of bounds')
-        }
-        this.progress.doc += offset
-        this.progress.mt = 0
-    }
-
-    public move_mt(offset: number) {
-        const mts = this.current_mts()
-        if (this.progress.mt + offset < 0 || this.progress.mt + offset >= mts.length) {
-            throw Error('MT model index out of bounds')
-        }
-        this.progress.mt += offset
-    }
-
     public end_doc() {
         return this.progress.doc >= this.manager.data.queue_doc.length - 1
     }

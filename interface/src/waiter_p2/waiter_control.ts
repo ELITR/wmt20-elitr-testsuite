@@ -33,9 +33,7 @@ export class WaiterControl {
 
             this.update_stats()
             this.display_current()
-            this.update_buttons()
 
-            
             $('#prev_button_p2').click(() => {
                 this.save_rating()
                 this.prev()
@@ -46,7 +44,7 @@ export class WaiterControl {
                 this.next()
                 this.save_progress()
             })
-                    })
+        })
     }
 
     public display_current() {
@@ -58,6 +56,8 @@ export class WaiterControl {
 
         let signature: string = this.model.signature(docName, mkbName, this.driver.progress.sec)
         let rating = this.manager.data.rating[signature] || {}
+        console.log(signature)
+
 
         let markableName = this.driver.currentMarkableName()
         this.display(docName, markableName, this.driver.progress.sec, rating)
@@ -82,26 +82,13 @@ export class WaiterControl {
     }
 
     private update_stats() {
-        let currentMarkables = this.driver.currentDoc().markable_keys
-        let currentSections = this.driver.currentDoc().get_sections(this.driver.currentMarkableName())
+        const currentMarkables = this.manager.data.queue_mkb.get(this.driver.currentDocName())
         $('#totl_doc_p2').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mkb_p2').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
+
+        let currentSections = this.driver.currentDoc().get_sections(this.driver.currentMarkableName())
         $('#totl_sec_p2').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
-        this.update_buttons()
-    }
-
-    private update_buttons() {
-        $('#next_doc').prop('disabled', this.driver.progress.doc >= this.manager.data.queue_doc.length - 1)
-        $('#prev_doc').prop('disabled', this.driver.progress.doc <= 0)
-
-        const markable_keys = this.driver.currentDoc().markable_keys
-        $('#next_mkb').prop('disabled', this.driver.progress.mkb >= markable_keys.length - 1)
-        $('#prev_mkb').prop('disabled', this.driver.progress.mkb <= 0)
-
-        const sections = this.driver.currentDoc().get_sections(this.driver.currentMarkableName())
-        $('#next_sec').prop('disabled', this.driver.progress.sec >= sections.length - 1)
-        $('#prev_sec').prop('disabled', this.driver.progress.sec <= 0)
     }
 
     private save_rating() {
@@ -142,13 +129,16 @@ export class WaiterControl {
                     // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                     window.setTimeout(() => window.location.reload(), 3000)
                 } else {
-                    this.driver.move_doc(+1)
+                    this.driver.progress.doc += 1
+                    this.driver.progress.mkb = 0
+                    this.driver.progress.sec = 0
                 }
             } else {
-                this.driver.move_mkb(+1)
+                this.driver.progress.mkb += 1
+                this.driver.progress.sec += 0
             }
         } else {
-            this.driver.move_sec(+1)
+            this.driver.progress.sec += 1
         }
 
         if (refresh) {
@@ -163,7 +153,7 @@ export class WaiterControl {
                     this.driver.progress.doc -= 1
                     let prevDocName = this.manager.data.queue_doc[this.driver.progress.doc]
                     let prevDoc = this.manager.data.content_src.get(prevDocName)
-                    this.driver.progress.mkb = prevDoc.markable_keys.length - 1
+                    this.driver.progress.mkb = this.manager.data.queue_mkb.get(prevDocName).length - 1
 
                     let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)[this.driver.progress.mkb]
                     this.driver.progress.sec = prevDoc.get_sections(prevMarkableName).length -= 1

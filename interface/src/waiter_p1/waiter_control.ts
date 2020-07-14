@@ -90,7 +90,7 @@ export class WaiterControl {
             this.driver.progress
         )
     }
-    
+
     private save_progress() {
         $.ajax({
             method: 'POST',
@@ -120,10 +120,11 @@ export class WaiterControl {
                 // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                 window.setTimeout(() => window.location.reload(), 3000)
             } else {
-                this.driver.move_doc(+1)
+                this.driver.progress.doc += 1
+                this.driver.progress.mt = 0
             }
         } else {
-            this.driver.move_mt(+1)
+            this.driver.progress.mt += 1
         }
 
         if (refresh) {

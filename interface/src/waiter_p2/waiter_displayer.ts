@@ -5,6 +5,7 @@ export class WaiterDisplayer {
     public static generateElements(snippets: Array<[string, string]>, rating: { [mt: string]: any }): string {
         let output = snippets.map(([key, value], index: number) => {
             let mtRating = rating[key] || {}
+            console.log(mtRating)
             return `
             <div class='div_snip tgt_snip_p2'>${value}</div>
 

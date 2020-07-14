@@ -24,7 +24,7 @@ export class ModelSegement {
         this.mtModels.forEach((model: ModelMT) => serializedRatings[model.name] = model.toObject())
         
         let docName = this.manager.data.queue_doc[current.doc]
-        let mkbName = this.manager.data.content_src.get(docName).markable_keys[current.mkb]
+        let mkbName = this.manager.data.queue_mkb.get(docName)[current.mkb]
 
         this.manager.data.rating[this.signature(docName, mkbName, current.sec)] = serializedRatings
 
