@@ -27,7 +27,7 @@ def read_user_rating(phase, AID):
     return rating_obj, rating_file
 
 @app.route('/login_p1', methods=['POST'])
-def logP1Service():
+def loginP1():
     AID = request.json['AID']
 
     rating_obj, _ = read_user_rating('p1', AID)
@@ -45,8 +45,8 @@ def logP1Service():
     return json.jsonify(content)
 
 @app.route('/login_p2', methods=['POST'])
-def logP2Service():
-    AID = request.json['AID']
+def loginP2():
+    AID = getAID(request)
     
     rating_obj, _ = read_user_rating('p2', AID)
     
@@ -62,46 +62,53 @@ def logP2Service():
     content['ratings'] = rating_obj
     return json.jsonify(content)
 
-@app.route('/save_p1', methods=['POST'])
-def saveP1Service():
-    AID = request.json['AID']
-    if not validate_AID(AID):
-        return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
+@app.route('/save_rating_p1', methods=['POST'])
+def saveRatingP1():
+    AID = getAID(request)
 
     rating_obj, rating_file = read_user_rating('p1', AID)
 
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}"
     rating_obj[location_signature] = request.json['rating']
-
     json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
 
+    return {'status': 'OK'}
+
+@app.route('/save_rating_p2', methods=['POST'])
+def saveRatingP2():
+    AID = getAID(request)
+
+    rating_obj, rating_file = read_user_rating('p2', AID)
+
+    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
+    rating_obj[location_signature] = request.json['rating']
+    json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
+
+    return {'status': 'OK'}
+
+@app.route('/save_progress_p1', methods=['POST'])
+def saveProgressP1():
+    AID = getAID(request)
     queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
     json.dump(queues, open('logs/p1/queue_user.json', 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
 
-@app.route('/save_p2', methods=['POST'])
-def saveP2Service():
-    AID = request.json['AID']
-    if not validate_AID(AID):
-        return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
-
-    rating_obj, rating_file = read_user_rating('p2', AID)
-
-    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
-    rating_obj[location_signature] = request.json['rating']
-
-    json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
-
+@app.route('/save_progress_p2', methods=['POST'])
+def saveProgressP2():
+    AID = getAID(request)
     queues = json.load(open('logs/p2/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
     json.dump(queues, open('logs/p2/queue_user.json', 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
 
-def validate_AID(AID):
-    return re.match(r'[a-zA-Z0-9]+', AID)
+def getAID(request):
+    AID = request.json['AID']
+    if not re.match(r'[a-zA-Z0-9]+', AID):
+        raise Exception('Invalid AID')
+    return AID
 
 def assertArgs(args, assertees):
     """
@@ -112,7 +119,6 @@ def assertArgs(args, assertees):
     for assertee in assertees:
         if assertee not in args.keys():
             raise Exception("Parameter '{}' is missing".format(assertee))
-
 
 def assertArgsJ(request, assertees):
     """

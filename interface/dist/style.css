@@ -9,7 +9,8 @@
 body {
     background-color: #f4f4f4;
     margin: 0;
-    margin-top: 100px;
+    padding-top: 90px;
+    padding-bottom: 50px;
 }
 
 #header_gap {
@@ -33,6 +34,16 @@ body {
 #waiter_p1_doc_control_frame, #waiter_p1_mtr_control_frame, #waiter_p2_mt_control_frame,  #waiter_p1_mkb_control_frame {
     display: inline-block;
     margin-right: 20px;
+}
+
+.waiter_button_nav {
+    text-align: center;
+    margin-left: 20px;
+}
+
+#waiter_p1_nav, #waiter_p2_nav {
+    float: right;
+    margin-right: 30px;
 }
 
 .div_snip {
@@ -98,13 +109,9 @@ body {
     display: inline-block;
 }
 
-#save_button_p1, #save_button_p2, #prev_button_p1, #prev_button_p2 {
+#next_button_p1, #next_button_p2, #prev_button_p1, #prev_button_p2 {
     font-size: 1.2em;
     display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 30px;
 }
 
 .waiter_p2_response div {

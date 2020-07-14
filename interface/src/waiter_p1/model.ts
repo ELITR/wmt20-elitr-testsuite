@@ -1,7 +1,8 @@
-import { DocumentLoader, UserProgress } from "./document_loader"
+import { UserProgress } from "./document_loader"
 import * as $ from 'jquery'
 import { DEVMODE } from "../main"
 import { DocumentManager } from "./document_manager"
+import { PageUtils } from "../misc/page_utils"
 
 export class Model {
     public documents: Array<[string, Array<ModelDocumentMT>]>
@@ -11,7 +12,7 @@ export class ModelDocumentMT {
 
     public constructor(private manager: DocumentManager) { }
 
-    public save(AID: string, current: UserProgress, progress: UserProgress) {
+    public save(AID: string, current: UserProgress) {
         let serializedRatings = this.toObject()
 
         let docName = this.manager.data.queue_doc[current.doc]
@@ -21,7 +22,7 @@ export class ModelDocumentMT {
 
         $.ajax({
             method: 'POST',
-            url: DocumentLoader.baseURL + 'save_p1',
+            url: PageUtils.baseURL + 'save_rating_p1',
             data: JSON.stringify({
                 'AID': AID,
                 'current': {
@@ -29,10 +30,6 @@ export class ModelDocumentMT {
                     'mt':  current.mt,
                     'mt_name':  mtName,
                     'doc_name': docName,
-                },
-                'progress': {
-                    'doc': progress.doc,
-                    'mt':  progress.mt,
                 },
                 'rating': serializedRatings
             }),

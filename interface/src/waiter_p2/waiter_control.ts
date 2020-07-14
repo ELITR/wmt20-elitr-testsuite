@@ -35,9 +35,18 @@ export class WaiterControl {
             this.display_current()
             this.update_buttons()
 
-            $('#save_button_p2').click(() => this.save())
-            $('#prev_button_p2').click(() => this.prev())
-        })
+            
+            $('#prev_button_p2').click(() => {
+                this.save_rating()
+                this.prev()
+                this.save_progress()
+            })
+            $('#next_button_p2').click(() => {
+                this.save_rating()
+                this.next()
+                this.save_progress()
+            })
+                    })
     }
 
     public display_current() {
@@ -69,9 +78,8 @@ export class WaiterControl {
         PageUtils.indeterminate()
         PageUtils.syncmodelP2(this)
 
-        this.sync_save_button()
+        this.sync_next_button()
     }
-
 
     private update_stats() {
         let currentMarkables = this.driver.currentDoc().markable_keys
@@ -96,13 +104,30 @@ export class WaiterControl {
         $('#prev_sec').prop('disabled', this.driver.progress.sec <= 0)
     }
 
-    private save() {
+    private save_rating() {
         this.model.save(
             this.AID,
             this.driver.progress,
-            this.driver.progress_next()
         )
-        this.next()
+    }
+
+    private save_progress() {
+        $.ajax({
+            method: 'POST',
+            url: PageUtils.baseURL + 'save_progress_p2',
+            data: JSON.stringify({
+                'AID': this.AID,
+                'progress': {
+                    'doc': this.driver.progress.doc,
+                    'mkb': this.driver.progress.mkb,
+                    'sec': this.driver.progress.sec
+                },
+            }),
+            crossDomain: true,
+            contentType: 'application/json; charset=utf-8',
+        }).done((data: any) => {
+            console.log(data)
+        })
     }
 
     private next() {
@@ -130,7 +155,6 @@ export class WaiterControl {
             this.display_current()
         }
     }
-
 
     private prev() {
         if (this.driver.progress.sec == 0) {
@@ -169,11 +193,11 @@ export class WaiterControl {
             this.model.mtModels[index].errors = value as string
         }
 
-        this.sync_save_button()
+        this.sync_next_button()
     }
 
-    private sync_save_button() {
+    private sync_next_button() {
         let not_resolved = this.model.mtModels.some((value: ModelMT) => !value.resolved())
-        $('#save_button_p2').prop('disabled', not_resolved)
+        $('#next_button_p2').prop('disabled', not_resolved)
     }
 }

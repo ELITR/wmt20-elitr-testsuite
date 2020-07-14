@@ -1,7 +1,8 @@
-import { DocumentLoader, UserProgress } from "./document_loader"
+import { UserProgress } from "./document_loader"
 import * as $ from 'jquery'
 import { DEVMODE } from "../main"
 import { DocumentManager } from "./document_manager"
+import { PageUtils } from "../misc/page_utils"
 
 export class Model {
     public documents: Array<[string, Array<ModelMarkable>]>
@@ -18,7 +19,7 @@ export class ModelSegement {
         this.mtModels = this.manager.data.mts.map((mtName: string) => new ModelMT(mtName))
      }
 
-    public save(AID: string, current: UserProgress, progress: UserProgress) {
+    public save(AID: string, current: UserProgress) {
         let serializedRatings: { [key: string]: any } = {}
         this.mtModels.forEach((model: ModelMT) => serializedRatings[model.name] = model.toObject())
         
@@ -29,7 +30,7 @@ export class ModelSegement {
 
         $.ajax({
             method: 'POST',
-            url: DocumentLoader.baseURL + 'save_p2',
+            url: PageUtils.baseURL + 'save_rating_p2',
             data: JSON.stringify({
                 'AID': AID,
                 'current': {
@@ -38,11 +39,6 @@ export class ModelSegement {
                     'sec': current.sec,
                     'doc_name': docName,
                     'mkb_name': mkbName,
-                },
-                'progress': {
-                    'doc': progress.doc,
-                    'mkb': progress.mkb,
-                    'sec': progress.sec,
                 },
                 'rating': serializedRatings,
             }),

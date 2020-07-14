@@ -4,7 +4,7 @@ import { ModelDocumentMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
-import { UserProgress } from "./document_loader"
+import { UserProgress, DocumentLoader } from "./document_loader"
 
 export type QuestionType = 'nonconf' | 'coherent' | 'lexical' | 'errors'
 
@@ -35,8 +35,16 @@ export class WaiterControl {
             this.update_stats()
             this.display_current()
 
-            $('#save_button_p1').click(() => this.save())
-            $('#prev_button_p1').click(() => this.prev())
+            $('#prev_button_p1').click(() => {
+                this.save_rating()
+                this.prev()
+                this.save_progress()
+            })
+            $('#next_button_p1').click(() => {
+                this.save_rating()
+                this.next()
+                this.save_progress()
+            })
         })
     }
 
@@ -66,7 +74,7 @@ export class WaiterControl {
         PageUtils.indeterminate()
         PageUtils.syncmodelP1(this)
 
-        this.sync_save_button()
+        this.sync_next_button()
     }
 
 
@@ -76,13 +84,29 @@ export class WaiterControl {
         $('#totl_mt_p1').text(`${this.driver.progress.mt + 1}/${currentMts.length}`)
     }
 
-    private save() {
+    private save_rating() {
         this.model.save(
             this.AID,
-            this.driver.progress,
-            this.driver.progress_next(),
+            this.driver.progress
         )
-        this.next()
+    }
+    
+    private save_progress() {
+        $.ajax({
+            method: 'POST',
+            url: PageUtils.baseURL + 'save_progress_p2',
+            data: JSON.stringify({
+                'AID': this.AID,
+                'progress': {
+                    'doc': this.driver.progress.doc,
+                    'mt': this.driver.progress.mt,
+                },
+            }),
+            crossDomain: true,
+            contentType: 'application/json; charset=utf-8',
+        }).done((data: any) => {
+            console.log(data)
+        })
     }
 
     private next() {
@@ -131,11 +155,11 @@ export class WaiterControl {
             this.model.lexical = value as number
         }
 
-        this.sync_save_button()
+        this.sync_next_button()
     }
 
-    private sync_save_button() {
+    private sync_next_button() {
         let not_resolved = !this.model.resolved()
-        $('#save_button_p1').prop('disabled', not_resolved)
+        $('#next_button_p1').prop('disabled', not_resolved)
     }
 }
