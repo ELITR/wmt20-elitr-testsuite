@@ -9,16 +9,16 @@ export class WaiterDriver {
         public progress: UserProgress
     ) { }
 
-    public current_sig(): string {
+    public current_docName(): string {
         return this.manager.data.queue_doc[this.progress.doc]
     }
 
-    public current_doc_src(): DocSrc {
+    public current_doc(): DocSrc {
         return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
     }
 
     public current_mts(): Array<string> {
-        return this.manager.data.queue_mt[this.current_sig()]
+        return this.manager.data.queue_mt[this.current_docName()]
     }
 
     public move_doc(offset: number) {
@@ -26,7 +26,7 @@ export class WaiterDriver {
             throw Error('Document index out of bounds')
         }
         this.progress.doc += offset
-        this.reset_mt()
+        this.progress.mt = 0
     }
 
     public move_mt(offset: number) {
@@ -46,17 +46,9 @@ export class WaiterDriver {
         return this.progress.mt >= mts.length - 1
     }
 
-    public reset_mt() {
-        this.progress.mt = 0
-    }
-
-    public log_progress() {
-        console.log(this.progress.doc, this.progress.mt)
-    }
-
-    public advanced(): UserProgress {
-        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mt)
-
+    public progress_next(): UserProgress {
+        let next: UserProgress = this.progress.clone()
+        
         if (this.end_mt()) {
             next.mt = 0;
             if (this.end_doc()) {
@@ -69,5 +61,21 @@ export class WaiterDriver {
         }
 
         return next
+    }
+    
+    public progress_prev(): UserProgress {
+        let prev: UserProgress = this.progress.clone()
+
+        if (prev.mt == 0) {
+            if (prev.doc > 0) {
+                prev.doc -= 1
+                let prevDocName = this.manager.data.queue_doc[prev.doc]
+                prev.mt = this.manager.data.queue_mt[prevDocName].length -1
+            }
+        } else {
+            prev.mt -= 1
+        }
+
+        return prev
     }
 }

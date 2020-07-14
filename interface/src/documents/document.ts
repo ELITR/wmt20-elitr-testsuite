@@ -27,7 +27,6 @@ export class DocSrc {
                 this.markables.set(markableClass, [[indexA, indexB]])
             }
         }
-
         this.markable_keys = Array.from(this.markables.keys()).sort()
         this.raw = raw
     }
@@ -60,11 +59,12 @@ export class DocSrc {
     }
 
     public displaySimple(): string {
-        return this.raw;
+        return this.raw
     }
 
     public get_sections(markable: number): Array<[number, number]> {
-        return this.markables.get(this.markable_keys[markable])
+        // creates a copy, because other code may modify it
+        return this.markables.get(this.markable_keys[markable]).map((value: [number, number]) => [value[0], value[1]])
     }
 }
 

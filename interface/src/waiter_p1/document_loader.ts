@@ -20,6 +20,10 @@ export class UserProgress {
     public finished(): boolean {
         return this.doc == -1 && this.mt == -1
     }
+
+    public clone(): UserProgress {
+        return new UserProgress(this.doc, this.mt)
+    }
 }
 
 export class DocumentLoader {

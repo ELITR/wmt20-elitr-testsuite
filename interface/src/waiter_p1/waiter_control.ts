@@ -36,6 +36,7 @@ export class WaiterControl {
             this.display_current()
 
             $('#save_button_p1').click(() => this.save())
+            $('#prev_button_p1').click(() => this.prev())
         })
     }
 
@@ -43,15 +44,19 @@ export class WaiterControl {
         this.update_stats()
         let docName = this.manager.data.queue_doc[this.driver.progress.doc]
         let mtName = this.manager.data.queue_mt[docName][this.driver.progress.mt]
-        this.display(docName, mtName)
+
         this.model = new ModelDocumentMT(this.manager)
+        let signature: string = this.model.signature(docName, mtName)
+        let rating = this.manager.data.rating[signature] || {}
+
+        this.display(docName, mtName, rating)
     }
 
-    private display(docName: string, mtName: string) {
-        let current_src = this.driver.current_doc_src()
+    private display(docName: string, mtName: string, rating: any) {
+        let current_src = this.driver.current_doc()
         this.waiter_src_snip.html(current_src.displaySimple())
 
-        let response_content = WaiterDisplayer.generateElements()
+        let response_content = WaiterDisplayer.generateElements(rating)
         this.waiter_tgt_table.html(response_content)
 
         let current_tgt = this.manager.currentMT(docName, mtName)
@@ -60,7 +65,8 @@ export class WaiterControl {
         PageUtils.syncval()
         PageUtils.indeterminate()
         PageUtils.syncmodelP1(this)
-        $('#save_button_p1').prop('disabled', true)
+
+        this.sync_save_button()
     }
 
 
@@ -74,7 +80,7 @@ export class WaiterControl {
         this.model.save(
             this.AID,
             this.driver.progress,
-            this.driver.advanced(),
+            this.driver.progress_next(),
         )
         this.next()
     }
@@ -82,7 +88,8 @@ export class WaiterControl {
     private next() {
         let refresh = true
         if (this.driver.end_mt()) {
-            this.driver.reset_mt()
+            this.driver.progress.mt = 0
+
             if (this.driver.end_doc()) {
                 refresh = false
                 alert('All work finished. Wait a few moments for the page to refresh.')
@@ -100,6 +107,19 @@ export class WaiterControl {
         }
     }
 
+    private prev() {
+        if (this.driver.progress.mt == 0) {
+            if (this.driver.progress.doc > 0) {
+                this.driver.progress.doc -= 1
+                let prevDocName = this.manager.data.queue_doc[this.driver.progress.doc]
+                this.driver.progress.mt = this.manager.data.queue_mt[prevDocName].length - 1
+            }
+        } else {
+            this.driver.progress.mt -= 1
+        }
+        this.display_current()
+    }
+
     public input_info(type: QuestionType, value: boolean | number | string) {
         if (type == 'nonconf') {
             this.model.nonconflicting = value as boolean
@@ -111,6 +131,10 @@ export class WaiterControl {
             this.model.lexical = value as number
         }
 
+        this.sync_save_button()
+    }
+
+    private sync_save_button() {
         let not_resolved = !this.model.resolved()
         $('#save_button_p1').prop('disabled', not_resolved)
     }

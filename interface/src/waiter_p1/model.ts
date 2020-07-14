@@ -27,8 +27,8 @@ export class ModelDocumentMT {
                 'current': {
                     'doc': current.doc,
                     'mt':  current.mt,
-                    'mt_name':  docName,
-                    'doc_name': mtName,
+                    'mt_name':  mtName,
+                    'doc_name': docName,
                 },
                 'progress': {
                     'doc': progress.doc,

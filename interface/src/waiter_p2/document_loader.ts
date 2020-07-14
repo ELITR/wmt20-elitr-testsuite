@@ -8,7 +8,7 @@ export interface UserIntroSync {
     mts: string[],
     content_src: Map<string, DocSrc>,
     content_mt: Map<string, Map<string, DocTgt>>,
-    rating: any,
+    rating: { [signature: string]: { [mt: string]: any } },
 }
 
 export class UserProgress {
@@ -21,6 +21,10 @@ export class UserProgress {
     public finished(): boolean {
         return this.doc == -1 && this.mkb == -1 && this.sec == -1
     }
+
+    public clone(): UserProgress {
+        return new UserProgress(this.doc, this.mkb, this.sec)
+    }
 }
 
 export class DocumentLoader {
@@ -30,7 +34,9 @@ export class DocumentLoader {
         let convertRaw = (data: any): UserIntroSync => {
             return {
                 queue_doc: data.queue_doc,
-                queue_mkb: data.queue_mkb,
+                queue_mkb: new Map<string, string[]>(Object.keys(data.queue_mkb).map(
+                    (key: string) => [key, data.queue_mkb[key]]
+                )),
                 mts: data.mts,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
                     (key: string) => [key, new DocSrc(data.content_src[key])]

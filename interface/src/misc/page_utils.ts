@@ -42,6 +42,10 @@ export class PageUtils {
                     controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
                 }
             })
+
+            if(element_val.attr('trigger') != undefined) {
+                element_val.trigger('input')
+            }
         })
     }
 
@@ -60,6 +64,10 @@ export class PageUtils {
                     controller.input_info('nonconf', element_val.prop('checked') as boolean)
                 }
             })
+
+            if(element_val.attr('trigger') != undefined) {
+                element_val.trigger('input')
+            }
         })
     }
 }

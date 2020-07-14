@@ -9,16 +9,16 @@ export class WaiterDriver {
         public progress: UserProgress
     ) { }
 
-    public current_sig(): string {
+    public current_docName(): string {
         return this.manager.data.queue_doc[this.progress.doc]
     }
 
-    public current_doc_src(): DocSrc {
+    public current_doc(): DocSrc {
         return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
     }
 
     public current_sections(): Array<[number, number]> {
-        return this.current_doc_src().get_sections(this.progress.mkb)
+        return this.current_doc().get_sections(this.progress.mkb)
     }
 
     public move_doc(offset: number) {
@@ -26,17 +26,17 @@ export class WaiterDriver {
             throw Error('Document index out of bounds')
         }
         this.progress.doc += offset
-        this.reset_mkb()
-        this.reset_sec()
+        this.progress.mkb = 0
+        this.progress.sec = 0
     }
 
     public move_mkb(offset: number) {
-        const markable_keys = this.current_doc_src().markable_keys
+        const markable_keys = this.current_doc().markable_keys
         if (this.progress.mkb + offset < 0 || this.progress.mkb + offset >= markable_keys.length) {
             throw Error('Markable index out of bounds')
         }
         this.progress.mkb += offset
-        this.reset_sec()
+        this.progress.sec = 0
     }
 
     public move_sec(offset: number) {
@@ -52,7 +52,7 @@ export class WaiterDriver {
     }
 
     public end_mkb() {
-        const markable_keys = this.current_doc_src().markable_keys
+        const markable_keys = this.current_doc().markable_keys
         return this.progress.mkb >= markable_keys.length - 1
     }
 
@@ -61,20 +61,8 @@ export class WaiterDriver {
         return this.progress.sec >= sections.length - 1
     }
 
-    public reset_sec() {
-        this.progress.sec = 0
-    }
-
-    public reset_mkb() {
-        this.progress.mkb = 0
-    }
-
-    public log_progress() {
-        console.log(this.progress.doc, this.progress.mkb, this.progress.sec)
-    }
-
-    public advanced(): UserProgress {
-        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mkb, this.progress.sec)
+    public progress_next(): UserProgress {
+        let next: UserProgress = this.progress.clone()
 
         if (this.end_sec()) {
             next.sec = 0;
@@ -93,5 +81,31 @@ export class WaiterDriver {
         }
 
         return next
+    }
+
+
+    public progress_prev(): UserProgress {
+        let prev: UserProgress = this.progress.clone()
+
+        if (prev.sec == 0) {
+            if (prev.mkb == 0) {
+                if (prev.doc > 0) {
+                    prev.doc -= 1
+                    let prevDocName = this.manager.data.queue_doc[prev.doc]
+                    let prevDoc = this.manager.data.content_src.get(prevDocName)
+                    prev.mkb = prevDoc.markable_keys.length - 1
+                    prev.sec = prevDoc.get_sections(prev.mkb).length -= 1
+                }
+            } else {
+                prev.mkb -= 1
+                let prevDocName = this.manager.data.queue_doc[prev.doc]
+                let prevDoc = this.manager.data.content_src.get(prevDocName)
+                prev.sec = prevDoc.get_sections(prev.mkb).length -= 1
+            }
+        } else {
+            prev.sec -= 1
+        }
+
+        return prev
     }
 }

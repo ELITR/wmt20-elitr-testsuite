@@ -98,9 +98,9 @@ body {
     display: inline-block;
 }
 
-#save_button_p1, #save_button_p2 {
+#save_button_p1, #save_button_p2, #prev_button_p1, #prev_button_p2 {
     font-size: 1.2em;
-    display: block;
+    display: inline-block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
