@@ -1,6 +1,6 @@
 import * as $ from 'jquery'
 import { DEVMODE } from '../main'
-import { DocSrc, DocTgt } from '../documents/document'
+import { DocSrc, DocTgt } from '../misc/document'
 import { PageUtils } from '../misc/page_utils'
 
 export interface UserIntroSync {
@@ -38,7 +38,20 @@ export class DocumentLoader {
                 )),
                 mts: data.mts,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
-                    (key: string) => [key, new DocSrc(data.content_src[key])]
+                    (docName: string) => [
+                        docName, 
+                        new DocSrc(
+                            data.content_src[docName],
+                            new Map<string, Array<[number, number]>>(
+                                Object.keys(data.indicies_src[docName]).map(
+                                    (markable: string) => [
+                                        markable,
+                                        data.indicies_src[docName][markable]
+                                    ]
+                                )
+                            )
+                        )
+                    ]
                 )),
                 content_mt: new Map<string, Map<string, DocTgt>>(Object.keys(data.content_mt).map(
                     (docKey: string) => [

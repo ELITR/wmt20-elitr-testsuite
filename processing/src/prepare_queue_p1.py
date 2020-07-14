@@ -3,7 +3,6 @@
 import argparse
 import yaml
 import json
-import markables
 import random
 
 parser = argparse.ArgumentParser(description='Prepare user queues')
@@ -19,19 +18,16 @@ if __name__ == '__main__':
     with open(args.experiment_def, 'r') as f:
         def_experiment = yaml.safe_load(f)
 
-    def_markables = def_experiment['markables']
     def_docs = def_experiment['docs']
     def_users = def_experiment['users']
     def_mts = def_experiment['mts']
 
     content = {}
-    doc_markables = {}
     for doc in def_docs:
-        filename = f'{args.experiment_dir}/{doc}_src.xml'
+        filename = f'{args.experiment_dir}/{doc}_src.txt'
         with open(filename, 'r') as f:
             text = f.read()
-        doc_markables[doc] = dict(filter(lambda x: x[1] != 0, markables.distribution(text, def_markables).items())).keys()
-
+        
     for user in def_users:
         obj = {}
         obj['progress'] = {

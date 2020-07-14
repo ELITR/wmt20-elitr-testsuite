@@ -1,6 +1,6 @@
 import * as $ from 'jquery'
 import { DEVMODE } from '../main'
-import { DocSrc, DocTgt } from '../documents/document'
+import { DocSrc, DocTgt } from '../misc/document'
 import { PageUtils } from '../misc/page_utils'
 
 export interface UserIntroSync {

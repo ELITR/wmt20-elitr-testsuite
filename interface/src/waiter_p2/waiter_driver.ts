@@ -1,5 +1,5 @@
 import { DocumentManager } from "./document_manager"
-import { DocSrc } from "../documents/document"
+import { DocSrc } from "../misc/document"
 import { UserProgress } from "./document_loader"
 
 export class WaiterDriver {

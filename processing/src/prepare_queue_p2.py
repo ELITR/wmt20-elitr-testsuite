@@ -26,10 +26,10 @@ if __name__ == '__main__':
     content = {}
     doc_markables = {}
     for doc in def_docs:
-        filename = f'{args.experiment_dir}/{doc}_src.xml'
+        filename = f'{args.experiment_dir}/{doc}_src.txt'
         with open(filename, 'r') as f:
             text = f.read()
-        doc_markables[doc] = dict(filter(lambda x: x[1] != 0, markables.distribution(text, def_markables).items())).keys()
+        doc_markables[doc] = markables.indicies_visible(text, def_markables)
 
     for user in def_users:
         obj = {}

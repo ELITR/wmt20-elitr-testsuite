@@ -12,34 +12,24 @@ def inv_markable(markables):
     return markablesInv
 
 
-def annotate(text, markables, sensitive=False):
-    markablesInv = inv_markable(markables)
+def indicies(text, markables, sensitive=False):
+    markableMap = {}
+    for values in markables:
+        head = values[0]
 
-    for value, code in markablesInv.items():
-        # Substitue markables which are not inside of another word
-        if sensitive:
-            text = re.sub(f'(^|[^>a-zA-Z])({value})($|[^<a-zA-Z])',
-                          r'\1' + f'<m m=\'{code}\'>' + r'\2</m>\3', text)
-        else:
-            text = re.sub(f'(^|[^>a-zA-Z])({value})($|[^<a-zA-Z])', r'\1' +
-                          f'<m m=\'{code}\'>' + r'\2</m>\3', text, flags=re.IGNORECASE)
+        for value in values:
+        # Take markables which are not inside of another word
+            if sensitive:
+                occurences = re.finditer(f'(^|\W)({value})($|\W)', text)
+                # second group boundaries group
+                markableMap.setdefault(head, []).extend([(m.start(2), m.end(2)) for m in occurences])
+            else:
+                occurences = re.finditer(f'(^|\W)({value})($|\W)', text, re.IGNORECASE)
+                # second group boundaries group
+                markableMap.setdefault(head, []).extend([(m.start(2), m.end(2)) for m in occurences])
 
-    return text
+    markableMap = {k:v for k,v in markableMap.items() if len(v) != 0}
+    return markableMap
 
-def occurences_context(hay, value, sensitive=False):
-    if sensitive:
-        return len(re.findall(f'(^|[^>a-zA-Z])({value})($|[^<a-zA-Z])', hay))
-    else:
-        return len(re.findall(f'(^|[^>a-zA-Z])({value})($|[^<a-zA-Z])', hay, flags=re.IGNORECASE))
-
-def distribution(text, markables, sensitive=False):
-    markablesInv = inv_markable(markables)
-    dist = defaultdict(int)
-
-    for value, code in markablesInv.items():
-        if sensitive:
-            dist[code] += occurences_context(text, value, True)
-        else:
-            dist[code] += occurences_context(text, value, False)
-    
-    return dist
+def indicies_visible(text, markables, sensitive=False):
+    return indicies(text, markables, sensitive).keys()

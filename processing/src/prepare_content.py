@@ -26,21 +26,23 @@ if __name__ == '__main__':
     content['mts'] = def_mts
     content['content_src'] = {}
     content['content_mt'] = {}
+    content['indicies_src'] = {}
 
     for doc in def_docs:
         content['content_mt'][doc] = {}
 
         for mt in def_mts:
-            filename = f'{args.experiment_dir}/{doc}_{mt}.xml'
+            filename = f'{args.experiment_dir}/{doc}_{mt}.txt'
             with open(filename, 'r') as f:
                 text = f.read()
                 content['content_mt'][doc][mt] = text
 
-        filename = f'{args.experiment_dir}/{doc}_src.xml'
+        filename = f'{args.experiment_dir}/{doc}_src.txt'
         with open(filename, 'r') as f:
             text = f.read()
-            text = markables.annotate(text, def_markables)
+            indicies = markables.indicies(text, def_markables)
             content['content_src'][doc] = text
+            content['indicies_src'][doc] = indicies
 
     with open(args.out_content, 'w') as f:
         json.dump(content, f, ensure_ascii=False)

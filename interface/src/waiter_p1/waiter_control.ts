@@ -56,6 +56,7 @@ export class WaiterControl {
         this.model = new ModelDocumentMT(this.manager)
         let signature: string = this.model.signature(docName, mtName)
         let rating = this.manager.data.rating[signature] || {}
+        console.log('Currently displaying:', signature)
 
         this.display(docName, mtName, rating)
     }

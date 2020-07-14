@@ -3,7 +3,6 @@ import '../misc/shuffle'
 export class WaiterDisplayer {
 
     public static generateElements(rating: any): string {
-        console.log(rating)
         return `
             <div class='waiter_p1_response'>
                 <div>

@@ -1,12 +1,10 @@
 
 mts:
-  - bing
   - google
   - lindat
 
 docs:
-  - doc1
-  - doc2
+  - au1
 
 users:
   - vilda
@@ -107,7 +105,5 @@ markables:
     - zejména
   -
     - článek
-    - čl
   -
     - číslo
-    - č

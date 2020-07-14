@@ -1,5 +1,5 @@
 import { DocumentLoader, UserProgress, UserIntroSync } from './document_loader';
-import { DocTgt, DocSrc } from '../documents/document';
+import { DocTgt, DocSrc } from '../misc/document';
 
 export type DocTgtArray = Array<[string, DocTgt]>
 export type DocSrcArray = Array<[string, DocSrc]>

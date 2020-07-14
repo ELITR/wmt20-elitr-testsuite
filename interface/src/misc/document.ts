@@ -1,4 +1,4 @@
-import { TextUtils } from "../misc/text_utils"
+import { TextUtils } from "./text_utils"
 
 export class DocSrc {
     private markables: Map<string, Array<[number, number]>> = new Map<string, Array<[number, number]>>()
@@ -6,34 +6,15 @@ export class DocSrc {
     private static MIN_CHAR_CONTEXT: number = 150
     private static SENT_CONTEXT: number = 2
 
-    constructor(public raw: string) {
-        let offset = 0
-        const MARKABLE_SEARCH = /<m m=["'](.*?)["']>(.*?)<\/m>/
-        while (true) {
-            let matches = raw.match(MARKABLE_SEARCH)
-            if (!matches) {
-                break
-            }
-            let markableClass = matches[1]
-            let markableContent = matches[2]
-            let indexA = raw.indexOf('<m', offset)
-            let indexB = raw.indexOf('</m>', offset) - 6 - 2 - markableClass.length
-            offset = indexB
-            raw = raw.replace(MARKABLE_SEARCH, markableContent)
-
-            if (this.markables.has(markableClass)) {
-                this.markables.get(markableClass).push([indexA, indexB])
-            } else {
-                this.markables.set(markableClass, [[indexA, indexB]])
-            }
-        }
-        this.markable_keys = Array.from(this.markables.keys()).sort()
-        this.raw = raw
+    constructor(public raw: string, markables: Map<string, Array<[number, number]>> = new Map()) {
+        this.markables = markables
+        console.log(markables)
     }
 
     public display(markable: string, index: number): string {
         let output = this.raw
         let indicies = this.markables.get(markable)[index]
+
         const STYLE_A = "<span class='waiter_p2_highlight_src'>"
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
