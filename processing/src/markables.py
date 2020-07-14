@@ -29,6 +29,7 @@ def indicies(text, markables, sensitive=False):
                 markableMap.setdefault(head, []).extend([(m.start(2), m.end(2)) for m in occurences])
 
     markableMap = {k:v for k,v in markableMap.items() if len(v) != 0}
+    # TODO: deduplicate
     return markableMap
 
 def indicies_visible(text, markables, sensitive=False):

@@ -5,6 +5,7 @@ mts:
 
 docs:
   - au1
+  - au2
 
 users:
   - vilda
@@ -28,10 +29,10 @@ markables:
     - auto
   - 
     - den
-    - den
     - dne
     - dnů
     - dnem
+    - dni
   - 
     - dohodnutý
     - dohodnutý
@@ -64,18 +65,21 @@ markables:
   - 
     - podpis
     - podpisu
-    - podspiy
+    - podpisy
     - podpisem
   -
     - prodej
     - prodeji
+  -
     - prohlašuje
+    - prohlašuji
   - 
     - průkaz
     - průkazu
   -
     - předmět
     - předmětu
+    - předmětem
   -
     - smlouva
     - smlouvy
@@ -85,6 +89,10 @@ markables:
     - strana
     - straně
     - stranami
+    - straně
+    - strany
+    - stranami
+    - stran
   -
     - uvedený
     - uvedeného
@@ -105,5 +113,49 @@ markables:
     - zejména
   -
     - článek
+    - článku
+    - čl
   -
     - číslo
+    - č
+  # au2tc
+  - 
+    - jeho
+    - její
+    - jehož
+    - jejich
+    - jejím
+  -
+    - motorového
+    - motorové
+    - motor
+  -
+    - smluvní
+    - smluvních
+  -
+    - vlastnictví
+    - vlastnictvích
+  - 
+    - vozidla
+    - vozidlo
+    - vozidle
+    - vozidlem
+  -
+    - zaplacení
+    - zaplacen
+    - zaplaceno
+    - zaplacením
+  -
+    - závadu
+    - závada
+    - závady
+  - 
+    - část
+    - části
+    - částí
+  -
+    - žádný
+    - žádná
+    - žádnou
+    - žádného
+    - žádným
