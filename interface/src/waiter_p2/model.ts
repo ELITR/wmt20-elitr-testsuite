@@ -1,6 +1,7 @@
 import { DocumentLoader, UserProgress } from "./document_loader"
 import * as $ from 'jquery'
 import { DEVMODE } from "../main"
+import { DocumentManager } from "./document_manager"
 
 export class Model {
     public documents: Array<[string, Array<ModelMarkable>]>
@@ -13,19 +14,18 @@ export class ModelMarkable {
 export class ModelSegement {
     public mtModels: Array<ModelMT>
     
-    // These strings and the progress object now create two sources of truth, which is bad
-    public mkbName: string
-    public docName: string
-
-    public constructor(mts: string[], mkbName: string, docName: string) {
-        this.mtModels = mts.map((name: string) => new ModelMT(name))
-        this.mkbName = mkbName
-        this.docName = docName
-    }
+    public constructor(private manager: DocumentManager) {
+        this.mtModels = this.manager.data.mts.map((mtName: string) => new ModelMT(mtName))
+     }
 
     public save(AID: string, current: UserProgress, progress: UserProgress) {
-        let rating_serialized: { [key: string]: any } = {}
-        this.mtModels.forEach((model: ModelMT) => rating_serialized[model.name] = model.toObject())
+        let serializedRatings: { [key: string]: any } = {}
+        this.mtModels.forEach((model: ModelMT) => serializedRatings[model.name] = model.toObject())
+        
+        let docName = this.manager.data.queue_doc[current.doc]
+        let mkbName = this.manager.data.content_src.get(docName).markable_keys[current.mkb]
+
+        this.manager.data.rating[this.signature(docName, mkbName, current.sec)] = serializedRatings
 
         $.ajax({
             method: 'POST',
@@ -36,21 +36,25 @@ export class ModelSegement {
                     'doc': current.doc,
                     'mkb': current.mkb,
                     'sec': current.sec,
-                    'mkb_name': this.mkbName,
-                    'doc_name': this.docName,
+                    'doc_name': docName,
+                    'mkb_name': mkbName,
                 },
                 'progress': {
                     'doc': progress.doc,
                     'mkb': progress.mkb,
                     'sec': progress.sec,
                 },
-                'rating': rating_serialized,
+                'rating': serializedRatings,
             }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',
         }).done((data: any) => {
             console.log(data)
         })
+    }
+
+    public signature(docName: string, mkbName: string, sec: number): string {
+        return `${docName}-${mkbName}-${sec}`
     }
 }
 
@@ -75,7 +79,7 @@ export class ModelMT {
 
     public toObject(): any {
         if (!this.resolved()) {
-            throw new Error('Attempted to jsonify an unresolved model object')
+            throw new Error('Attempted to serialize an unresolved model object')
         }
         return { translated: this.translated as boolean, adequacy: this.adequacy as number, fluency: this.fluency as number, errors: this.errors as string }
     }

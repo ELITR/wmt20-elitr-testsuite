@@ -30,7 +30,7 @@ body {
 }
 
 #waiter_p2_doc_control_frame, #waiter_p2_mtr_control_frame, #waiter_p2_sec_control_frame, #waiter_p2_mkb_control_frame,
-#waiter_p1_doc_control_frame, #waiter_p1_mtr_control_frame, #waiter_p2_mtn_control_frame, #waiter_p1_mkb_control_frame {
+#waiter_p1_doc_control_frame, #waiter_p1_mtr_control_frame, #waiter_p2_mt_control_frame,  #waiter_p1_mkb_control_frame {
     display: inline-block;
     margin-right: 20px;
 }

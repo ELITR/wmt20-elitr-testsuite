@@ -53,7 +53,7 @@ export class WaiterDisplayer {
 
             <br>
         `
-        }).reduce((prev: string, current: string) => prev + current)
+        }).shuffle().reduce((prev: string, current: string) => prev + current)
 
         return output
     }

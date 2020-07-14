@@ -36,7 +36,7 @@ if __name__ == '__main__':
         obj = {}
         obj['progress'] = {
             "doc": 0,
-            "mtn": 0
+            "mt":  0
         }
         obj['queue_doc'] = random.sample(def_docs, len(def_docs))
         obj['queue_mts'] = {}

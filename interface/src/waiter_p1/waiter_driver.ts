@@ -18,7 +18,7 @@ export class WaiterDriver {
     }
 
     public current_mts(): Array<string> {
-        return this.manager.data.queue_mts[this.current_sig()]
+        return this.manager.data.queue_mt[this.current_sig()]
     }
 
     public move_doc(offset: number) {
@@ -26,46 +26,46 @@ export class WaiterDriver {
             throw Error('Document index out of bounds')
         }
         this.progress.doc += offset
-        this.reset_mtn()
+        this.reset_mt()
     }
 
-    public move_mtn(offset: number) {
+    public move_mt(offset: number) {
         const mts = this.current_mts()
-        if (this.progress.mtn + offset < 0 || this.progress.mtn + offset >= mts.length) {
+        if (this.progress.mt + offset < 0 || this.progress.mt + offset >= mts.length) {
             throw Error('MT model index out of bounds')
         }
-        this.progress.mtn += offset
+        this.progress.mt += offset
     }
 
     public end_doc() {
         return this.progress.doc >= this.manager.data.queue_doc.length - 1
     }
 
-    public end_mtn() {
+    public end_mt() {
         const mts = this.current_mts()
-        return this.progress.mtn >= mts.length - 1
+        return this.progress.mt >= mts.length - 1
     }
 
-    public reset_mtn() {
-        this.progress.mtn = 0
+    public reset_mt() {
+        this.progress.mt = 0
     }
 
     public log_progress() {
-        console.log(this.progress.doc, this.progress.mtn)
+        console.log(this.progress.doc, this.progress.mt)
     }
 
     public advanced(): UserProgress {
-        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mtn)
+        let next: UserProgress = new UserProgress(this.progress.doc, this.progress.mt)
 
-        if (this.end_mtn()) {
-            next.mtn = 0;
+        if (this.end_mt()) {
+            next.mt = 0;
             if (this.end_doc()) {
-                next.doc = next.mtn = -1
+                next.doc = next.mt = -1
             } else {
                 next.doc += 1
             }
         } else {
-            next.mtn += 1
+            next.mt += 1
         }
 
         return next

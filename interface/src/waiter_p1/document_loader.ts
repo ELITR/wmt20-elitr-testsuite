@@ -4,28 +4,21 @@ import { DocSrc, DocTgt } from '../documents/document'
 
 export interface UserIntroSync {
     queue_doc: string[],
-    queue_mts: { [key: string]: Array<string> },
+    queue_mt: { [key: string]: Array<string> },
     mts: string[],
     content_src: Map<string, DocSrc>,
     content_mt: Map<string, Map<string, DocTgt>>,
-}
-export interface UserIntroRaw {
-    queue_doc: string[],
-    queue_mts: { [key: string]: Array<string> },
-    mts: string[],
-    content_src: { [key: string]: string },
-    content_mt: { [doc: string]: { [tgt: string]: string } },
-    progress: UserProgress,
+    rating: {[key: string]: any},
 }
 
 export class UserProgress {
     constructor(
         public doc: number,
-        public mtn: number
-    ) {}
+        public mt: number
+    ) { }
 
     public finished(): boolean {
-        return this.doc == -1 && this.mtn == -1
+        return this.doc == -1 && this.mt == -1
     }
 }
 
@@ -33,10 +26,10 @@ export class DocumentLoader {
     public static baseURL: string = DEVMODE ? 'http://localhost:8001/' : 'http://localhost:8001/'
 
     public static async load(AID: string): Promise<[UserIntroSync, UserProgress]> {
-        let convertRaw: (data: UserIntroRaw) => UserIntroSync = (data: UserIntroRaw) => {
+        let convertRaw = (data: any): UserIntroSync => {
             return {
                 queue_doc: data.queue_doc,
-                queue_mts: data.queue_mts,
+                queue_mt: data.queue_mts,
                 mts: data.mts,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
                     (key: string) => [key, new DocSrc(data.content_src[key])]
@@ -48,7 +41,8 @@ export class DocumentLoader {
                             (tgtKey: string) => [tgtKey, new DocTgt(data.content_mt[docKey][tgtKey])]
                         ))
                     ]
-                ))
+                )),
+                rating: data.ratings
             }
         }
 
@@ -58,7 +52,7 @@ export class DocumentLoader {
             data: JSON.stringify({ 'AID': AID }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',
-            success: (data: UserIntroRaw) => {
+            success: (data: any) => {
                 return data
             },
             error: (text) => {
@@ -66,6 +60,6 @@ export class DocumentLoader {
                 throw new Error(`${DocumentLoader.baseURL} download sync error`)
             }
         })
-        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mtn)]
+        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mt)]
     }
 }

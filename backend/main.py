@@ -17,13 +17,20 @@ pathlib.Path('logs/p1/ratings').mkdir(parents=True, exist_ok=True)
 def index():
     return 'This is the WMT20 ELITR server. For info about this project or the API please see the <a href="https://github.com/ELITR/wmt20-elitr-testsuite">documentation</a>.'
 
+def read_user_rating(phase, AID):
+    rating_file = f'logs/{phase}/ratings/{AID}.json'
+    if not os.path.isfile(rating_file):
+        rating_obj = {}
+    else:
+        with open(rating_file, 'r') as f:
+            rating_obj = json.loads(f.read())    
+    return rating_obj, rating_file
 
 @app.route('/login_p1', methods=['POST'])
 def logP1Service():
-    try:
-        assertArgsJ(request, 'AID')
-    except Exception as e:
-        return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
+    AID = request.json['AID']
+
+    rating_obj, _ = read_user_rating('p1', AID)
 
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
@@ -31,18 +38,17 @@ def logP1Service():
     with open('logs/p1/queue_user.json', 'r') as f:
         queues = json.load(f)
 
-    AID = request.json['AID']
     content['progress'] = queues[AID]['progress']
     content['queue_doc'] = queues[AID]['queue_doc']
     content['queue_mts'] = queues[AID]['queue_mts']
+    content['ratings'] = rating_obj
     return json.jsonify(content)
 
 @app.route('/login_p2', methods=['POST'])
 def logP2Service():
-    try:
-        assertArgsJ(request, 'AID')
-    except Exception as e:
-        return json.jsonify({'status': 'FAIL', 'error': e.__str__()})
+    AID = request.json['AID']
+    
+    rating_obj, _ = read_user_rating('p2', AID)
     
     with open('logs/content.json', 'r') as f:
         content = json.load(f)
@@ -50,10 +56,10 @@ def logP2Service():
     with open('logs/p2/queue_user.json', 'r') as f:
         queues = json.load(f)
 
-    AID = request.json['AID']
     content['progress'] = queues[AID]['progress']
     content['queue_doc'] = queues[AID]['queue_doc']
     content['queue_mkb'] = queues[AID]['queue_mkb']
+    content['ratings'] = rating_obj
     return json.jsonify(content)
 
 @app.route('/save_p1', methods=['POST'])
@@ -62,18 +68,12 @@ def saveP1Service():
     if not validate_AID(AID):
         return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
 
-    ratings_file = f'logs/p1/ratings/{AID}.json'
-
-    if not os.path.isfile(ratings_file):
-        rating_obj = {}
-    else:
-        with open(ratings_file, 'r') as f:
-            rating_obj = json.loads(f.read())
+    rating_obj, rating_file = read_user_rating('p1', AID)
 
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}"
     rating_obj[location_signature] = request.json['rating']
 
-    json.dump(rating_obj, open(ratings_file, 'w'), ensure_ascii=False)
+    json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
 
     queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
@@ -87,22 +87,16 @@ def saveP2Service():
     if not validate_AID(AID):
         return json.jsonify({'status': 'FAIL', 'error': 'Invalid AID.'})
 
-    ratings_file = f'logs/p2/ratings/{AID}.json'
-
-    if not os.path.isfile(ratings_file):
-        rating_obj = {}
-    else:
-        with open(ratings_file, 'r') as f:
-            rating_obj = json.loads(f.read())
+    rating_obj, rating_file = read_user_rating('p2', AID)
 
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
     rating_obj[location_signature] = request.json['rating']
 
-    json.dump(rating_obj, open(ratings_file, 'w'), ensure_ascii=False)
+    json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
 
-    queues = json.load(open('logs/p1/queue_user.json', 'r'))
+    queues = json.load(open('logs/p2/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/p1/queue_user.json', 'w'), ensure_ascii=False)
+    json.dump(queues, open('logs/p2/queue_user.json', 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
 

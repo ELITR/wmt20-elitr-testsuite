@@ -8,14 +8,7 @@ export interface UserIntroSync {
     mts: string[],
     content_src: Map<string, DocSrc>,
     content_mt: Map<string, Map<string, DocTgt>>,
-}
-export interface UserIntroRaw {
-    queue_doc: string[],
-    queue_mkb: Map<string, string[]>,
-    mts: string[],
-    content_src: { [key: string]: string },
-    content_mt: { [doc: string]: { [tgt: string]: string } },
-    progress: UserProgress,
+    rating: any,
 }
 
 export class UserProgress {
@@ -23,7 +16,7 @@ export class UserProgress {
         public doc: number,
         public mkb: number,
         public sec: number,
-    ) {}
+    ) { }
 
     public finished(): boolean {
         return this.doc == -1 && this.mkb == -1 && this.sec == -1
@@ -34,7 +27,7 @@ export class DocumentLoader {
     public static baseURL: string = DEVMODE ? 'http://localhost:8001/' : 'http://localhost:8001/'
 
     public static async load(AID: string): Promise<[UserIntroSync, UserProgress]> {
-        let convertRaw: (data: UserIntroRaw) => UserIntroSync = (data: UserIntroRaw) => {
+        let convertRaw = (data: any): UserIntroSync => {
             return {
                 queue_doc: data.queue_doc,
                 queue_mkb: data.queue_mkb,
@@ -49,7 +42,8 @@ export class DocumentLoader {
                             (tgtKey: string) => [tgtKey, new DocTgt(data.content_mt[docKey][tgtKey])]
                         ))
                     ]
-                ))
+                )),
+                rating: data.ratings
             }
         }
 
@@ -59,7 +53,7 @@ export class DocumentLoader {
             data: JSON.stringify({ 'AID': AID }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',
-            success: (data: UserIntroRaw) => {
+            success: (data: any) => {
                 return data
             },
             error: (text) => {

@@ -42,10 +42,9 @@ export class WaiterControl {
     public display_current() {
         this.update_stats()
         let docName: string = this.manager.data.queue_doc[this.driver.progress.doc]
-        let mkbName: string = this.driver.current_doc_src().markable_keys[this.driver.progress.mkb]
 
         this.display(docName, this.driver.progress.mkb, this.driver.progress.sec)
-        this.model = new ModelSegement(this.manager.data.mts.shuffle(), mkbName, docName)
+        this.model = new ModelSegement(this.manager)
     }
 
     private display(file: string, markable: number, index: number) {

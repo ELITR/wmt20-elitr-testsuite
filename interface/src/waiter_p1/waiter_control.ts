@@ -42,20 +42,19 @@ export class WaiterControl {
     public display_current() {
         this.update_stats()
         let docName = this.manager.data.queue_doc[this.driver.progress.doc]
-        this.display(docName, this.driver.progress.mtn)
-        this.model = new ModelDocumentMT(this.manager.data.mts[this.driver.progress.mtn], docName)
+        let mtName = this.manager.data.queue_mt[docName][this.driver.progress.mt]
+        this.display(docName, mtName)
+        this.model = new ModelDocumentMT(this.manager)
     }
 
-    private display(file: string, mtn: number) {
+    private display(docName: string, mtName: string) {
         let current_src = this.driver.current_doc_src()
-        // this.waiter_src_snip.html(current_src.displayAll(markable))
         this.waiter_src_snip.html(current_src.displaySimple())
 
         let response_content = WaiterDisplayer.generateElements()
         this.waiter_tgt_table.html(response_content)
 
-        let current_tgt = this.manager.currentMT(file, mtn)
-        // this.waiter_tgt_snip.html(current_tgt.displayAll(current_src, markable))
+        let current_tgt = this.manager.currentMT(docName, mtName)
         this.waiter_tgt_snip.html(current_tgt.displaySimple())
 
         PageUtils.syncval()
@@ -66,25 +65,24 @@ export class WaiterControl {
 
 
     private update_stats() {
-        let currentMarkables = this.driver.current_doc_src().markable_keys
         let currentMts = this.driver.current_mts()
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_mtn_p1').text(`${this.driver.progress.mtn + 1}/${currentMts.length}`)
+        $('#totl_mt_p1').text(`${this.driver.progress.mt + 1}/${currentMts.length}`)
     }
 
     private save() {
         this.model.save(
             this.AID,
             this.driver.progress,
-            this.driver.advanced()
+            this.driver.advanced(),
         )
         this.next()
     }
 
     private next() {
         let refresh = true
-        if (this.driver.end_mtn()) {
-            this.driver.reset_mtn()
+        if (this.driver.end_mt()) {
+            this.driver.reset_mt()
             if (this.driver.end_doc()) {
                 refresh = false
                 alert('All work finished. Wait a few moments for the page to refresh.')
@@ -94,7 +92,7 @@ export class WaiterControl {
                 this.driver.move_doc(+1)
             }
         } else {
-            this.driver.move_mtn(+1)
+            this.driver.move_mt(+1)
         }
 
         if (refresh) {

@@ -1,21 +1,24 @@
 import { DocumentLoader, UserProgress } from "./document_loader"
 import * as $ from 'jquery'
 import { DEVMODE } from "../main"
+import { DocumentManager } from "./document_manager"
 
 export class Model {
     public documents: Array<[string, Array<ModelDocumentMT>]>
 }
 
 export class ModelDocumentMT {
-    public mtName: string
-    public docName: string
 
-    public constructor(mtName: string, docName: string) {
-        this.mtName = mtName
-        this.docName = docName
-    }
+    public constructor(private manager: DocumentManager) { }
 
     public save(AID: string, current: UserProgress, progress: UserProgress) {
+        let serializedRatings = this.toObject()
+
+        let docName = this.manager.data.queue_doc[current.doc]
+        let mtName = this.manager.data.queue_mt[docName][current.mt]
+
+        this.manager.data.rating[this.signature(docName, mtName)] = serializedRatings
+
         $.ajax({
             method: 'POST',
             url: DocumentLoader.baseURL + 'save_p1',
@@ -23,15 +26,15 @@ export class ModelDocumentMT {
                 'AID': AID,
                 'current': {
                     'doc': current.doc,
-                    'mtn': current.mtn,
-                    'mt_name': this.mtName,
-                    'doc_name': this.docName,
+                    'mt':  current.mt,
+                    'mt_name':  docName,
+                    'doc_name': mtName,
                 },
                 'progress': {
                     'doc': progress.doc,
-                    'mtn': progress.mtn,
+                    'mt':  progress.mt,
                 },
-                'rating': this.toObject()
+                'rating': serializedRatings
             }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',
@@ -53,9 +56,13 @@ export class ModelDocumentMT {
             return (this.nonconflicting != undefined && this.coherent != undefined)
     }
 
+    public signature(docName: string, mtName: string): string {
+        return `${docName}-${mtName}`
+    }
+
     public toObject(): any {
         if (!this.resolved()) {
-            throw new Error('Attempted to jsonify an unresolved model object')
+            throw new Error('Attempted to serialize an unresolved model object')
         }
         return {
             nonconflicting: this.nonconflicting as boolean,
