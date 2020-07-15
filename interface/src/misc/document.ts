@@ -18,22 +18,9 @@ export class DocSrc {
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
 
-        output = TextUtils.context(output, Math.round((indicies[0] + indicies[1]) / 2), DocSrc.MIN_CHAR_CONTEXT, DocSrc.SENT_CONTEXT)
+        let [posA, posB] = TextUtils.contextSentence(output, Math.round((indicies[0] + indicies[1]) / 2), DocSrc.MIN_CHAR_CONTEXT, DocSrc.SENT_CONTEXT)
 
-        return output
-    }
-
-    public displayAll(markable: string): string {
-        let output = this.raw
-        const STYLE_A = "<span class='waiter_p1_highlight_src'>"
-        const STYLE_B = "</span>"
-        const STYLE_LEN = STYLE_A.length + STYLE_B.length
-
-        this.markables.get(markable).forEach((indicies: [number, number], indiciesI: number) => {
-            // This assumes, that the indicies are linearly ordered 
-            let offset = STYLE_LEN * indiciesI
-            output = output.slice(0, indicies[0] + offset) + STYLE_A + output.slice(indicies[0] + offset, indicies[1] + offset) + STYLE_B + output.slice(indicies[1] + offset)
-        })
+        output = output.substring(posA, posB)
 
         return output
     }
@@ -50,8 +37,9 @@ export class DocSrc {
 
 export class DocTgt {
     private static MIN_CHAR_CONTEXT: number = 150
-    private static UNDERLINE_CHAR_CONTEXT: number = 20
     private static SENT_CONTEXT: number = 1
+    private static UNDERLINE_CHAR_CONTEXT: number = 10
+    private static UNDERLINE_WORD_CONTEXT: number = 2
 
     constructor(public raw: string) { }
 
@@ -65,34 +53,12 @@ export class DocTgt {
         const STYLE_A = "<span class='waiter_p2_highlight_tgt'>"
         const STYLE_B = "</span>"
 
+        let [posA, posB] = TextUtils.contextWord(this.raw, projection_position, DocTgt.UNDERLINE_CHAR_CONTEXT, DocTgt.UNDERLINE_WORD_CONTEXT)
+
         let output =
-            this.raw.substring(0, projection_position - DocTgt.UNDERLINE_CHAR_CONTEXT) +
-            STYLE_A + this.raw.substring(projection_position - DocTgt.UNDERLINE_CHAR_CONTEXT, projection_position + DocTgt.UNDERLINE_CHAR_CONTEXT) +
-            STYLE_B + this.raw.substring(projection_position + DocTgt.UNDERLINE_CHAR_CONTEXT)
-
-        output = TextUtils.context(output, projection_position, DocTgt.MIN_CHAR_CONTEXT, DocTgt.SENT_CONTEXT)
-        return output
-    }
-
-    public displayAll(doc_src: DocSrc, markable: string): string {
-        let output = this.raw
-        const STYLE_A = "<span class='waiter_p1_highlight_tgt'>"
-        const STYLE_B = "</span>"
-        const STYLE_LEN = STYLE_A.length + STYLE_B.length
-
-        doc_src.get_sections(markable).forEach((indicies: [number, number], indiciesI: number) => {
-            // This assumes, that the indicies are linearly ordered 
-            let offset = STYLE_LEN * indiciesI
-            
-            // very naive segment alignment
-            let position = Math.round((indicies[0] + indicies[1]) / 2 + offset)
-            let projection_position = position / doc_src.raw.length * this.raw.length
-
-            output =
-                output.substring(0, projection_position - DocTgt.UNDERLINE_CHAR_CONTEXT) +
-                STYLE_A + output.substring(projection_position - DocTgt.UNDERLINE_CHAR_CONTEXT, projection_position + DocTgt.UNDERLINE_CHAR_CONTEXT) +
-                STYLE_B + output.substring(projection_position + DocTgt.UNDERLINE_CHAR_CONTEXT)
-        })
+            this.raw.substring(0, posA) +
+            STYLE_A + this.raw.substring(posA, posB) +
+            STYLE_B + this.raw.substring(posB)
 
         return output
     }
