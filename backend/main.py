@@ -3,6 +3,7 @@ from flask_cors import CORS
 import pathlib
 import re
 import os
+import time
 
 # create new Flask app
 app = Flask(__name__)
@@ -70,6 +71,7 @@ def saveRatingP1():
 
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}"
     rating_obj[location_signature] = request.json['rating']
+    rating_obj[location_signature]['time'] = timeNow()
     json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
@@ -82,6 +84,7 @@ def saveRatingP2():
 
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
     rating_obj[location_signature] = request.json['rating']
+    rating_obj[location_signature]['time'] = timeNow()
     json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
 
     return {'status': 'OK'}
@@ -130,3 +133,6 @@ def assertArgsJ(request, assertees):
     for assertee in assertees:
         if assertee not in request.json:
             raise Exception("Parameter '{}' is missing".format(assertee))
+
+def timeNow():
+    return int(round(time.time() * 1000))

@@ -1,11 +1,8 @@
 import * as $ from 'jquery'
 import { WaiterControl as WaiterControlP2 } from '../waiter_p2/waiter_control'
 import { WaiterControl as WaiterControlP1 } from '../waiter_p1/waiter_control'
-import { DEVMODE } from '../main'
 
 export class PageUtils {
-    public static baseURL: string = DEVMODE ? 'http://locahost:8001/' : 'https://quest.ms.mff.cuni.cz/testsuite/'
-
     public static syncval(): void {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_text = $(`#${element.id}_text`)

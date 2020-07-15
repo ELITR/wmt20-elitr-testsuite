@@ -5,6 +5,7 @@ import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
 import { UserProgress } from "./document_loader"
+import { BASEURL } from "../main"
 
 export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
 
@@ -100,7 +101,7 @@ export class WaiterControl {
     private save_progress() {
         $.ajax({
             method: 'POST',
-            url: PageUtils.baseURL + 'save_progress_p2',
+            url: BASEURL + 'save_progress_p2',
             data: JSON.stringify({
                 'AID': this.AID,
                 'progress': {

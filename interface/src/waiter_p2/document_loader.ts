@@ -1,7 +1,6 @@
 import * as $ from 'jquery'
-import { DEVMODE } from '../main'
+import { DEVMODE, BASEURL } from '../main'
 import { DocSrc, DocTgt } from '../misc/document'
-import { PageUtils } from '../misc/page_utils'
 
 export interface UserIntroSync {
     queue_doc: string[],
@@ -67,7 +66,7 @@ export class DocumentLoader {
 
         let data = await $.ajax({
             method: 'POST',
-            url: PageUtils.baseURL + 'login_p2',
+            url: BASEURL + 'login_p2',
             data: JSON.stringify({ 'AID': AID }),
             crossDomain: true,
             contentType: 'application/json; charset=utf-8',
@@ -76,7 +75,7 @@ export class DocumentLoader {
             },
             error: (text) => {
                 alert('Error syncing with server. Is it up?')
-                throw new Error(`${PageUtils.baseURL} download sync error`)
+                throw new Error(`${BASEURL} download sync error`)
             }
         })
         return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mkb, data.progress.sec)]

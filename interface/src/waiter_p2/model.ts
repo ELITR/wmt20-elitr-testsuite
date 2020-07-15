@@ -1,8 +1,7 @@
 import { UserProgress } from "./document_loader"
 import * as $ from 'jquery'
-import { DEVMODE } from "../main"
+import { DEVMODE, BASEURL } from "../main"
 import { DocumentManager } from "./document_manager"
-import { PageUtils } from "../misc/page_utils"
 
 export class Model {
     public documents: Array<[string, Array<ModelMarkable>]>
@@ -30,7 +29,7 @@ export class ModelSegement {
 
         $.ajax({
             method: 'POST',
-            url: PageUtils.baseURL + 'save_rating_p2',
+            url: BASEURL + 'save_rating_p2',
             data: JSON.stringify({
                 'AID': AID,
                 'current': {
