@@ -18,26 +18,22 @@
 
 <body>
   <div id='header_gap'>
-    <span style='font-size: 1.7em;'>WMT20 SAO</span>
+    <span style='font-size: 1.6em;'>WMT20 SAO</span>
     <div>
-      <span style='margin-left: 30px;'>Annotator ID:</span>
-      <input id='annotator_id' style='width: 100px;' type='text'>
+      <span style='margin-left: 20px;'>Annotator ID:</span>
+      <input id='annotator_id' style='width: 90px;' type='text'>
       <input id='start_annotation_p1' type='button' value="Start P1">
       <input id='start_annotation_p2' type='button' value="Start P2">
     </div>
 
     <div id='waiter_p1_nav' style='display: none;'>
-      <div id='waiter_p1_doc_control_frame'>
+      <div class='waiter_control_frame'>
         <span>Document:</span>
-        <!-- <input id='prev_doc' type='button' class='text_button' value='PREV DOCUMENT'> -->
-        <!-- <input id='next_doc' type='button' class='text_button' value='NEXT DOCUMENT'> -->
         <span id='totl_doc_p1' style='margin-left: 5px;'>4</span>
       </div>
 
-      <div id='waiter_p1_mt_control_frame'>
+      <div class='waiter_control_frame'>
         <span>System:</span>
-        <!-- <input id='prev_sec' type='button' class='text_button' value='PREV SECTION'> -->
-        <!-- <input id='next_sec' type='button' class='text_button' value='NEXT SECTION'> -->
         <span id='totl_mt_p1' style='margin-left: 5px;'>6</span>
       </div>
 
@@ -48,28 +44,23 @@
     </div>
 
     <div id='waiter_p2_nav' style='display: none;'>
-      <div id='waiter_p2_doc_control_frame'>
+      <div class='waiter_control_frame'>
         <span>Document:</span>
-        <!-- <input id='prev_doc' type='button' class='text_button' value='PREV DOCUMENT'> -->
-        <!-- <input id='next_doc' type='button' class='text_button' value='NEXT DOCUMENT'> -->
         <span id='totl_doc_p2' style='margin-left: 5px;'>4</span>
       </div>
 
-      <div id='waiter_p2_mkb_control_frame'>
+      <div class='waiter_control_frame'>
         <span id='text_mkb'>Markable:</span>
-        <!-- <input id='prev_mkb' type='button' class='text_button' value='PREV MARKABLE'> -->
-        <!-- <input id='next_mkb' type='button' class='text_button' value='NEXT MARKABLE'> -->
         <span id='totl_mkb_p2' style='margin-left: 5px;'>5</span>
       </div>
 
-      <div id='waiter_p2_sec_control_frame'>
+      <div class='waiter_control_frame'>
         <span>Section:</span>
-        <!-- <input id='prev_sec' type='button' class='text_button' value='PREV SECTION'> -->
-        <!-- <input id='next_sec' type='button' class='text_button' value='NEXT SECTION'> -->
         <span id='totl_sec_p2' style='margin-left: 5px;'>6</span>
       </div>
 
       <div class='waiter_button_nav'>
+        <input id='focus_button_p2' type='button' value='FOCUS'>
         <input id='prev_button_p2' type='button' value='SAVE & BACK'>
         <input id='next_button_p2' type='button' value='SAVE & NEXT'>
       </div>

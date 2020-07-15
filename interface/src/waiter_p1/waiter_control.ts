@@ -117,6 +117,7 @@ export class WaiterControl {
 
             if (this.driver.end_doc()) {
                 refresh = false
+                this.driver.progress.doc = this.driver.progress.mt = -1
                 alert('All work finished. Wait a few moments for the page to refresh.')
                 // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                 window.setTimeout(() => window.location.reload(), 3000)

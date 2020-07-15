@@ -14,6 +14,9 @@ export class WaiterControl {
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p2_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p2')
     private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p2_tgt_table')
+    private focus_button: JQuery<HTMLInputElement> = $('#focus_button_p2')
+    private prev_button: JQuery<HTMLInputElement> = $('#prev_button_p2')
+    private next_button: JQuery<HTMLInputElement> = $('#next_button_p2')
 
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
@@ -35,16 +38,17 @@ export class WaiterControl {
             this.update_stats()
             this.display_current()
 
-            $('#prev_button_p2').click(() => {
+            this.prev_button.click(() => {
                 this.save_rating()
                 this.prev()
                 this.save_progress()
             })
-            $('#next_button_p2').click(() => {
+            this.next_button.click(() => {
                 this.save_rating()
                 this.next()
                 this.save_progress()
             })
+            this.focus_button.click(() => PageUtils.scrollIntoViewP2())
         })
     }
 
@@ -125,6 +129,7 @@ export class WaiterControl {
                 this.driver.progress.mkb = 0
                 if (this.driver.end_doc()) {
                     refresh = false
+                    this.driver.progress.doc = this.driver.progress.mkb = this.driver.progress.sec = -1
                     alert('All work finished. Wait a few moments for the page to refresh.')
                     // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                     window.setTimeout(() => window.location.reload(), 3000)

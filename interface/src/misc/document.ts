@@ -3,8 +3,6 @@ import { TextUtils } from "./text_utils"
 export class DocSrc {
     private markables: Map<string, Array<[number, number]>> = new Map<string, Array<[number, number]>>()
     public markable_keys: Array<string>
-    private static MIN_CHAR_CONTEXT: number = 10000
-    private static SENT_CONTEXT: number = 2
 
     constructor(public raw: string, markables: Map<string, Array<[number, number]>> = new Map()) {
         this.markables = markables
@@ -17,10 +15,6 @@ export class DocSrc {
         const STYLE_A = "<span class='waiter_p2_highlight_src'>"
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
-
-        let [posA, posB] = TextUtils.contextSentence(output, Math.round((indicies[0] + indicies[1]) / 2), DocSrc.MIN_CHAR_CONTEXT, DocSrc.SENT_CONTEXT)
-
-        output = output.substring(posA, posB)
 
         return output
     }
@@ -36,8 +30,6 @@ export class DocSrc {
 }
 
 export class DocTgt {
-    private static MIN_CHAR_CONTEXT: number = 150
-    private static SENT_CONTEXT: number = 1
     private static UNDERLINE_CHAR_CONTEXT: number = 10
     private static UNDERLINE_WORD_CONTEXT: number = 2
 
