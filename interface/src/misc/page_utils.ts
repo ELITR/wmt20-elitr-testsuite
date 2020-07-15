@@ -21,15 +21,16 @@ export class PageUtils {
                 })
             }
         })
+        PageUtils.indeterminate()
     }
 
-    public static indeterminate(): void {
+    private static indeterminate(): void {
         $('.synctext[type="checkbox"]').each((index: number, element: HTMLElement) => {
             (element as HTMLInputElement).indeterminate = true
         })
     }
 
-    public static syncmodelP2(controller: WaiterControlP2) {
+    public static listenModelP2(controller: WaiterControlP2) {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_val = $(element)
 
@@ -46,13 +47,13 @@ export class PageUtils {
                 }
             })
 
-            if(element_val.attr('trigger') != undefined) {
+            if (element_val.attr('trigger') != undefined) {
                 element_val.trigger('input')
             }
         })
     }
 
-    public static syncmodelP1(controller: WaiterControlP1) {
+    public static listenModelP1(controller: WaiterControlP1) {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_val = $(element)
 
@@ -68,9 +69,22 @@ export class PageUtils {
                 }
             })
 
-            if(element_val.attr('trigger') != undefined) {
+            if (element_val.attr('trigger') != undefined) {
                 element_val.trigger('input')
             }
         })
+    }
+
+    public static scrollIntoViewP2() {
+        $('.waiter_p2_highlight_src').get(0).scrollIntoView(false)
+        $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop() + 150)
+
+        $('.waiter_p2_highlight_tgt').each(
+            (index: number, element: HTMLElement) => {
+                element.scrollIntoView(false)
+                let parentEl = $(element.parentElement)
+                parentEl.scrollTop(parentEl.scrollTop() + 100)
+            }
+        )
     }
 }

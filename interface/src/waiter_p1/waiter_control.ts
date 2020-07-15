@@ -72,8 +72,7 @@ export class WaiterControl {
         this.waiter_tgt_snip.html(current_tgt.displaySimple())
 
         PageUtils.syncval()
-        PageUtils.indeterminate()
-        PageUtils.syncmodelP1(this)
+        PageUtils.listenModelP1(this)
 
         this.sync_next_button()
     }

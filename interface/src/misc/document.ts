@@ -3,8 +3,8 @@ import { TextUtils } from "./text_utils"
 export class DocSrc {
     private markables: Map<string, Array<[number, number]>> = new Map<string, Array<[number, number]>>()
     public markable_keys: Array<string>
-    private static MIN_CHAR_CONTEXT: number = 100
-    private static SENT_CONTEXT: number = 1
+    private static MIN_CHAR_CONTEXT: number = 10000
+    private static SENT_CONTEXT: number = 2
 
     constructor(public raw: string, markables: Map<string, Array<[number, number]>> = new Map()) {
         this.markables = markables
