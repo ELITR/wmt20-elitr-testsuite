@@ -95,7 +95,7 @@ export class WaiterControl {
     private save_progress() {
         $.ajax({
             method: 'POST',
-            url: BASEURL + 'save_progress_p2',
+            url: BASEURL + 'save_progress_p1',
             data: JSON.stringify({
                 'AID': this.AID,
                 'progress': {

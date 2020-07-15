@@ -6,7 +6,6 @@ export { DEVMODE_ as DEVMODE, BASEURL }
 import { WaiterControl as WaiterControlP2 } from "./waiter_p2/waiter_control"
 import { WaiterControl as WaiterControlP1 } from "./waiter_p1/waiter_control";
 import * as $ from 'jquery'
-import { PageUtils } from "./misc/page_utils";
 
 function validateAID() : string {
     let AIDEl = $('#annotator_id')
@@ -41,6 +40,6 @@ $('#start_annotation_p1').click(() => {
 
 if (DEVMODE) {
     $('#annotator_id').val('testuser')
-    $('#start_annotation_p1').trigger('click')
-    // $('#start_annotation_p2').trigger('click')
+    // $('#start_annotation_p1').trigger('click')
+   $('#start_annotation_p2').trigger('click')
 }
