@@ -155,3 +155,12 @@ input[type=range] {
     margin-right: auto;
     margin-top: 20px;
 }
+
+.waiter_p2_error_type {
+    height: 100px;
+    width: max-content;
+    overflow-y: scroll;
+    margin-left: auto;
+    border: 1px solid #c9c9c9;
+    padding: 4px;
+}
