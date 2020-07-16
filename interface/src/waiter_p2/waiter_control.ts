@@ -63,9 +63,8 @@ export class WaiterControl {
 
         this.model = new ModelSegement(this.manager)
 
-        let signature: string = this.model.signature(docName, mkbName, this.driver.progress.sec)
-        let rating = this.manager.data.rating[signature] || {}
-        console.log('Currently displaying:', signature)
+        let rating = this.manager.data.rating.get(docName, mkbName, this.driver.progress.sec)
+        console.log(`Currently displaying: ${docName}-${mkbName}-${this.driver.progress.sec}`)
 
         let markableName = this.driver.currentMarkableName()
         

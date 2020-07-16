@@ -1,6 +1,7 @@
 import * as $ from 'jquery'
-import { DEVMODE, BASEURL } from '../main'
+import { BASEURL } from '../main'
 import { DocSrc, DocTgt } from '../misc/document'
+import { RatingDatabase } from './model'
 
 export interface UserIntroSync {
     queue_doc: Array<string>,
@@ -8,7 +9,7 @@ export interface UserIntroSync {
     names_mt: Array<string>,
     content_src: Map<string, DocSrc>,
     content_mt: Map<string, Map<string, DocTgt>>,
-    rating: {[key: string]: any},
+    rating: RatingDatabase,
 }
 
 export class UserProgress {
@@ -47,7 +48,7 @@ export class DocumentLoader {
                         ))
                     ]
                 )),
-                rating: data.ratings
+                rating: new RatingDatabase(data.ratings)
             }
         }
 

@@ -62,9 +62,8 @@ export class WaiterControl {
         let mtName = this.manager.data.queue_mt.get(docName)[this.driver.progress.mt]
 
         this.model = new ModelDocumentMT(this.manager)
-        let signature: string = this.model.signature(docName, mtName, this.driver.progress.sent)
-        let rating = this.manager.data.rating[signature] || {}
-        console.log('Currently displaying:', signature)
+        console.log(`Currently displaying: ${docName}-${mtName}-${this.driver.progress.sent}`)
+        let rating = this.manager.data.rating.get(docName, mtName, this.driver.progress.sent)
 
         let current_src = this.driver.current_doc()
         this.waiter_src_snip.html(current_src.displayLine(this.driver.progress.sent))

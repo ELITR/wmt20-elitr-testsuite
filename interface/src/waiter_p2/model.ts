@@ -3,6 +3,29 @@ import * as $ from 'jquery'
 import { DEVMODE, BASEURL } from "../main"
 import { DocumentManager } from "./document_manager"
 
+export type RatingObject = any
+export type RatingDic = { [mt: string]: RatingObject }
+
+export class RatingDatabase {
+    private data: { [signature: string]: { [section: string]: RatingDic } }
+
+    public constructor(data: { [signature: string]: { [section: string]: RatingObject } }) {
+        this.data = data
+    }
+
+    public set(docName: string, mkbName: string, sentence: number, rating: RatingDic) {
+        let signature = `${docName}-${mkbName}`
+        this.data[signature] = this.data[signature] || {}
+        this.data[signature][sentence.toString()] = rating
+    }
+    
+    public get(docName: string, mkbName: string, sentence: number) : RatingDic {
+        let signature = `${docName}-${mkbName}`
+        this.data[signature] = this.data[signature] || {}
+        return this.data[signature][sentence.toString()] || {}
+    }
+}
+
 export class Model {
     public documents: Array<[string, Array<ModelMarkable>]>
 }
@@ -25,7 +48,7 @@ export class ModelSegement {
         let docName = this.manager.data.queue_doc[current.doc]
         let mkbName = this.manager.data.queue_mkb.get(docName)[current.mkb]
 
-        this.manager.data.rating[this.signature(docName, mkbName, current.sec)] = serializedRatings
+        this.manager.data.rating.set(docName, mkbName, current.sec, serializedRatings)
 
         $.ajax({
             method: 'POST',
@@ -46,10 +69,6 @@ export class ModelSegement {
         }).done((data: any) => {
             console.log(data)
         })
-    }
-
-    public signature(docName: string, mkbName: string, sec: number): string {
-        return `${docName}-${mkbName}-${sec}`
     }
 }
 
@@ -72,7 +91,7 @@ export class ModelMT {
             return (this.translated != undefined && this.adequacy != undefined && this.fluency != undefined)
     }
 
-    public toObject(): any {
+    public toObject(): RatingObject {
         if (false && !this.resolved()) {
             throw new Error('Attempted to serialize an unresolved model object')
         }

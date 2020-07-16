@@ -69,9 +69,13 @@ def saveRatingP1():
 
     rating_obj, rating_file = read_user_rating('p1', AID)
 
-    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}-{request.json['current']['sent']}"
-    rating_obj[location_signature] = request.json['rating']
-    rating_obj[location_signature]['time'] = timeNow()
+    docName = request.json['current']['doc_name']
+    mtName = request.json['current']['mt_name']
+    sentence = str(request.json['current']['sent'])
+    location_signature = f"{docName}-{mtName}"
+
+    rating_obj.setdefault(location_signature, {})[sentence] = request.json['rating']
+    rating_obj[location_signature][sentence]['time'] = timeNow()
     jsonDumpMini(rating_obj, open(rating_file, 'w'))
 
     return {'status': 'OK'}
@@ -82,9 +86,12 @@ def saveRatingP2():
 
     rating_obj, rating_file = read_user_rating('p2', AID)
 
-    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
-    rating_obj[location_signature] = request.json['rating']
-    rating_obj[location_signature]['time'] = timeNow()
+    docName = request.json['current']['doc_name']
+    mkbName = request.json['current']['mkb_name']
+    section = request.json['current']['sec']
+    location_signature = f"{docName}-{mkbName}"
+    rating_obj.setdefault(location_signature, {})[section] = request.json['rating']
+    rating_obj[location_signature][section]['time'] = timeNow()
     jsonDumpMini(rating_obj, open(rating_file, 'w'))
 
     return {'status': 'OK'}

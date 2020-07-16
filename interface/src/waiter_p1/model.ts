@@ -3,6 +3,28 @@ import * as $ from 'jquery'
 import { DEVMODE, BASEURL } from "../main"
 import { DocumentManager } from "./document_manager"
 
+export type RatingObject = any
+
+export class RatingDatabase {
+    private data: { [signature: string]: { [sentence: string]: RatingObject } }
+
+    public constructor(data: { [signature: string]: { [sentence: string]: RatingObject } }) {
+        this.data = data
+    }
+
+    public set(docName: string, mtName: string, sentence: number, rating: RatingObject) {
+        let signature = `${docName}-${mtName}`
+        this.data[signature] = this.data[signature] || {}
+        this.data[signature][sentence.toString()] = rating
+    }
+    
+    public get(docName: string, mtName: string, sentence: number) : RatingObject {
+        let signature = `${docName}-${mtName}`
+        this.data[signature] = this.data[signature] || {}
+        return this.data[signature][sentence.toString()] || {}
+    }
+}
+
 export class Model {
     public documents: Array<[string, Array<ModelDocumentMT>]>
 }
@@ -17,7 +39,7 @@ export class ModelDocumentMT {
         let docName = this.manager.data.queue_doc[current.doc]
         let mtName = this.manager.data.queue_mt.get(docName)[current.mt]
 
-        this.manager.data.rating[this.signature(docName, mtName, current.sent)] = serializedRatings
+        this.manager.data.rating.set(docName, mtName, current.sent, serializedRatings)
 
         $.ajax({
             method: 'POST',
@@ -26,9 +48,9 @@ export class ModelDocumentMT {
                 'AID': AID,
                 'current': {
                     'doc': current.doc,
-                    'mt':  current.mt,
+                    'mt': current.mt,
                     'sent': current.sent,
-                    'mt_name':  mtName,
+                    'mt_name': mtName,
                     'doc_name': docName,
                 },
                 'rating': serializedRatings
@@ -53,11 +75,7 @@ export class ModelDocumentMT {
             return (this.nonconflicting != undefined && this.adequacy != undefined && this.fluency != undefined)
     }
 
-    public signature(docName: string, mtName: string, sent: number): string {
-        return `${docName}-${mtName}-${sent}`
-    }
-
-    public toObject(): any {
+    public toObject(): RatingObject {
         if (false && !this.resolved()) {
             throw new Error('Attempted to serialize an unresolved model object')
         }
