@@ -14,10 +14,6 @@ export class DocumentManager {
         return progress
     }
 
-    public currentMT(docName: string, mtName: string): DocTgt {
-        return this.data.content_mt.get(docName).get(mtName)
-    }
-
     public assertSameLength() {
         console.warn('assertSameLength not implemented')
     }

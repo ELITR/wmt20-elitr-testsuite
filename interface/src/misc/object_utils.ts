@@ -1,5 +1,5 @@
 interface Array<T> {
-    shuffle(): T[];
+    shuffle(): T[]
 }
 
 Array.prototype.shuffle = function (): any[] {
@@ -15,7 +15,8 @@ Array.prototype.shuffle = function (): any[] {
 }
 
 interface String {
-    nthIndexOf(pattern: string, n: number): number;
+    nthIndexOf(pattern: string, n: number): number
+    linesCount(): number
 }
 
 String.prototype.nthIndexOf = function (pattern: string, n: number): number {
@@ -27,4 +28,8 @@ String.prototype.nthIndexOf = function (pattern: string, n: number): number {
     }
 
     return i;
+}
+
+String.prototype.linesCount = function(): number {
+    return (this.match(/\n/g) || []).length
 }

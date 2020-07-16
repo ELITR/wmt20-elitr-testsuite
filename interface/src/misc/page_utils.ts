@@ -55,10 +55,10 @@ export class PageUtils {
             let element_val = $(element)
 
             element_val.on('input', () => {
-                if (element.id.endsWith('coherent')) {
-                    controller.input_info('coherent', element_val.val() as string)
-                } else if (element.id.endsWith('lexical')) {
-                    controller.input_info('lexical', element_val.val() as number)
+                if (element.id.endsWith('adequacy')) {
+                    controller.input_info('adequacy', element_val.val() as number)
+                } else if (element.id.endsWith('fluency')) {
+                    controller.input_info('fluency', element_val.val() as number)
                 } else if (element.id.endsWith('errors')) {
                     controller.input_info('errors', element_val.val() as string)
                 } else if (element.id.endsWith('nonconf')) {
@@ -72,15 +72,27 @@ export class PageUtils {
         })
     }
 
-    public static scrollIntoViewP2() {
-        $('.waiter_p2_highlight_src').get(0).scrollIntoView(false)
-        $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop() + 150)
-
-        $('.waiter_p2_highlight_tgt').each(
+    public static scrollIntoViewP1() {
+        $('.waiter_highlight_line').each(
             (index: number, element: HTMLElement) => {
                 element.scrollIntoView(false)
                 let parentEl = $(element.parentElement)
-                parentEl.scrollTop(parentEl.scrollTop() + 100)
+                if (parentEl.scrollTop() > 0)
+                    parentEl.scrollTop(parentEl.scrollTop() + 100)
+            }
+        )
+    }
+
+    public static scrollIntoViewP2() {
+        $('.waiter_highlight_markable').get(0).scrollIntoView(false)
+        $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop() + 150)
+
+        $('.waiter_highlight_line').each(
+            (index: number, element: HTMLElement) => {
+                element.scrollIntoView(false)
+                let parentEl = $(element.parentElement)
+                if (parentEl.scrollTop() > 0)
+                    parentEl.scrollTop(parentEl.scrollTop() + 100)
             }
         )
     }

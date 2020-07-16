@@ -15,7 +15,7 @@ export class ModelSegement {
     public mtModels: Array<ModelMT>
     
     public constructor(private manager: DocumentManager) {
-        this.mtModels = this.manager.data.mts.map((mtName: string) => new ModelMT(mtName))
+        this.mtModels = this.manager.data.names_mt.map((mtName: string) => new ModelMT(mtName))
      }
 
     public save(AID: string, current: UserProgress) {

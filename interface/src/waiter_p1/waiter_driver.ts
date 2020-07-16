@@ -1,5 +1,5 @@
 import { DocumentManager } from "./document_manager"
-import { DocSrc } from "../misc/document"
+import { DocSrc, DocTgt } from "../misc/document"
 import { UserProgress } from "./document_loader"
 
 export class WaiterDriver {
@@ -17,8 +17,14 @@ export class WaiterDriver {
         return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
     }
 
+    public current_mt(): DocTgt {
+        let docName = this.current_docName()
+        let mtName = this.manager.data.queue_mt.get(docName)[this.progress.mt]
+        return this.manager.data.content_mt.get(docName).get(mtName)
+    }
+
     public current_mts(): Array<string> {
-        return this.manager.data.queue_mt[this.current_docName()]
+        return this.manager.data.queue_mt.get(this.current_docName())
     }
 
     public end_doc() {
@@ -28,5 +34,9 @@ export class WaiterDriver {
     public end_mt() {
         const mts = this.current_mts()
         return this.progress.mt >= mts.length - 1
+    }
+
+    public end_sent() {
+        return this.progress.sent >= this.current_doc().lines - 1
     }
 }

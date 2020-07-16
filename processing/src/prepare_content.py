@@ -23,7 +23,7 @@ if __name__ == '__main__':
     def_docs = def_experiment['docs']
 
     content = {}
-    content['mts'] = def_mts
+    content['names_mt'] = def_mts
     content['content_src'] = {}
     content['content_mt'] = {}
     content['indicies_src'] = {}

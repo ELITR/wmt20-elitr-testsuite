@@ -59,7 +59,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 1075px;
-    height: 400px;
+    height: 300px;
     overflow-y: scroll;
 }
 
@@ -75,7 +75,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 1075px;
-    height: 400px;
+    height: 300px;
     overflow-y: scroll;
 }
 
@@ -88,13 +88,13 @@ body {
     overflow-y: scroll;
 }
 
-.waiter_p2_highlight_src {
+.waiter_highlight_markable {
     background-color: #7aa8de;
     border-radius: 3px;
     border: 1px solid black;
 }
 
-.waiter_p2_highlight_tgt {
+.waiter_highlight_line {
     text-decoration: underline;
     text-decoration-style: dotted;
     background-color: #7aa9de33;

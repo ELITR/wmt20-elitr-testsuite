@@ -3,9 +3,9 @@ import { DEVMODE, BASEURL } from '../main'
 import { DocSrc, DocTgt } from '../misc/document'
 
 export interface UserIntroSync {
-    queue_doc: string[],
-    queue_mkb: Map<string, string[]>,
-    mts: string[],
+    queue_doc: Array<string>,
+    queue_mkb: Map<string, Array<string>>,
+    names_mt: Array<string>,
     content_src: Map<string, DocSrc>,
     content_mt: Map<string, Map<string, DocTgt>>,
     rating: { [signature: string]: { [mt: string]: any } },
@@ -35,7 +35,7 @@ export class DocumentLoader {
                 queue_mkb: new Map<string, string[]>(Object.keys(data.queue_mkb).map(
                     (key: string) => [key, data.queue_mkb[key]]
                 )),
-                mts: data.mts,
+                names_mt: data.names_mt,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
                     (docName: string) => [
                         docName, 

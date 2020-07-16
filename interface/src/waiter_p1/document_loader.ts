@@ -3,9 +3,9 @@ import { DEVMODE, BASEURL } from '../main'
 import { DocSrc, DocTgt } from '../misc/document'
 
 export interface UserIntroSync {
-    queue_doc: string[],
-    queue_mt: { [key: string]: Array<string> },
-    mts: string[],
+    queue_doc: Array<string>,
+    queue_mt: Map<string, Array<string>>,
+    names_mt: Array<string>,
     content_src: Map<string, DocSrc>,
     content_mt: Map<string, Map<string, DocTgt>>,
     rating: {[key: string]: any},
@@ -14,15 +14,16 @@ export interface UserIntroSync {
 export class UserProgress {
     constructor(
         public doc: number,
-        public mt: number
+        public mt: number,
+        public sent: number,
     ) { }
 
     public finished(): boolean {
-        return this.doc == -1 && this.mt == -1
+        return this.doc == -1 && this.mt == -1 && this.sent == -1
     }
 
     public clone(): UserProgress {
-        return new UserProgress(this.doc, this.mt)
+        return new UserProgress(this.doc, this.mt, this.sent)
     }
 }
 
@@ -31,8 +32,10 @@ export class DocumentLoader {
         let convertRaw = (data: any): UserIntroSync => {
             return {
                 queue_doc: data.queue_doc,
-                queue_mt: data.queue_mts,
-                mts: data.mts,
+                queue_mt: new Map<string, Array<string>>(Object.keys(data.queue_mt).map(
+                    (key: string) => [key, data.queue_mt[key]]
+                )),
+                names_mt: data.names_mt,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(
                     (key: string) => [key, new DocSrc(data.content_src[key])]
                 )),
@@ -62,6 +65,6 @@ export class DocumentLoader {
                 throw new Error(`${BASEURL} download sync error`)
             }
         })
-        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mt)]
+        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mt, data.progress.sent)]
     }
 }

@@ -68,15 +68,12 @@ export class WaiterControl {
         console.log('Currently displaying:', signature)
 
         let markableName = this.driver.currentMarkableName()
-        this.display(docName, markableName, this.driver.progress.sec, rating)
-    }
-
-    private display(file: string, markable: string, index: number, rating: { [mt: string]: any }) {
+        
         let current_src = this.driver.currentDoc()
-        this.waiter_src_snip.html(current_src.display(markable, index))
+        this.waiter_src_snip.html(current_src.display(markableName, this.driver.progress.sec))
 
-        let snippets: Array<[string, string]> = this.manager.getAllMT(file).map(
-            ([key, doc]) => [key, doc.display(current_src, markable, index)]
+        let snippets: Array<[string, string]> = this.manager.getAllMT(docName).map(
+            ([key, doc]) => [key, doc.display(current_src, markableName, this.driver.progress.sec)]
         )
 
         let content = WaiterDisplayer.generateElements(snippets, rating)
@@ -94,7 +91,7 @@ export class WaiterControl {
         $('#totl_doc_p2').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mkb_p2').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
 
-        let currentSections = this.driver.currentDoc().get_sections(this.driver.currentMarkableName())
+        let currentSections = this.driver.currentDoc().sections(this.driver.currentMarkableName())
         $('#totl_sec_p2').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
     }
@@ -129,24 +126,24 @@ export class WaiterControl {
         let refresh = true
         if (this.driver.end_sec()) {
             this.driver.progress.sec = 0
+
             if (this.driver.end_mkb()) {
                 this.driver.progress.mkb = 0
+
                 if (this.driver.end_doc()) {
                     refresh = false
                     this.driver.progress.doc = this.driver.progress.mkb = this.driver.progress.sec = -1
+                    
                     alert(WaiterControl.ALL_FINISHED_MSG)
                     // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                     window.setTimeout(() => window.location.reload(), 3000)
                 } else {
                     alert(WaiterControl.DIFFERENT_DOCUMENT_MSG)
                     this.driver.progress.doc += 1
-                    this.driver.progress.mkb = 0
-                    this.driver.progress.sec = 0
                 }
             } else {
                 alert(WaiterControl.DIFFERENT_MARKABLE_MSG)
                 this.driver.progress.mkb += 1
-                this.driver.progress.sec += 0
             }
         } else {
             this.driver.progress.sec += 1
@@ -162,20 +159,24 @@ export class WaiterControl {
             if (this.driver.progress.mkb == 0) {
                 if (this.driver.progress.doc > 0) {
                     this.driver.progress.doc -= 1
-                    let prevDocName = this.manager.data.queue_doc[this.driver.progress.doc]
-                    let prevDoc = this.manager.data.content_src.get(prevDocName)
-                    this.driver.progress.mkb = this.manager.data.queue_mkb.get(prevDocName).length - 1
+                
+                    let prevDocName = this.driver.currentDocName()
+                    let prevDoc = this.driver.currentDoc()
+                    let mkbQueue = this.manager.data.queue_mkb
 
-                    let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)[this.driver.progress.mkb]
-                    this.driver.progress.sec = prevDoc.get_sections(prevMarkableName).length -= 1
+                    this.driver.progress.mkb = mkbQueue.get(prevDocName).length - 1
+
+                    let prevMarkableName = mkbQueue.get(prevDocName)[this.driver.progress.mkb]
+                    this.driver.progress.sec = prevDoc.sections(prevMarkableName).length - 1
                 }
             } else {
                 this.driver.progress.mkb -= 1
-                let prevDocName = this.manager.data.queue_doc[this.driver.progress.doc]
-                let prevDoc = this.manager.data.content_src.get(prevDocName)
+
+                let prevDocName = this.driver.currentDocName()
+                let prevDoc = this.driver.currentDoc()
 
                 let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)[this.driver.progress.mkb]
-                this.driver.progress.sec = prevDoc.get_sections(prevMarkableName).length -= 1
+                this.driver.progress.sec = prevDoc.sections(prevMarkableName).length - 1
             }
         } else {
             this.driver.progress.sec -= 1

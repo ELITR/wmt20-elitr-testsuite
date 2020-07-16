@@ -22,7 +22,7 @@ export class WaiterDriver {
     }
 
     public currentSections(): Array<[number, number]> {
-        return this.currentDoc().get_sections(this.currentMarkableName())
+        return this.currentDoc().sections(this.currentMarkableName())
     }
 
     public end_doc() {

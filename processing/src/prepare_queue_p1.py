@@ -32,12 +32,13 @@ if __name__ == '__main__':
         obj = {}
         obj['progress'] = {
             "doc": 0,
-            "mt":  0
+            "mt":  0,
+            "sent":  0
         }
         obj['queue_doc'] = random.sample(def_docs, len(def_docs))
-        obj['queue_mts'] = {}
+        obj['queue_mt'] = {}
         for doc in def_docs:
-            obj['queue_mts'][doc] = random.sample(def_mts, len(def_mts))
+            obj['queue_mt'][doc] = random.sample(def_mts, len(def_mts))
 
         content[user] = obj
 

@@ -16,7 +16,7 @@ export class DocumentManager {
     }
 
     public getAllMT(file: string): DocTgtArray {
-        return this.data.mts.map((value: string, index: number) => [value, this.data.content_mt.get(file).get(value)])
+        return this.data.names_mt.map((value: string, index: number) => [value, this.data.content_mt.get(file).get(value)])
     }
 
     public assertSameLength() {

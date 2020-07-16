@@ -15,9 +15,9 @@ export class ModelDocumentMT {
         let serializedRatings = this.toObject()
 
         let docName = this.manager.data.queue_doc[current.doc]
-        let mtName = this.manager.data.queue_mt[docName][current.mt]
+        let mtName = this.manager.data.queue_mt.get(docName)[current.mt]
 
-        this.manager.data.rating[this.signature(docName, mtName)] = serializedRatings
+        this.manager.data.rating[this.signature(docName, mtName, current.sent)] = serializedRatings
 
         $.ajax({
             method: 'POST',
@@ -27,6 +27,7 @@ export class ModelDocumentMT {
                 'current': {
                     'doc': current.doc,
                     'mt':  current.mt,
+                    'sent': current.sent,
                     'mt_name':  mtName,
                     'doc_name': docName,
                 },
@@ -41,19 +42,19 @@ export class ModelDocumentMT {
 
 
     public nonconflicting?: boolean
-    public coherent?: number
-    public lexical?: number
+    public adequacy?: number
+    public fluency?: number
     public errors?: string
 
     public resolved(): boolean {
         if (DEVMODE)
             return true
         else
-            return (this.nonconflicting != undefined && this.coherent != undefined)
+            return (this.nonconflicting != undefined && this.adequacy != undefined && this.fluency != undefined)
     }
 
-    public signature(docName: string, mtName: string): string {
-        return `${docName}-${mtName}`
+    public signature(docName: string, mtName: string, sent: number): string {
+        return `${docName}-${mtName}-${sent}`
     }
 
     public toObject(): any {
@@ -62,8 +63,8 @@ export class ModelDocumentMT {
         }
         return {
             nonconflicting: this.nonconflicting as boolean,
-            coherent: this.coherent as number,
-            lexical: this.lexical as number,
+            fluency: this.fluency as number,
+            adequacy: this.adequacy as number,
             errors: this.errors as string
         }
     }

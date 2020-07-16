@@ -41,7 +41,7 @@ def loginP1():
 
     content['progress'] = queues[AID]['progress']
     content['queue_doc'] = queues[AID]['queue_doc']
-    content['queue_mts'] = queues[AID]['queue_mts']
+    content['queue_mt'] = queues[AID]['queue_mt']
     content['ratings'] = rating_obj
     return json.jsonify(content)
 
@@ -69,10 +69,10 @@ def saveRatingP1():
 
     rating_obj, rating_file = read_user_rating('p1', AID)
 
-    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}"
+    location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mt_name']}-{request.json['current']['sent']}"
     rating_obj[location_signature] = request.json['rating']
     rating_obj[location_signature]['time'] = timeNow()
-    json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
+    jsonDumpMini(rating_obj, open(rating_file, 'w'))
 
     return {'status': 'OK'}
 
@@ -85,7 +85,7 @@ def saveRatingP2():
     location_signature = f"{request.json['current']['doc_name']}-{request.json['current']['mkb_name']}-{request.json['current']['sec']}"
     rating_obj[location_signature] = request.json['rating']
     rating_obj[location_signature]['time'] = timeNow()
-    json.dump(rating_obj, open(rating_file, 'w'), ensure_ascii=False)
+    jsonDumpMini(rating_obj, open(rating_file, 'w'))
 
     return {'status': 'OK'}
 
@@ -94,7 +94,7 @@ def saveProgressP1():
     AID = getAID(request)
     queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/p1/queue_user.json', 'w'), ensure_ascii=False)
+    jsonDumpMini(queues, open('logs/p1/queue_user.json', 'w'))
 
     return {'status': 'OK'}
 
@@ -103,7 +103,7 @@ def saveProgressP2():
     AID = getAID(request)
     queues = json.load(open('logs/p2/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
-    json.dump(queues, open('logs/p2/queue_user.json', 'w'), ensure_ascii=False)
+    jsonDumpMini(queues, open('logs/p2/queue_user.json', 'w'))
 
     return {'status': 'OK'}
 
@@ -136,3 +136,6 @@ def assertArgsJ(request, assertees):
 
 def timeNow():
     return int(round(time.time() * 1000))
+
+def jsonDumpMini(data, f):
+    json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
