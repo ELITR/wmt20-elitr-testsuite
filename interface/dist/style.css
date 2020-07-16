@@ -52,6 +52,8 @@ body {
     padding: 10px;
     margin-top: 20px;
     white-space: pre-line;
+    overflow-y: scroll;
+    resize: both;
 }
 
 #tgt_snip_p1 {
@@ -60,14 +62,12 @@ body {
     margin-right: auto;
     width: 1075px;
     height: 300px;
-    overflow-y: scroll;
 }
 
 .tgt_snip_p2 {
     display: inline-block;
     width: 650px;
     height: 250px;
-    overflow-y: scroll;
 }
 
 #src_snip_p1 {
@@ -76,7 +76,6 @@ body {
     margin-right: auto;
     width: 1075px;
     height: 300px;
-    overflow-y: scroll;
 }
 
 #src_snip_p2 {
@@ -85,7 +84,6 @@ body {
     margin-right: auto;
     width: 1075px;
     height: 300px;
-    overflow-y: scroll;
 }
 
 .waiter_highlight_markable {
@@ -95,9 +93,9 @@ body {
 }
 
 .waiter_highlight_line {
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    background-color: #7aa9de33;
+    /* text-decoration: underline;
+    text-decoration-style: dotted; */
+    background-color: #7aa9de60;
 }
 
 .waiter_p2_response {

@@ -26,13 +26,13 @@ export class WaiterControl {
     private driver: WaiterDriver
     private model: ModelSegement
 
-    public constructor(private AID: string) {
-        new Promise(async () => {
-            let progress: UserProgress = await this.manager.load(AID)
+    public constructor(private AID: string, successCallback: () => void) {
+        this.manager.load(AID).then((progress: UserProgress) => {
             if (progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
             }
+            successCallback()
 
             this.driver = new WaiterDriver(this.manager, progress)
 
@@ -67,7 +67,7 @@ export class WaiterControl {
         console.log(`Currently displaying: ${docName}-${mkbName}-${this.driver.progress.sec}`)
 
         let markableName = this.driver.currentMarkableName()
-        
+
         let current_src = this.driver.currentDoc()
         this.waiter_src_snip.html(current_src.display(markableName, this.driver.progress.sec))
 
@@ -93,6 +93,8 @@ export class WaiterControl {
         let currentSections = this.driver.currentDoc().sections(this.driver.currentMarkableName())
         $('#totl_sec_p2').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
+
+        this.prev_button.prop('disabled', this.driver.progress.beginning())
     }
 
     private save_rating() {
@@ -132,7 +134,7 @@ export class WaiterControl {
                 if (this.driver.end_doc()) {
                     refresh = false
                     this.driver.progress.doc = this.driver.progress.mkb = this.driver.progress.sec = -1
-                    
+
                     alert(WaiterControl.ALL_FINISHED_MSG)
                     // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                     window.setTimeout(() => window.location.reload(), 3000)
@@ -158,7 +160,7 @@ export class WaiterControl {
             if (this.driver.progress.mkb == 0) {
                 if (this.driver.progress.doc > 0) {
                     this.driver.progress.doc -= 1
-                
+
                     let prevDocName = this.driver.currentDocName()
                     let prevDoc = this.driver.currentDoc()
                     let mkbQueue = this.manager.data.queue_mkb
@@ -199,7 +201,6 @@ export class WaiterControl {
 
     private sync_next_button() {
         let not_resolved = this.model.mtModels.some((value: ModelMT) => !value.resolved())
-        // $('#next_button_p2').prop('disabled', not_resolved)
-        $('#next_button_p2').prop('disabled', false)
+        $('#next_button_p2').prop('disabled', not_resolved)
     }
 }

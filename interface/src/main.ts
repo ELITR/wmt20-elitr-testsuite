@@ -8,33 +8,36 @@ import { WaiterControl as WaiterControlP1 } from "./waiter_p1/waiter_control";
 import * as $ from 'jquery'
 
 function validateAID(): string {
-    let AIDEl = $('#annotator_id')
-
-    let AID = AIDEl.val() as string
+    let AID = $('#annotator_id').val() as string
     if (!(/^[a-zA-Z0-9]+$/.test(AID))) {
         alert('Invalid Annotator ID')
         return undefined
     }
 
-    AIDEl.prop('disabled', true)
-    $('#start_annotation_p1').hide()
-    $('#start_annotation_p2').hide()
     return AID
 }
-
-$('#start_annotation_p2').click(() => {
-    let AID: string = validateAID()
-    if (AID) {
-        // Start the main routing
-        new WaiterControlP2(AID)
-    }
-})
 
 $('#start_annotation_p1').click(() => {
     let AID: string = validateAID()
     if (AID) {
         // Start the main routing
-        new WaiterControlP1(AID)
+        new WaiterControlP1(AID, () => {
+            $('#annotator_id').prop('disabled', true)
+            $('#start_annotation_p1').hide()
+            $('#start_annotation_p2').hide()
+        })
+    }
+})
+
+$('#start_annotation_p2').click(() => {
+    let AID: string = validateAID()
+    if (AID) {
+        // Start the main routing
+        new WaiterControlP2(AID, () => {
+            $('#annotator_id').prop('disabled', true)
+            $('#start_annotation_p1').hide()
+            $('#start_annotation_p2').hide()
+        })
     }
 })
 

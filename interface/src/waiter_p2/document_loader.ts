@@ -19,6 +19,10 @@ export class UserProgress {
         public sec: number,
     ) { }
 
+    public beginning() : boolean {
+        return this.doc == 0 && this.mkb == 0 && this.sec == 0
+    }
+
     public finished(): boolean {
         return this.doc == -1 && this.mkb == -1 && this.sec == -1
     }

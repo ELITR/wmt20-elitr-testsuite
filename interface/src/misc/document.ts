@@ -8,12 +8,14 @@ export class DocSrc {
     }
 
     public display(markable: string, index: number): string {
-        let output = this.raw
         let indicies = this.markables.get(markable)[index]
-
+        let mkbRow = this.raw.substr(0, indicies[0]).linesCount()
+        let output = this.raw
+        
         const STYLE_A = "<span class='waiter_highlight_markable'>"
         const STYLE_B = "</span>"
         output = output.slice(0, indicies[0]) + STYLE_A + output.slice(indicies[0], indicies[1]) + STYLE_B + output.slice(indicies[1])
+        output = this.displayLine(mkbRow, output)
 
         return output
     }
@@ -22,17 +24,17 @@ export class DocSrc {
         return this.raw
     }
 
-    public displayLine(line: number): string {
-        let posA = this.raw.nthIndexOf("\n", line)
-        let posB = this.raw.nthIndexOf("\n", line + 1)
+    public displayLine(line: number, raw: string = this.raw): string {
+        let posA = raw.nthIndexOf("\n", line)
+        let posB = raw.nthIndexOf("\n", line + 1)
 
         const STYLE_A = "<span class='waiter_highlight_line'>"
         const STYLE_B = "</span>"
 
         let output =
-            this.raw.substring(0, posA) +
-            STYLE_A + this.raw.substring(posA, posB) +
-            STYLE_B + this.raw.substring(posB)
+            raw.substring(0, posA) +
+            STYLE_A + raw.substring(posA, posB) +
+            STYLE_B + raw.substring(posB)
 
         return output
     }
@@ -51,17 +53,17 @@ export class DocTgt {
         return this.displayLine(mkbRow)
     }
 
-    public displayLine(line: number) {
-        let posA = this.raw.nthIndexOf("\n", line)
-        let posB = this.raw.nthIndexOf("\n", line + 1)
+    public displayLine(line: number, raw: string = this.raw) {
+        let posA = raw.nthIndexOf("\n", line)
+        let posB = raw.nthIndexOf("\n", line + 1)
 
         const STYLE_A = "<span class='waiter_highlight_line'>"
         const STYLE_B = "</span>"
 
         let output =
-            this.raw.substring(0, posA) +
-            STYLE_A + this.raw.substring(posA, posB) +
-            STYLE_B + this.raw.substring(posB)
+            raw.substring(0, posA) +
+            STYLE_A + raw.substring(posA, posB) +
+            STYLE_B + raw.substring(posB)
 
         return output
     }

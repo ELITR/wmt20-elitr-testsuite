@@ -145,4 +145,4 @@ def timeNow():
     return int(round(time.time() * 1000))
 
 def jsonDumpMini(data, f):
-    json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
+    json.dump(data, f, ensure_ascii=False, separators=(',', ':'), sort_keys=False)

@@ -76,9 +76,9 @@ export class ModelDocumentMT {
     }
 
     public toObject(): RatingObject {
-        if (false && !this.resolved()) {
-            throw new Error('Attempted to serialize an unresolved model object')
-        }
+        // if (!this.resolved()) {
+        //     throw new Error('Attempted to serialize an unresolved model object')
+        // }
         return {
             nonconflicting: this.nonconflicting as boolean,
             fluency: this.fluency as number,

@@ -26,13 +26,13 @@ export class WaiterControl {
     private driver: WaiterDriver
     private model: ModelDocumentMT
 
-    public constructor(private AID: string) {
-        new Promise(async () => {
-            let progress: UserProgress = await this.manager.load(AID)
+    public constructor(private AID: string, successCallback: () => void) {
+        this.manager.load(AID).then((progress: UserProgress) => {
             if (progress.finished()) {
                 alert("You've already finished all stimuli. Exiting.")
                 return
             }
+            successCallback()
 
             this.driver = new WaiterDriver(this.manager, progress)
 
@@ -85,6 +85,9 @@ export class WaiterControl {
         let currentMts = this.driver.current_mts()
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mt_p1').text(`${this.driver.progress.mt + 1}/${currentMts.length}`)
+
+        console.log(this.driver.progress.sent, this.driver.progress.beginning())
+        this.prev_button.prop('disabled', this.driver.progress.beginning())
     }
 
     private save_rating() {
@@ -118,10 +121,10 @@ export class WaiterControl {
 
         if (this.driver.end_sent()) {
             this.driver.progress.sent = 0
-            
+
             if (this.driver.end_mt()) {
                 this.driver.progress.mt = 0
-                
+
                 if (this.driver.end_doc()) {
                     refresh = false
                     this.driver.progress.doc = this.driver.progress.mt = this.driver.progress.sent = -1
@@ -151,11 +154,11 @@ export class WaiterControl {
                 if (this.driver.progress.doc > 0) {
                     this.driver.progress.doc -= 1
                     this.driver.progress.mt = this.manager.data.queue_mt.get(this.driver.current_docName()).length - 1
-                    this.driver.progress.sent = this.driver.current_doc().lines -1
+                    this.driver.progress.sent = this.driver.current_doc().lines - 1
                 }
             } else {
                 this.driver.progress.mt -= 1
-                this.driver.progress.sent = this.driver.current_doc().lines -1
+                this.driver.progress.sent = this.driver.current_doc().lines - 1
             }
         } else {
             this.driver.progress.sent -= 1
@@ -179,7 +182,6 @@ export class WaiterControl {
 
     private sync_next_button() {
         let not_resolved = !this.model.resolved()
-        // $('#next_button_p1').prop('disabled', not_resolved)
-        $('#next_button_p1').prop('disabled', false)
+        $('#next_button_p1').prop('disabled', not_resolved)
     }
 }
