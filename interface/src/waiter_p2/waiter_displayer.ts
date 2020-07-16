@@ -1,4 +1,4 @@
-import '../misc/shuffle'
+import '../misc/object_utils'
 
 export class WaiterDisplayer {
 

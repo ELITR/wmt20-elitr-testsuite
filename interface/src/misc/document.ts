@@ -1,5 +1,3 @@
-import { TextUtils } from "./text_utils"
-
 export class DocSrc {
     private markables: Map<string, Array<[number, number]>> = new Map<string, Array<[number, number]>>()
     public markable_keys: Array<string>
@@ -30,25 +28,21 @@ export class DocSrc {
 }
 
 export class DocTgt {
-    private static UNDERLINE_CHAR_CONTEXT: number = 10
-    private static UNDERLINE_WORD_CONTEXT: number = 2
-
     constructor(public raw: string) { }
 
     public display(doc_src: DocSrc, markable: string, index: number): string {
         let indicies: [number, number] = doc_src.get_sections(markable)[index]
-        let position = Math.round((indicies[0] + indicies[1]) / 2)
 
-        // very naive segment alignment
-        let projection_position = position / doc_src.raw.length * this.raw.length
+        // Try to align by sentences
+        let mkbRow = (doc_src.raw.substr(0, indicies[0]).match(/\n/g) || []).length
+        let posA = this.raw.nthIndexOf("\n", mkbRow)
+        let posB = this.raw.nthIndexOf("\n", mkbRow+1)
 
         const STYLE_A = "<span class='waiter_p2_highlight_tgt'>"
         const STYLE_B = "</span>"
 
-        let [posA, posB] = TextUtils.contextWord(this.raw, projection_position, DocTgt.UNDERLINE_CHAR_CONTEXT, DocTgt.UNDERLINE_WORD_CONTEXT)
-
         let output =
-            this.raw.substring(0, posA) +
+            this.raw.substring(0, indicies[0]) +
             STYLE_A + this.raw.substring(posA, posB) +
             STYLE_B + this.raw.substring(posB)
 
