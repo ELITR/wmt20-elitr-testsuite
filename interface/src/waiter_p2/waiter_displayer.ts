@@ -30,21 +30,21 @@ export class WaiterDisplayer {
                 <div class='waiter_p2_error_type'>
                     <input type='checkbox' id='nontranslated_${index}'>
                     <label for='nontranslated_${index}'>Not translated</label>
-                    <br>
                     <input type='checkbox' id='tootranslated_${index}'>
                     <label for='tootranslated_${index}'>Over-translated</label>
                     <br>
+
                     <input type='checkbox' id='terminology_${index}'>
                     <label for='terminology_${index}'>Bad terminology</label>
-                    <br>
                     <input type='checkbox' id='style_${index}'>
                     <label for='style_${index}'>Bad style</label>
                     <br>
+
                     <input type='checkbox' id='sense_${index}'>
                     <label for='sense_${index}'>Distorted sense</label>
-                    <br>
                     <input type='checkbox' id='typography_${index}'>
                     <label for='typography_${index}'>Bad typography</label>
+
                     <br>
                     <input type='checkbox' id='grammar_${index}'>
                     <label for='grammar_${index}'>Grammar</label>

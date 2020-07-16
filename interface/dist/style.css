@@ -162,3 +162,8 @@ input[type=range] {
     border: 1px solid #c9c9c9;
     padding: 4px;
 }
+
+.waiter_p2_error_type label {
+    width: 160px;
+    display: inline-block;
+}
