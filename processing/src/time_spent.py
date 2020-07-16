@@ -9,23 +9,28 @@ args = parser.parse_args()
 
 data = json.load(open(args.rating_file, 'r'))
 
-print('Entries:', len(data))
+times = []
+for docmodel in data.values():
+    for secsent in docmodel.values():
+        times.append(secsent['time'])
+times.sort()
 
-if len(data) <= 1:
+print('Entries:', len(times))
+
+if len(times) <= 1:
     print('Too little number of entries')
     exit(0)
 
-data = sorted([v['time'] for v in data.values()])
 
 spentTime = 0
-blockBegin = data[0]
+blockBegin = times[0]
 blocks = 0
 
-for index, time in enumerate(data[1:], start=1):
-    diff = time - data[index-1]
+for index, time in enumerate(times[1:], start=1):
+    diff = time - times[index-1]
     # 5 minutes for one view
-    if diff > 5*60*1000 or index == len(data)-1:
-        spentTime += data[index-1] - blockBegin
+    if diff > 5*60*1000 or index == len(times)-1:
+        spentTime += times[index-1] - blockBegin
         blockBegin = time
         blocks += 1
 
