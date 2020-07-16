@@ -16,6 +16,9 @@ export class WaiterControl {
     private waiter_tgt_snip: JQuery<HTMLDivElement> = $('#tgt_snip_p1')
     private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p1_tgt_table')
 
+    private static DIFFERENT_DOCUMENT_MSG = 'You annotated all translations of one document. Moving to the next one.'
+    private static ALL_FINISHED_MSG = 'All work finished. Wait a few moments for the page to refresh.'
+
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
     private model: ModelDocumentMT
@@ -118,10 +121,11 @@ export class WaiterControl {
             if (this.driver.end_doc()) {
                 refresh = false
                 this.driver.progress.doc = this.driver.progress.mt = -1
-                alert('All work finished. Wait a few moments for the page to refresh.')
+                alert(WaiterControl.ALL_FINISHED_MSG)
                 // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                 window.setTimeout(() => window.location.reload(), 3000)
             } else {
+                alert(WaiterControl.DIFFERENT_DOCUMENT_MSG)
                 this.driver.progress.doc += 1
                 this.driver.progress.mt = 0
             }

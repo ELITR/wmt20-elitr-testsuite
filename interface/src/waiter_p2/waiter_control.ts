@@ -18,6 +18,10 @@ export class WaiterControl {
     private prev_button: JQuery<HTMLInputElement> = $('#prev_button_p2')
     private next_button: JQuery<HTMLInputElement> = $('#next_button_p2')
 
+    private static DIFFERENT_DOCUMENT_MSG = 'You annotated all markables of one document. Moving to the next one.'
+    private static DIFFERENT_MARKABLE_MSG = 'You annotated all occurences of the current markable. Moving to the next one.'
+    private static ALL_FINISHED_MSG = 'All work finished. Wait a few moments for the page to refresh.'
+
     private manager: DocumentManager = new DocumentManager()
     private driver: WaiterDriver
     private model: ModelSegement
@@ -130,15 +134,17 @@ export class WaiterControl {
                 if (this.driver.end_doc()) {
                     refresh = false
                     this.driver.progress.doc = this.driver.progress.mkb = this.driver.progress.sec = -1
-                    alert('All work finished. Wait a few moments for the page to refresh.')
+                    alert(WaiterControl.ALL_FINISHED_MSG)
                     // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
                     window.setTimeout(() => window.location.reload(), 3000)
                 } else {
+                    alert(WaiterControl.DIFFERENT_DOCUMENT_MSG)
                     this.driver.progress.doc += 1
                     this.driver.progress.mkb = 0
                     this.driver.progress.sec = 0
                 }
             } else {
+                alert(WaiterControl.DIFFERENT_MARKABLE_MSG)
                 this.driver.progress.mkb += 1
                 this.driver.progress.sec += 0
             }
