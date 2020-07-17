@@ -85,8 +85,8 @@ export class WaiterControl {
         let currentMts = this.driver.current_mts()
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mt_p1').text(`${this.driver.progress.mt + 1}/${currentMts.length}`)
+        $('#totl_sent_p1').text(`${this.driver.progress.sent + 1}/${this.driver.current_doc().lines}`)
 
-        console.log(this.driver.progress.sent, this.driver.progress.beginning())
         this.prev_button.prop('disabled', this.driver.progress.beginning())
     }
 
