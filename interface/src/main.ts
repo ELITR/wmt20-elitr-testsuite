@@ -7,7 +7,7 @@ import { WaiterControl as WaiterControlP2 } from "./waiter_p2/waiter_control"
 import { WaiterControl as WaiterControlP1 } from "./waiter_p1/waiter_control";
 import * as $ from 'jquery'
 
-function validateAID(): string {
+function validateAID(): string | undefined {
     let AID = $('#annotator_id').val() as string
     if (!(/^[a-zA-Z0-9]+$/.test(AID))) {
         alert('Invalid Annotator ID')
@@ -18,7 +18,7 @@ function validateAID(): string {
 }
 
 $('#start_annotation_p1').click(() => {
-    let AID: string = validateAID()
+    let AID: string | undefined = validateAID()
     if (AID) {
         // Start the main routing
         new WaiterControlP1(AID, () => {
@@ -30,7 +30,7 @@ $('#start_annotation_p1').click(() => {
 })
 
 $('#start_annotation_p2').click(() => {
-    let AID: string = validateAID()
+    let AID: string | undefined = validateAID()
     if (AID) {
         // Start the main routing
         new WaiterControlP2(AID, () => {

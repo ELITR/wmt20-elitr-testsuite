@@ -23,8 +23,8 @@ export class WaiterControl {
     private static ALL_FINISHED_MSG = 'All work finished. Wait a few moments for the page to refresh.'
 
     private manager: DocumentManager = new DocumentManager()
-    private driver: WaiterDriver
-    private model: ModelSegement
+    private driver!: WaiterDriver
+    private model!: ModelSegement
 
     public constructor(private AID: string, successCallback: () => void) {
         this.manager.load(AID).then((progress: UserProgress) => {
@@ -59,7 +59,7 @@ export class WaiterControl {
     public display_current() {
         this.update_stats()
         let docName: string = this.manager.data.queue_doc[this.driver.progress.doc]
-        let mkbName: string = this.manager.data.queue_mkb.get(docName)[this.driver.progress.mkb]
+        let mkbName: string = this.manager.data.queue_mkb.get(docName)![this.driver.progress.mkb]
 
         this.model = new ModelSegement(this.manager)
 
@@ -86,7 +86,7 @@ export class WaiterControl {
     }
 
     private update_stats() {
-        const currentMarkables = this.manager.data.queue_mkb.get(this.driver.currentDocName())
+        const currentMarkables = this.manager.data.queue_mkb.get(this.driver.currentDocName())!
         $('#totl_doc_p2').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
         $('#totl_mkb_p2').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
 
@@ -165,9 +165,9 @@ export class WaiterControl {
                     let prevDoc = this.driver.currentDoc()
                     let mkbQueue = this.manager.data.queue_mkb
 
-                    this.driver.progress.mkb = mkbQueue.get(prevDocName).length - 1
+                    this.driver.progress.mkb = mkbQueue.get(prevDocName)!.length - 1
 
-                    let prevMarkableName = mkbQueue.get(prevDocName)[this.driver.progress.mkb]
+                    let prevMarkableName = mkbQueue.get(prevDocName)![this.driver.progress.mkb]
                     this.driver.progress.sec = prevDoc.sections(prevMarkableName).length - 1
                 }
             } else {
@@ -176,7 +176,7 @@ export class WaiterControl {
                 let prevDocName = this.driver.currentDocName()
                 let prevDoc = this.driver.currentDoc()
 
-                let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)[this.driver.progress.mkb]
+                let prevMarkableName = this.manager.data.queue_mkb.get(prevDocName)![this.driver.progress.mkb]
                 this.driver.progress.sec = prevDoc.sections(prevMarkableName).length - 1
             }
         } else {

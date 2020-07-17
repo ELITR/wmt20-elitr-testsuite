@@ -4,11 +4,11 @@ import { DocSrc, DocTgt } from '../misc/document'
 import { RatingDatabase } from './model'
 
 export interface UserIntroSync {
-    queue_doc: Array<string>,
-    queue_mkb: Map<string, Array<string>>,
-    names_mt: Array<string>,
-    content_src: Map<string, DocSrc>,
-    content_mt: Map<string, Map<string, DocTgt>>,
+    queue_doc: Readonly<Array<string>>,
+    queue_mkb: Readonly<Map<string, Array<string>>>,
+    names_mt: Readonly<Array<string>>,
+    content_src: Readonly<Map<string, DocSrc>>,
+    content_mt: Readonly<Map<string, Map<string, DocTgt>>>,
     rating: RatingDatabase,
 }
 

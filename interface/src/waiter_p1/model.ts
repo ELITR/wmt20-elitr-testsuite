@@ -25,10 +25,6 @@ export class RatingDatabase {
     }
 }
 
-export class Model {
-    public documents: Array<[string, Array<ModelDocumentMT>]>
-}
-
 export class ModelDocumentMT {
 
     public constructor(private manager: DocumentManager) { }
@@ -37,7 +33,7 @@ export class ModelDocumentMT {
         let serializedRatings = this.toObject()
 
         let docName = this.manager.data.queue_doc[current.doc]
-        let mtName = this.manager.data.queue_mt.get(docName)[current.mt]
+        let mtName = this.manager.data.queue_mt.get(docName)![current.mt]
 
         this.manager.data.rating.set(docName, mtName, current.sent, serializedRatings)
 
@@ -66,7 +62,7 @@ export class ModelDocumentMT {
     public nonconflicting?: boolean
     public adequacy?: number
     public fluency?: number
-    public errors?: string
+    public errors: string = ''
 
     public resolved(): boolean {
         if (DEVMODE)

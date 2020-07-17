@@ -30,6 +30,6 @@ module.exports = (env, argv) => {
          new webpack.DefinePlugin({
             DEVMODE: !!(argv.mode == 'development')
          })
-      ]
+      ],
    }
 };

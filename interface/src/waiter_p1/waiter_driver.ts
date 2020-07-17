@@ -14,17 +14,17 @@ export class WaiterDriver {
     }
 
     public current_doc(): DocSrc {
-        return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
+        return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])!
     }
 
     public current_mt(): DocTgt {
         let docName = this.current_docName()
-        let mtName = this.manager.data.queue_mt.get(docName)[this.progress.mt]
-        return this.manager.data.content_mt.get(docName).get(mtName)
+        let mtName = this.manager.data.queue_mt.get(docName)![this.progress.mt]
+        return this.manager.data.content_mt.get(docName)!.get(mtName)!
     }
 
     public current_mts(): Array<string> {
-        return this.manager.data.queue_mt.get(this.current_docName())
+        return this.manager.data.queue_mt.get(this.current_docName())!
     }
 
     public end_doc() {

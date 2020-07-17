@@ -6,7 +6,7 @@ export class PageUtils {
     public static syncval(): void {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_text = $(`#${element.id}_text`)
-            let type: string = element.getAttribute('type')
+            let type: string = element.getAttribute('type') as string
             let element_val = $(element)
             if (type == 'range') {
                 element_val.on('input', () => {
@@ -31,7 +31,7 @@ export class PageUtils {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_val = $(element)
 
-            let true_index: number = +element_val.attr('index')
+            let true_index: number = +(element_val.attr('index')!)
             element_val.on('input', () => {
                 if (element.id.endsWith('fluency')) {
                     controller.input_info('fluency', true_index, element_val.val() as number)
@@ -76,23 +76,23 @@ export class PageUtils {
         $('.waiter_highlight_line').each(
             (index: number, element: HTMLElement) => {
                 element.scrollIntoView(false)
-                let parentEl = $(element.parentElement)
-                if (parentEl.scrollTop() > 0)
-                    parentEl.scrollTop(parentEl.scrollTop() + 100)
+                let parentEl = $(element.parentElement!)
+                if (parentEl.scrollTop()! > 0)
+                    parentEl.scrollTop(parentEl.scrollTop()! + 100)
             }
         )
     }
 
     public static scrollIntoViewP2() {
         $('.waiter_highlight_markable').get(0).scrollIntoView(false)
-        $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop() + 150)
+        $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop()! + 150)
 
         $('.waiter_highlight_line').each(
             (index: number, element: HTMLElement) => {
                 element.scrollIntoView(false)
-                let parentEl = $(element.parentElement)
-                if (parentEl.scrollTop() > 0)
-                    parentEl.scrollTop(parentEl.scrollTop() + 100)
+                let parentEl = $(element.parentElement!)
+                if (parentEl.scrollTop()! > 0)
+                    parentEl.scrollTop(parentEl.scrollTop()! + 100)
             }
         )
     }

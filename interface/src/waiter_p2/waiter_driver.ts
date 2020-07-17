@@ -14,11 +14,11 @@ export class WaiterDriver {
     }
 
     public currentDoc(): DocSrc {
-        return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])
+        return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])!
     }
 
     public currentMarkableName() : string {
-        return this.manager.data.queue_mkb.get(this.currentDocName())[this.progress.mkb]
+        return this.manager.data.queue_mkb.get(this.currentDocName())![this.progress.mkb]
     }
 
     public currentSections(): Array<[number, number]> {
@@ -31,7 +31,7 @@ export class WaiterDriver {
 
     public end_mkb() {
         const currentMarkables = this.manager.data.queue_mkb.get(this.currentDocName())
-        return this.progress.mkb >= currentMarkables.length - 1
+        return this.progress.mkb >= currentMarkables!.length - 1
     }
 
     public end_sec() {

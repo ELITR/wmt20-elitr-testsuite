@@ -23,8 +23,8 @@ export class WaiterControl {
     private static ALL_FINISHED_MSG = 'All work finished. Wait a few moments for the page to refresh.'
 
     private manager: DocumentManager = new DocumentManager()
-    private driver: WaiterDriver
-    private model: ModelDocumentMT
+    private driver!: WaiterDriver
+    private model!: ModelDocumentMT
 
     public constructor(private AID: string, successCallback: () => void) {
         this.manager.load(AID).then((progress: UserProgress) => {
@@ -59,7 +59,7 @@ export class WaiterControl {
     public display_current() {
         this.update_stats()
         let docName = this.manager.data.queue_doc[this.driver.progress.doc]
-        let mtName = this.manager.data.queue_mt.get(docName)[this.driver.progress.mt]
+        let mtName = this.manager.data.queue_mt.get(docName)![this.driver.progress.mt]
 
         this.model = new ModelDocumentMT(this.manager)
         console.log(`Currently displaying: ${docName}-${mtName}-${this.driver.progress.sent}`)
@@ -153,7 +153,7 @@ export class WaiterControl {
             if (this.driver.progress.mt == 0) {
                 if (this.driver.progress.doc > 0) {
                     this.driver.progress.doc -= 1
-                    this.driver.progress.mt = this.manager.data.queue_mt.get(this.driver.current_docName()).length - 1
+                    this.driver.progress.mt = this.manager.data.queue_mt.get(this.driver.current_docName())!.length - 1
                     this.driver.progress.sent = this.driver.current_doc().lines - 1
                 }
             } else {

@@ -26,14 +26,6 @@ export class RatingDatabase {
     }
 }
 
-export class Model {
-    public documents: Array<[string, Array<ModelMarkable>]>
-}
-
-export class ModelMarkable {
-    public segments: Array<ModelSegement>
-}
-
 export class ModelSegement {
     public mtModels: Array<ModelMT>
 
@@ -46,7 +38,7 @@ export class ModelSegement {
         this.mtModels.forEach((model: ModelMT) => serializedRatings[model.name] = model.toObject())
 
         let docName = this.manager.data.queue_doc[current.doc]
-        let mkbName = this.manager.data.queue_mkb.get(docName)[current.mkb]
+        let mkbName = this.manager.data.queue_mkb.get(docName)![current.mkb]
 
         this.manager.data.rating.set(docName, mkbName, current.sec, serializedRatings)
 
@@ -76,7 +68,7 @@ export class ModelMT {
     public translated?: boolean
     public adequacy?: number
     public fluency?: number
-    public errors: string
+    public errors: string = ''
 
     public name: string
 

@@ -8,7 +8,7 @@ export class DocSrc {
     }
 
     public display(markable: string, index: number): string {
-        let indicies = this.markables.get(markable)[index]
+        let indicies = this.markables.get(markable)![index]
         let mkbRow = this.raw.substr(0, indicies[0]).linesCount()
         let output = this.raw
         
@@ -40,7 +40,7 @@ export class DocSrc {
     }
 
     public sections(markable: string): Array<[number, number]> {
-        return this.markables.get(markable)
+        return this.markables.get(markable)!
     }
 }
 
