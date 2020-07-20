@@ -26,8 +26,9 @@ export class RatingDatabase {
 export class ModelDocument {
     public mtModels: Array<ModelMT>
 
-    public constructor(private manager: DocumentManager) {
-        this.mtModels = this.manager.data.names_mt.map((mtName: string) => new ModelMT(mtName))
+    public constructor(private manager: DocumentManager, current: UserProgress) {
+        let docName = this.manager.data.queue_doc[current.doc]
+        this.mtModels = this.manager.data.queue_mt.get(docName)!.map((mtName: string) => new ModelMT(mtName))
     }
 
 

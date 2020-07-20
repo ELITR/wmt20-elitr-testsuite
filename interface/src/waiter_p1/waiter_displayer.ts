@@ -5,6 +5,7 @@ export class WaiterDisplayer {
     public static generateElements(snippets: Array<[string, string]>, rating: { [mt: string]: any }): string {
         let output = snippets.map(([key, value], index: number) => {
             let mtRating = rating[key] || {}
+            console.log(key, mtRating)
             return `
             <div class='div_snip tgt_snip_p1'>${value}</div>
             
@@ -12,19 +13,19 @@ export class WaiterDisplayer {
                 <div class='waiter_p2_response_single'>
                     <div>Fluency:</div>
                     <input id='val_${index}_fluency' index='${index}' ${mtRating.fluency == undefined ? '' : 'trigger'} class='synctext' type='range' min='0' , max='1' , step='0.1' value='${mtRating.fluency ?? -1}'>
-                    <div id='val_${index}_fluency_text'>-</div>
+                    <label for='val_${index}_fluency' id='val_${index}_fluency_text'>-</label>
                 </div>
                 
                 <div class='waiter_p2_response_single'>
                     <div>Adequacy:</div>
                     <input id='val_${index}_adequacy' index='${index}' ${mtRating.adequacy == undefined ? '' : 'trigger'} class='synctext' type='range' min='0' , max='1' , step='0.1' value='${mtRating.adequacy ?? -1}'>
-                    <div id='val_${index}_adequacy_text'>-</div>
+                    <label for='val_${index}_adequacy' id='val_${index}_adequacy_text'>-</label>
                 </div>
 
                 <div class='waiter_p1_response_single'>
                     <div>Non-conflicting markables:</div>
-                    <input id='val_${index}_nonconf' index='${index}' class='synctext' type='checkbox' ${mtRating.nonconflicting == undefined ? '' : 'trigger'} value='${mtRating.nonconflicting ?? -1}'>
-                    <div id='val_${index}_nonconf_text'>-</div>
+                    <input id='val_${index}_nonconf' index='${index}' class='synctext' type='checkbox' trigger ${mtRating.nonconflicting == undefined ? 'checked' : (mtRating.nonconflicting ? 'checked' : '')}>
+                    <label for='val_${index}_nonconf' id='val_${index}_nonconf_text'>-</label>
                 </div>
 
                 <div>

@@ -52,7 +52,7 @@ export class WaiterControl {
                 this.next()
                 this.save_progress()
             })
-            this.focus_button.click(() => PageUtils.scrollIntoViewP2())
+            this.focus_button.click(() => PageUtils.scrollIntoView())
         })
     }
 
@@ -80,7 +80,7 @@ export class WaiterControl {
 
         PageUtils.syncval()
         PageUtils.listenModelP2(this)
-        PageUtils.scrollIntoViewP2()
+        PageUtils.scrollIntoView()
 
         this.sync_next_button()
     }

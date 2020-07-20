@@ -113,10 +113,11 @@ input[type=range] {
     float: left;
 }
 
-.waiter_p1_response_single div:last-child, .waiter_p2_response_single div:last-child {
+.waiter_p1_response_single label:last-child, .waiter_p2_response_single label:last-child {
     width: 20px;
     display: inline-block !important;
     text-align: right;
+    user-select: none;
 }
 
 .waiter_p1_response_single textarea, .waiter_p2_response_single textarea {

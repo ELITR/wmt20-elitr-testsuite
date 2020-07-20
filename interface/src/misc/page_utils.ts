@@ -18,9 +18,9 @@ export class PageUtils {
                 })
             }
         })
-        PageUtils.indeterminate()
     }
 
+    // @unused
     private static indeterminate(): void {
         $('.synctext[type="checkbox"]').each((index: number, element: HTMLElement) => {
             (element as HTMLInputElement).indeterminate = true
@@ -46,7 +46,7 @@ export class PageUtils {
 
             if (element_val.attr('trigger') != undefined) {
                 element_val.trigger('input')
-            }
+            }   
         })
     }
 
@@ -73,9 +73,8 @@ export class PageUtils {
         })
     }
 
-    public static scrollIntoViewP1() {
-        // $('.waiter_highlight_markable').get(0).scrollIntoView(false)
-        // $('#src_snip_p1').scrollTop($('#src_snip_p1').scrollTop()! + 150)
+    public static scrollIntoView() {
+        let prevDocPos : number = $(window).scrollTop()!
 
         $('.waiter_highlight_line').each(
             (index: number, element: HTMLElement) => {
@@ -85,19 +84,7 @@ export class PageUtils {
                     parentEl.scrollTop(parentEl.scrollTop()! + 100)
             }
         )
-    }
 
-    public static scrollIntoViewP2() {
-        // $('.waiter_highlight_markable').get(0).scrollIntoView(false)
-        // $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop()! + 150)
-
-        $('.waiter_highlight_line').each(
-            (index: number, element: HTMLElement) => {
-                element.scrollIntoView(false)
-                let parentEl = $(element.parentElement!)
-                if (parentEl.scrollTop()! > 0)
-                    parentEl.scrollTop(parentEl.scrollTop()! + 100)
-            }
-        )
+        $(window).scrollTop(prevDocPos)
     }
 }

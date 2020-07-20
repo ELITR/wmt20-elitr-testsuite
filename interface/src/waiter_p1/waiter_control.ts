@@ -13,7 +13,6 @@ export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p1_frame')
     private waiter_nav: JQuery<HTMLDivElement> = $('#waiter_p1_nav')
     private waiter_src_snip: JQuery<HTMLDivElement> = $('#src_snip_p1')
-    private waiter_tgt_snip: JQuery<HTMLDivElement> = $('#tgt_snip_p1')
     private waiter_tgt_table: JQuery<HTMLDivElement> = $('#waiter_p1_tgt_table')
     private focus_button: JQuery<HTMLInputElement> = $('#focus_button_p1')
     private prev_button: JQuery<HTMLInputElement> = $('#prev_button_p1')
@@ -52,7 +51,7 @@ export class WaiterControl {
                 this.next()
                 this.save_progress()
             })
-            this.focus_button.click(() => PageUtils.scrollIntoViewP1())
+            this.focus_button.click(() => PageUtils.scrollIntoView())
         })
     }
 
@@ -62,7 +61,7 @@ export class WaiterControl {
         let current_src = this.driver.current_doc()
         this.waiter_src_snip.html(current_src.displayLine(this.driver.progress.sent))
 
-        this.model = new ModelDocument(this.manager)
+        this.model = new ModelDocument(this.manager, this.driver.progress)
         console.log(`Currently displaying: ${docName}-${this.driver.progress.sent}`)
         let rating = this.manager.data.rating.get(docName, this.driver.progress.sent)
 
@@ -75,7 +74,7 @@ export class WaiterControl {
 
         PageUtils.syncval()
         PageUtils.listenModelP1(this)
-        PageUtils.scrollIntoViewP1()
+        PageUtils.scrollIntoView()
 
         this.sync_next_button()
     }
