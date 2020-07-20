@@ -74,6 +74,7 @@ export class PageUtils {
     }
 
     public static scrollIntoView() {
+        // store main window position
         let prevDocPos : number = $(window).scrollTop()!
 
         $('.waiter_highlight_line').each(

@@ -4,6 +4,7 @@ import argparse
 import yaml
 import json
 import markables
+import re
 
 parser = argparse.ArgumentParser(description='Prepare annotated document content file')
 parser.add_argument(
@@ -31,18 +32,25 @@ if __name__ == '__main__':
     for doc in def_docs:
         content['content_mt'][doc] = {}
 
-        for mt in def_mts:
-            filename = f'{args.experiment_dir}/{doc}_{mt}.txt'
-            with open(filename, 'r') as f:
-                text = f.read()
-                content['content_mt'][doc][mt] = text
-
         filename = f'{args.experiment_dir}/{doc}_src.txt'
         with open(filename, 'r') as f:
-            text = f.read()
+            text = list(filter(lambda x: not re.match('^\s+$', x), f.readlines()))
+            lines_src = len(text)
+            text = ''.join(text)
             indicies = markables.indicies(text, def_markables)
             content['content_src'][doc] = text
             content['indicies_src'][doc] = indicies
+            print(f'{doc} lines', lines_src)
+
+        for mt in def_mts:
+            filename = f'{args.experiment_dir}/{doc}_{mt}.txt'
+            with open(filename, 'r') as f:
+                text = list(filter(lambda x: not re.match('^\s+$', x), f.readlines()))
+                lines_mt = len(text)
+                text = ''.join(text)
+                content['content_mt'][doc][mt] = text
+                assert(lines_src == lines_mt)
+
 
     with open(args.out_content, 'w') as f:
         json.dump(content, f, ensure_ascii=False)
