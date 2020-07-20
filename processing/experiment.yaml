@@ -2,6 +2,7 @@
 mts:
   - google
   - lindat
+  - bing
 
 docs:
   - au1
