@@ -50,23 +50,6 @@ export class WaiterDisplayer {
                     <label for='grammar_${index}'>Grammar</label>
                 </div>
                 </div>
-                
-                <!--
-                <div>
-                    <div>Mistakes:</div>
-                    <div class='waiter_p2_response_single'>
-                        <textarea id='val_${index}_errors' index='${index}' ${mtRating.errors == undefined ? '' : 'trigger'} class='synctext'>${mtRating.errors ?? ''}</textarea>
-                    </div>
-                </div>
-
-                <div>
-                    <div>Non-conflicting?</div>
-                    <div class='waiter_p2_response_single'>
-                        <input id='val_${index}_nonconf' index='${index}' class='synctext' type='range' min='0' , max='1' , step='0.1' value='-1'>
-                        <div id='val_${index}_nonconf_text'>-</div>
-                    </div>
-                </div>
-                -->
             </div>
 
             <br>

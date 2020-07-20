@@ -12,30 +12,32 @@ export class RatingDatabase {
         this.data = data
     }
 
-    public set(docName: string, mtName: string, sentence: number, rating: RatingObject) {
-        let signature = `${docName}-${mtName}`
-        this.data[signature] = this.data[signature] || {}
-        this.data[signature][sentence.toString()] = rating
+    public set(docName: string, sentence: number, rating: RatingObject) {
+        this.data[docName] = this.data[docName] || {}
+        this.data[docName][sentence.toString()] = rating
     }
-    
-    public get(docName: string, mtName: string, sentence: number) : RatingObject {
-        let signature = `${docName}-${mtName}`
-        this.data[signature] = this.data[signature] || {}
-        return this.data[signature][sentence.toString()] || {}
+
+    public get(docName: string, sentence: number): RatingObject {
+        this.data[docName] = this.data[docName] || {}
+        return this.data[docName][sentence.toString()] || {}
     }
 }
 
-export class ModelDocumentMT {
+export class ModelDocument {
+    public mtModels: Array<ModelMT>
 
-    public constructor(private manager: DocumentManager) { }
+    public constructor(private manager: DocumentManager) {
+        this.mtModels = this.manager.data.names_mt.map((mtName: string) => new ModelMT(mtName))
+    }
+
 
     public save(AID: string, current: UserProgress) {
-        let serializedRatings = this.toObject()
+        let serializedRatings: { [key: string]: any } = {}
+        this.mtModels.forEach((model: ModelMT) => serializedRatings[model.name] = model.toObject())
 
         let docName = this.manager.data.queue_doc[current.doc]
-        let mtName = this.manager.data.queue_mt.get(docName)![current.mt]
 
-        this.manager.data.rating.set(docName, mtName, current.sent, serializedRatings)
+        this.manager.data.rating.set(docName, current.sent, serializedRatings)
 
         $.ajax({
             method: 'POST',
@@ -44,9 +46,7 @@ export class ModelDocumentMT {
                 'AID': AID,
                 'current': {
                     'doc': current.doc,
-                    'mt': current.mt,
                     'sent': current.sent,
-                    'mt_name': mtName,
                     'doc_name': docName,
                 },
                 'rating': serializedRatings
@@ -57,12 +57,20 @@ export class ModelDocumentMT {
             console.log(data)
         })
     }
+}
 
 
+export class ModelMT {
     public nonconflicting?: boolean
     public adequacy?: number
     public fluency?: number
     public errors: string = ''
+
+    public name: string
+
+    public constructor(name: string) {
+        this.name = name
+    }
 
     public resolved(): boolean {
         if (DEVMODE)

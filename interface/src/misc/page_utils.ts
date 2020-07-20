@@ -27,6 +27,29 @@ export class PageUtils {
         })
     }
 
+    public static listenModelP1(controller: WaiterControlP1) {
+        $('.synctext').each((index: number, element: HTMLElement) => {
+            let element_val = $(element)
+
+            let true_index: number = +(element_val.attr('index')!)
+            element_val.on('input', () => {
+                if (element.id.endsWith('adequacy')) {
+                    controller.input_info('adequacy', true_index, element_val.val() as number)
+                } else if (element.id.endsWith('fluency')) {
+                    controller.input_info('fluency', true_index, element_val.val() as number)
+                } else if (element.id.endsWith('errors')) {
+                    controller.input_info('errors', true_index, element_val.val() as string)
+                } else if (element.id.endsWith('nonconf')) {
+                    controller.input_info('nonconf', true_index, element_val.prop('checked') as boolean)
+                }
+            })
+
+            if (element_val.attr('trigger') != undefined) {
+                element_val.trigger('input')
+            }
+        })
+    }
+
     public static listenModelP2(controller: WaiterControlP2) {
         $('.synctext').each((index: number, element: HTMLElement) => {
             let element_val = $(element)
@@ -50,29 +73,10 @@ export class PageUtils {
         })
     }
 
-    public static listenModelP1(controller: WaiterControlP1) {
-        $('.synctext').each((index: number, element: HTMLElement) => {
-            let element_val = $(element)
-
-            element_val.on('input', () => {
-                if (element.id.endsWith('adequacy')) {
-                    controller.input_info('adequacy', element_val.val() as number)
-                } else if (element.id.endsWith('fluency')) {
-                    controller.input_info('fluency', element_val.val() as number)
-                } else if (element.id.endsWith('errors')) {
-                    controller.input_info('errors', element_val.val() as string)
-                } else if (element.id.endsWith('nonconf')) {
-                    controller.input_info('nonconf', element_val.prop('checked') as boolean)
-                }
-            })
-
-            if (element_val.attr('trigger') != undefined) {
-                element_val.trigger('input')
-            }
-        })
-    }
-
     public static scrollIntoViewP1() {
+        // $('.waiter_highlight_markable').get(0).scrollIntoView(false)
+        // $('#src_snip_p1').scrollTop($('#src_snip_p1').scrollTop()! + 150)
+
         $('.waiter_highlight_line').each(
             (index: number, element: HTMLElement) => {
                 element.scrollIntoView(false)
@@ -84,8 +88,8 @@ export class PageUtils {
     }
 
     public static scrollIntoViewP2() {
-        $('.waiter_highlight_markable').get(0).scrollIntoView(false)
-        $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop()! + 150)
+        // $('.waiter_highlight_markable').get(0).scrollIntoView(false)
+        // $('#src_snip_p2').scrollTop($('#src_snip_p2').scrollTop()! + 150)
 
         $('.waiter_highlight_line').each(
             (index: number, element: HTMLElement) => {

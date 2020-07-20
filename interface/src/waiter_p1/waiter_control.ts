@@ -1,6 +1,6 @@
 import { DocumentManager } from "./document_manager"
 import * as $ from 'jquery'
-import { ModelDocumentMT } from "./model"
+import { ModelDocument, ModelMT } from "./model"
 import { WaiterDriver } from "./waiter_driver"
 import { WaiterDisplayer } from "./waiter_displayer"
 import { PageUtils } from "../misc/page_utils"
@@ -24,7 +24,7 @@ export class WaiterControl {
 
     private manager: DocumentManager = new DocumentManager()
     private driver!: WaiterDriver
-    private model!: ModelDocumentMT
+    private model!: ModelDocument
 
     public constructor(private AID: string, successCallback: () => void) {
         this.manager.load(AID).then((progress: UserProgress) => {
@@ -59,20 +59,19 @@ export class WaiterControl {
     public display_current() {
         this.update_stats()
         let docName = this.manager.data.queue_doc[this.driver.progress.doc]
-        let mtName = this.manager.data.queue_mt.get(docName)![this.driver.progress.mt]
-
-        this.model = new ModelDocumentMT(this.manager)
-        console.log(`Currently displaying: ${docName}-${mtName}-${this.driver.progress.sent}`)
-        let rating = this.manager.data.rating.get(docName, mtName, this.driver.progress.sent)
-
         let current_src = this.driver.current_doc()
         this.waiter_src_snip.html(current_src.displayLine(this.driver.progress.sent))
 
-        let response_content = WaiterDisplayer.generateElements(rating)
-        this.waiter_tgt_table.html(response_content)
+        this.model = new ModelDocument(this.manager)
+        console.log(`Currently displaying: ${docName}-${this.driver.progress.sent}`)
+        let rating = this.manager.data.rating.get(docName, this.driver.progress.sent)
 
-        let current_tgt = this.driver.current_mt()
-        this.waiter_tgt_snip.html(current_tgt.displayLine(this.driver.progress.sent))
+        let snippets: Array<[string, string]> = this.manager.getAllMT(docName).map(
+            ([key, doc]) => [key, doc.displayLine(this.driver.progress.sent)]
+        )
+
+        let content = WaiterDisplayer.generateElements(snippets, rating)
+        this.waiter_tgt_table.html(content)
 
         PageUtils.syncval()
         PageUtils.listenModelP1(this)
@@ -82,9 +81,7 @@ export class WaiterControl {
     }
 
     private update_stats() {
-        let currentMts = this.driver.current_mts()
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_mt_p1').text(`${this.driver.progress.mt + 1}/${currentMts.length}`)
         $('#totl_sent_p1').text(`${this.driver.progress.sent + 1}/${this.driver.current_doc().lines}`)
 
         this.prev_button.prop('disabled', this.driver.progress.beginning())
@@ -105,7 +102,6 @@ export class WaiterControl {
                 'AID': this.AID,
                 'progress': {
                     'doc': this.driver.progress.doc,
-                    'mt': this.driver.progress.mt,
                     'sent': this.driver.progress.sent,
                 },
             }),
@@ -122,22 +118,16 @@ export class WaiterControl {
         if (this.driver.end_sent()) {
             this.driver.progress.sent = 0
 
-            if (this.driver.end_mt()) {
-                this.driver.progress.mt = 0
+            if (this.driver.end_doc()) {
+                refresh = false
+                this.driver.progress.doc = this.driver.progress.sent = -1
 
-                if (this.driver.end_doc()) {
-                    refresh = false
-                    this.driver.progress.doc = this.driver.progress.mt = this.driver.progress.sent = -1
-
-                    alert(WaiterControl.ALL_FINISHED_MSG)
-                    // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
-                    window.setTimeout(() => window.location.reload(), 3000)
-                } else {
-                    alert(WaiterControl.DIFFERENT_DOCUMENT_MSG)
-                    this.driver.progress.doc += 1
-                }
+                alert(WaiterControl.ALL_FINISHED_MSG)
+                // TODO: This is suspectible to a race condition, as the LOG request may not have finished by then
+                window.setTimeout(() => window.location.reload(), 3000)
             } else {
-                this.driver.progress.mt += 1
+                alert(WaiterControl.DIFFERENT_DOCUMENT_MSG)
+                this.driver.progress.doc += 1
             }
         } else {
             this.driver.progress.sent += 1
@@ -150,14 +140,8 @@ export class WaiterControl {
 
     private prev() {
         if (this.driver.progress.sent == 0) {
-            if (this.driver.progress.mt == 0) {
-                if (this.driver.progress.doc > 0) {
-                    this.driver.progress.doc -= 1
-                    this.driver.progress.mt = this.manager.data.queue_mt.get(this.driver.current_docName())!.length - 1
-                    this.driver.progress.sent = this.driver.current_doc().lines - 1
-                }
-            } else {
-                this.driver.progress.mt -= 1
+            if (this.driver.progress.doc > 0) {
+                this.driver.progress.doc -= 1
                 this.driver.progress.sent = this.driver.current_doc().lines - 1
             }
         } else {
@@ -166,22 +150,22 @@ export class WaiterControl {
         this.display_current()
     }
 
-    public input_info(type: QuestionType, value: boolean | number | string) {
+    public input_info(type: QuestionType, index: number, value: boolean | number | string) {
         if (type == 'nonconf') {
-            this.model.nonconflicting = value as boolean
-        } else if (type == 'fluency') {
-            this.model.fluency = value as number
+            this.model.mtModels[index].nonconflicting = value as boolean
         } else if (type == 'adequacy') {
-            this.model.adequacy = value as number
+            this.model.mtModels[index].adequacy = value as number
+        } else if (type == 'fluency') {
+            this.model.mtModels[index].fluency = value as number
         } else if (type == 'errors') {
-            this.model.errors = value as string
+            this.model.mtModels[index].errors = value as string
         }
 
         this.sync_next_button()
     }
 
     private sync_next_button() {
-        let not_resolved = !this.model.resolved()
+        let not_resolved = this.model.mtModels.some((value: ModelMT) => !value.resolved())
         $('#next_button_p1').prop('disabled', not_resolved)
     }
 }

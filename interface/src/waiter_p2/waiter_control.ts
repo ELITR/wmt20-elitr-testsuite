@@ -72,7 +72,7 @@ export class WaiterControl {
         this.waiter_src_snip.html(current_src.display(markableName, this.driver.progress.sec))
 
         let snippets: Array<[string, string]> = this.manager.getAllMT(docName).map(
-            ([key, doc]) => [key, doc.display(current_src, markableName, this.driver.progress.sec)]
+            ([key, doc]) => [key, doc.displayMarkable(current_src, markableName, this.driver.progress.sec)]
         )
 
         let content = WaiterDisplayer.generateElements(snippets, rating)

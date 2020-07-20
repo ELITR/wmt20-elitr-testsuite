@@ -47,7 +47,7 @@ export class DocSrc {
 export class DocTgt {
     constructor(public raw: string) { }
 
-    public display(doc_src: DocSrc, markable: string, index: number): string {
+    public displayMarkable(doc_src: DocSrc, markable: string, index: number): string {
         let indicies: [number, number] = doc_src.sections(markable)[index]
         let mkbRow = doc_src.raw.substr(0, indicies[0]).linesCount()
         return this.displayLine(mkbRow)

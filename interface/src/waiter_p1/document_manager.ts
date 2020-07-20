@@ -14,7 +14,7 @@ export class DocumentManager {
         return progress
     }
 
-    public assertSameLength() {
-        console.warn('assertSameLength not implemented')
+    public getAllMT(docName: string): DocTgtArray {
+        return this.data.queue_mt.get(docName)!.map((value: string, index: number) => [value, this.data.content_mt.get(docName)!.get(value)!])
     }
 }

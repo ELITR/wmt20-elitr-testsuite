@@ -15,20 +15,19 @@ export interface UserIntroSync {
 export class UserProgress {
     constructor(
         public doc: number,
-        public mt: number,
         public sent: number,
     ) { }
 
     public beginning(): boolean {
-        return this.doc == 0 && this.mt == 0 && this.sent == 0
+        return this.doc == 0 && this.sent == 0
     }
 
     public finished(): boolean {
-        return this.doc == -1 && this.mt == -1 && this.sent == -1
+        return this.doc == -1 && this.sent == -1
     }
 
     public clone(): UserProgress {
-        return new UserProgress(this.doc, this.mt, this.sent)
+        return new UserProgress(this.doc, this.sent)
     }
 }
 
@@ -70,6 +69,6 @@ export class DocumentLoader {
                 throw new Error(`${BASEURL} download sync error`)
             }
         })
-        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.mt, data.progress.sent)]
+        return [convertRaw(data), new UserProgress(data.progress.doc, data.progress.sent)]
     }
 }

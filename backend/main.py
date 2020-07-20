@@ -68,14 +68,11 @@ def saveRatingP1():
     AID = getAID(request)
 
     rating_obj, rating_file = read_user_rating('p1', AID)
-
     docName = request.json['current']['doc_name']
-    mtName = request.json['current']['mt_name']
     sentence = str(request.json['current']['sent'])
-    location_signature = f"{docName}-{mtName}"
 
-    rating_obj.setdefault(location_signature, {})[sentence] = request.json['rating']
-    rating_obj[location_signature][sentence]['time'] = timeNow()
+    rating_obj.setdefault(docName, {})[sentence] = request.json['rating']
+    rating_obj[docName][sentence]['time'] = timeNow()
     jsonDumpMini(rating_obj, open(rating_file, 'w'))
 
     return {'status': 'OK'}
