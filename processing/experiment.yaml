@@ -18,11 +18,11 @@ docs:
   - kufrc
   - kufre
   - autoc
-  - euroa
+  - euroe
   - broukc
   - brouke
-  # - hrnekc
-  # - hrneke
+  - hrnekc
+  - hrneke
 
 users:
   - vilda
