@@ -2,7 +2,7 @@
 mts:
   - CUNI-DocTransformer
   - CUNI-T2T-2018
-  - CUNI-T2T-2018
+  - CUNI-Transformer
   - PROMT_NMT-eTranslation
   - newstest2020-online-a.sgm
   - newstest2020-online-b.sgm
@@ -17,10 +17,12 @@ mts:
 docs:
   - kufrc
   - kufre
+  - autoc
+  - euroa
   - broukc
   - brouke
-  - hrnekc
-  - hrneke
+  # - hrnekc
+  # - hrneke
 
 users:
   - vilda

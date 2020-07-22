@@ -12,7 +12,7 @@ parser.add_argument(
     'experiment_dir', help='Path to the root document directory')
 parser.add_argument('--out-queue', default='queue_user.json',
                     help='Path to the output queue JSON file')
-parser.add_argument('--doc-user-overlap', default=4,
+parser.add_argument('--doc-user-overlap', default=5,
                     help='How much extra users per one document to generate')
 args = parser.parse_args()
 
