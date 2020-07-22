@@ -7,7 +7,7 @@ import { PageUtils } from "../misc/page_utils"
 import { UserProgress } from "./document_loader"
 import { BASEURL } from "../main"
 
-export type QuestionType = 'nonconf' | 'fluency' | 'adequacy' | 'errors'
+export type QuestionType = 'conflicting' | 'fluency' | 'adequacy' | 'errors'
 
 export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p1_frame')
@@ -150,8 +150,8 @@ export class WaiterControl {
     }
 
     public input_info(type: QuestionType, index: number, value: boolean | number | string) {
-        if (type == 'nonconf') {
-            this.model.mtModels[index].nonconflicting = value as boolean
+        if (type == 'conflicting') {
+            this.model.mtModels[index].conflicting = value as boolean
         } else if (type == 'adequacy') {
             this.model.mtModels[index].adequacy = value as number
         } else if (type == 'fluency') {

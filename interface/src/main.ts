@@ -9,7 +9,7 @@ import * as $ from 'jquery'
 
 function validateAID(): string | undefined {
     let AID = $('#annotator_id').val() as string
-    if (!(/^[a-zA-Z0-9]+$/.test(AID))) {
+    if (!(/^[a-zA-Z0-9\-]+$/.test(AID))) {
         alert('Invalid Annotator ID')
         return undefined
     }

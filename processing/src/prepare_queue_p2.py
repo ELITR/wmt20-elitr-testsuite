@@ -26,7 +26,7 @@ if __name__ == '__main__':
     content = {}
     doc_markables = {}
     for doc in def_docs:
-        filename = f'{args.experiment_dir}/{doc}_src.txt'
+        filename = f'{args.experiment_dir}/{doc}/src.txt'
         with open(filename, 'r') as f:
             text = f.read()
         doc_markables[doc] = markables.indicies_visible(text, def_markables)

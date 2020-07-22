@@ -1,12 +1,26 @@
 
 mts:
-  - google
-  - lindat
-  - bing
+  - CUNI-DocTransformer
+  - CUNI-T2T-2018
+  - CUNI-T2T-2018
+  - PROMT_NMT-eTranslation
+  - newstest2020-online-a.sgm
+  - newstest2020-online-b.sgm
+  - newstest2020-online-z.sgm
+  - Online-G
+  - OPPO
+  - ref
+  - SRPOL
+  - UEDIN-CUNI
+  - zlabs-nlp
 
 docs:
-  - au1
-  - au2
+  - kufrc
+  - kufre
+  - broukc
+  - brouke
+  - hrnekc
+  - hrneke
 
 users:
   - vilda
@@ -16,17 +30,6 @@ users:
   - martin
 
 markables:
-  # demo
-  - 
-    - Lóřem
-    - lorem
-  -
-    - kořen
-    - kořeny
-    - kořenů
-  -
-    - Emperor
-    - Panovník
   # au1tc
   - 
     - automobil

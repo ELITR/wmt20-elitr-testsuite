@@ -39,8 +39,8 @@ export class PageUtils {
                     controller.input_info('fluency', true_index, element_val.val() as number)
                 } else if (element.id.endsWith('errors')) {
                     controller.input_info('errors', true_index, element_val.val() as string)
-                } else if (element.id.endsWith('nonconf')) {
-                    controller.input_info('nonconf', true_index, element_val.prop('checked') as boolean)
+                } else if (element.id.endsWith('conflicting')) {
+                    controller.input_info('conflicting', true_index, element_val.prop('checked') as boolean)
                 }
             })
 

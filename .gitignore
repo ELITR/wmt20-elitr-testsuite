@@ -1,3 +1,5 @@
 *.pyc
+*.swp
 backend/logs/*
 nohup.out
+processing/data/**/*.txt

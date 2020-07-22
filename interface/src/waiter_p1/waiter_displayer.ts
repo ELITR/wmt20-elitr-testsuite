@@ -23,13 +23,13 @@ export class WaiterDisplayer {
                 </div>
 
                 <div class='waiter_p1_response_single'>
-                    <div>Non-conflicting markables:</div>
-                    <input id='val_${index}_nonconf' index='${index}' class='synctext' type='checkbox' trigger ${mtRating.nonconflicting == undefined ? 'checked' : (mtRating.nonconflicting ? 'checked' : '')}>
-                    <label for='val_${index}_nonconf' id='val_${index}_nonconf_text'>-</label>
+                    <div>Conflicting markables:</div>
+                    <input id='val_${index}_conflicting' index='${index}' class='synctext' type='checkbox' trigger ${mtRating.conflicting == undefined ? '' : (mtRating.conflicting ? 'checked' : '')}>
+                    <label for='val_${index}_conflicting' id='val_${index}_conflicting_text'>-</label>
                 </div>
 
                 <div>
-                    <div>Bad markables:</div>
+                    <div>Wrong markables:</div>
                     <div class='waiter_p1_response_single'>
                         <textarea id='val_${index}_errors' index='${index}' ${mtRating.errors == undefined ? '' : 'trigger'} class='synctext'>${mtRating.errors ?? ''}</textarea>
                     </div>

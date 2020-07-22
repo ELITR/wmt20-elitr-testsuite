@@ -62,7 +62,7 @@ export class ModelDocument {
 
 
 export class ModelMT {
-    public nonconflicting?: boolean
+    public conflicting?: boolean
     public adequacy?: number
     public fluency?: number
     public errors: string = ''
@@ -77,7 +77,7 @@ export class ModelMT {
         if (DEVMODE)
             return true
         else
-            return (this.nonconflicting != undefined && this.adequacy != undefined && this.fluency != undefined)
+            return (this.conflicting != undefined && this.adequacy != undefined && this.fluency != undefined)
     }
 
     public toObject(): RatingObject {
@@ -85,7 +85,7 @@ export class ModelMT {
         //     throw new Error('Attempted to serialize an unresolved model object')
         // }
         return {
-            nonconflicting: this.nonconflicting as boolean,
+            conflicting: this.conflicting as boolean,
             fluency: this.fluency as number,
             adequacy: this.adequacy as number,
             errors: this.errors as string

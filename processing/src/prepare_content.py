@@ -32,7 +32,7 @@ if __name__ == '__main__':
     for doc in def_docs:
         content['content_mt'][doc] = {}
 
-        filename = f'{args.experiment_dir}/{doc}_src.txt'
+        filename = f'{args.experiment_dir}/{doc}/src.txt'
         with open(filename, 'r') as f:
             text = list(filter(lambda x: not re.match('^\s+$', x), f.readlines()))
             lines_src = len(text)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             print(f'{doc} lines', lines_src)
 
         for mt in def_mts:
-            filename = f'{args.experiment_dir}/{doc}_{mt}.txt'
+            filename = f'{args.experiment_dir}/{doc}/{mt}.txt'
             with open(filename, 'r') as f:
                 text = list(filter(lambda x: not re.match('^\s+$', x), f.readlines()))
                 lines_mt = len(text)
