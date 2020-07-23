@@ -47,3 +47,40 @@ processing/src/prepare_queue.py processing/experiment.yaml processing/example_do
 processing/src/prepare_content.py processing/experiment.yaml processing/example_docs/
 mv {content,queue_user}.json backend/logs/
 ```
+
+## Data preparation
+
+### Extraction
+
+WMT .sgm to .txt was done using a script similar to this:
+
+```
+for file in ./*.sgm; do
+	echo $file 
+	tail -n +14973 "$file" | head -n 13 | sed -E 's/<seg id="[0-9]*">//g; s/<\/seg>//g' > tmp
+	mv tmp "$file"
+done
+```
+
+### Model renaming
+
+#### PROMT_NMT - eTranslation
+
+Since `PROMT_NMT` only does cs->en and `eTranslation` en->cs, the models were unified into one called `PROMT_NMT-eTranslation` so that it's easier to process. They should be separated in the evaluation.
+
+#### Newstest online-[abc]
+
+The `newstest2020 online` models were stripped of all the language codes so that in both directions only three models could be used: `newstest2020-online-[abc].sgm`.
+
+### Data types
+
+| Document | Direction | Lines | Description | Source |
+|----------|-----------|-------|-------------|--------|
+| kufrc | cs->en | 29 | nájemní smlouva | SMLprodl |
+| kufre | en->cs | 29 | nájemní smlouva | SMLprodl |
+| autoc | cs->en | 18 | článek o motorkách | denik.cz.201550+blesk.cz.189684 |
+| euroe | en->cs | 13 | článek o Gretě | rt.com.113881 |
+| broukc | cs->en | 90 | audit | KA_13_04 |
+| brouke | en->cs | 90 | audit | KA_13_04 |
+| hrnekc | cs->en | 197 | audit | KA_06_03 |
+| hrneke | en->cs | 197 | audit | KA_06_03 |
