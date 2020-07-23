@@ -1,14 +1,15 @@
 from flask import Flask, request, json
 from flask_cors import CORS
 import pathlib
-import re
-import os
-import time
+import os, time, re
+import logging
 
 # create new Flask app
 app = Flask(__name__)
 # allow Cross-origin resource sharing access
 CORS(app)
+# log level INFO
+app.logger.setLevel(logging.INFO)
 
 # create loging directory
 pathlib.Path('logs/p2/ratings').mkdir(parents=True, exist_ok=True)
@@ -16,6 +17,7 @@ pathlib.Path('logs/p1/ratings').mkdir(parents=True, exist_ok=True)
 
 @app.route('/')
 def index():
+    app.logger.info('Index access')
     return 'This is the WMT20 ELITR server. For info about this project or the API please see the <a href="https://github.com/ELITR/wmt20-elitr-testsuite">documentation</a>.'
 
 def read_user_rating(phase, AID):
@@ -29,7 +31,8 @@ def read_user_rating(phase, AID):
 
 @app.route('/login_p1', methods=['POST'])
 def loginP1():
-    AID = request.json['AID']
+    AID = getAID(request)
+    app.logger.info(f'Login P1 ({AID})')
 
     rating_obj, _ = read_user_rating('p1', AID)
 
@@ -48,6 +51,7 @@ def loginP1():
 @app.route('/login_p2', methods=['POST'])
 def loginP2():
     AID = getAID(request)
+    app.logger.info(f'Login P2 ({AID})')
     
     rating_obj, _ = read_user_rating('p2', AID)
     
@@ -66,6 +70,7 @@ def loginP2():
 @app.route('/save_rating_p1', methods=['POST'])
 def saveRatingP1():
     AID = getAID(request)
+    app.logger.info(f'Save rating P1 ({AID})')
 
     rating_obj, rating_file = read_user_rating('p1', AID)
     docName = request.json['current']['doc_name']
@@ -80,6 +85,7 @@ def saveRatingP1():
 @app.route('/save_rating_p2', methods=['POST'])
 def saveRatingP2():
     AID = getAID(request)
+    app.logger.info(f'Save rating P2 ({AID})')
 
     rating_obj, rating_file = read_user_rating('p2', AID)
 
@@ -96,6 +102,8 @@ def saveRatingP2():
 @app.route('/save_progress_p1', methods=['POST'])
 def saveProgressP1():
     AID = getAID(request)
+    app.logger.info(f'Save progress P1 ({AID})')
+
     queues = json.load(open('logs/p1/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
     jsonDumpMini(queues, open('logs/p1/queue_user.json', 'w'))
@@ -105,6 +113,8 @@ def saveProgressP1():
 @app.route('/save_progress_p2', methods=['POST'])
 def saveProgressP2():
     AID = getAID(request)
+    app.logger.info(f'Save progress P2 ({AID})')
+
     queues = json.load(open('logs/p2/queue_user.json', 'r'))
     queues[AID]['progress'] = request.json['progress']
     jsonDumpMini(queues, open('logs/p2/queue_user.json', 'w'))

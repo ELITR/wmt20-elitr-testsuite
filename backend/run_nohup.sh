@@ -7,5 +7,5 @@ PREVWD=`pwd`
 TARGETWD=`realpath "$0" | xargs dirname`
 
 cd "$TARGETWD"
-nohup python3 -m flask run --port 80 --host 0.0.0.0 --without-threads &
+nohup python3 -m flask run --port 80 --host 0.0.0.0 --without-threads &>> server.log &
 cd $PREVWD

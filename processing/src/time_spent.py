@@ -29,7 +29,7 @@ blocks = 0
 for index, time in enumerate(times[1:], start=1):
     diff = time - times[index-1]
     # 5 minutes for one view
-    if diff > 5*60*1000 or index == len(times)-1:
+    if diff > 5*60*10000 or index == len(times)-1:
         spentTime += times[index-1] - blockBegin
         blockBegin = time
         blocks += 1
