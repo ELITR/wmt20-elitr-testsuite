@@ -31,19 +31,21 @@ export class WaiterDisplayer {
                     <br>
 
                     <input type='checkbox' id='terminology_${index}'>
-                    <label for='terminology_${index}'>Wrong terminology</label>
+                    <label for='terminology_${index}'>Terminology</label>
                     <input type='checkbox' id='style_${index}'>
-                    <label for='style_${index}'>Wrong style</label>
+                    <label for='style_${index}'>Style</label>
                     <br>
 
                     <input type='checkbox' id='sense_${index}'>
                     <label for='sense_${index}'>Distorted sense</label>
                     <input type='checkbox' id='typography_${index}'>
-                    <label for='typography_${index}'>Wrong typography</label>
+                    <label for='typography_${index}'>Typography</label>
 
                     <br>
                     <input type='checkbox' id='grammar_${index}'>
                     <label for='grammar_${index}'>Grammar</label>
+                    <input type='checkbox' id='conflict_${index}'>
+                    <label for='conflict_${index}'>Conflict</label>
                 </div>
                 </div>
             </div>

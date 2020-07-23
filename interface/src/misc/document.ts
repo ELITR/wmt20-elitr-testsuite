@@ -2,8 +2,14 @@ export class DocSrc {
     private markables: Map<string, Array<[number, number]>> = new Map<string, Array<[number, number]>>()
     public lines: number
 
-    constructor(public raw: string, markables: Map<string, Array<[number, number]>> = new Map()) {
-        this.markables = markables
+    constructor(public raw: string, markables: Map<string, Array<[number, number]>> | undefined = undefined) {
+        if (markables != undefined) {
+            if(markables!.size == 0) {
+                throw new Error('Zero number of markables is not allowed. (' + raw.substr(0, 100) + ')')
+            } else {
+                this.markables = markables
+            }
+        }
         this.lines = raw.linesCount()
     }
 

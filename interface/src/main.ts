@@ -44,5 +44,5 @@ $('#start_annotation_p2').click(() => {
 if (DEVMODE) {
     $('#annotator_id').val('testuser')
     // $('#start_annotation_p1').trigger('click')
-    // $('#start_annotation_p2').trigger('click')
+    $('#start_annotation_p2').trigger('click')
 }

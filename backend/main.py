@@ -18,7 +18,7 @@ pathlib.Path('logs/p1/ratings').mkdir(parents=True, exist_ok=True)
 @app.route('/')
 def index():
     app.logger.info('Index access')
-    return 'This is the WMT20 ELITR server. For info about this project or the API please see the <a href="https://github.com/ELITR/wmt20-elitr-testsuite">documentation</a>.'
+    return 'This is the WMT20 Markable server (CUNI). For info about this project or the API please see the <a href="https://github.com/ELITR/wmt20-elitr-testsuite">documentation</a>.'
 
 def read_user_rating(phase, AID):
     rating_file = f'logs/{phase}/ratings/{AID}.json'
@@ -149,6 +149,7 @@ def assertArgsJ(request, assertees):
             raise Exception("Parameter '{}' is missing".format(assertee))
 
 def timeNow():
+    # This is wrong, but the experiment is already underway.
     return int(round(time.time() * 1000))
 
 def jsonDumpMini(data, f):

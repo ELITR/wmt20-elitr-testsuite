@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
-import json
-import argparse
+from load import load_single
 
-parser = argparse.ArgumentParser(description='Measure the time annotator spent on this experiment. Automatically detects P1 and P2.')
-parser.add_argument('rating_file', help='Path to the logged user JSONfile')
-args = parser.parse_args()
-
-data = json.load(open(args.rating_file, 'r'))
+data = load_single()
 
 times = []
 for docmodel in data.values():
@@ -28,8 +23,8 @@ blocks = 0
 
 for index, time in enumerate(times[1:], start=1):
     diff = time - times[index-1]
-    # 5 minutes for one view
-    if diff > 5*60*10000 or index == len(times)-1:
+    # 20 minutes for one view
+    if diff > 20*60*1000 or index == len(times)-1:
         spentTime += times[index-1] - blockBegin
         blockBegin = time
         blocks += 1

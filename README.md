@@ -84,3 +84,10 @@ The `newstest2020 online` models were stripped of all the language codes so that
 | brouke | en->cs | 90 | audit | KA_13_04 |
 | hrnekc | cs->en | 197 | audit | KA_06_03 |
 | hrneke | en->cs | 197 | audit | KA_06_03 |
+
+
+### Miscellaneous commands
+
+```
+scp testsuite:wmt20-elitr-testsuite/backend/logs/p1/ratings/*.json wmt_ratings/
+```
