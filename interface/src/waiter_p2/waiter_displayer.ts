@@ -1,58 +1,43 @@
 import '../misc/object_utils'
+import { ModelMT } from './model'
 
 export class WaiterDisplayer {
 
     public static generateElements(snippets: Array<[string, string]>, rating: { [mt: string]: any }): string {
-        let output = snippets.map(([key, value], index: number) => {
-            let mtRating = rating[key] || {}
+        let output = snippets.map(([mtName, value], index: number) => {
+            let mtRating = rating[mtName] || {}
+            let errorContent = ModelMT.ERROR_TYPES.map(([type, name, hint], _) => `
+                <div class='waiter_p2_error_line'>
+                    <div>
+                        <input trigger ${mtRating[type] == undefined ? '' : (mtRating[type] ? 'checked' : '')} type='checkbox' id='${type}_${index}_checkbox' index='${index}' class='syncdisabled'>
+                        <label title='${hint}' for='${type}_${index}_checkbox'>${name}</label>
+                    </div>
+                    <div>
+                        <input id='val_${index}_${type}' index='${index}' ${mtRating[type] == undefined ? '' : 'trigger'} class='synctext' type='range' min='0' , max='1' , step='0.25' value='${mtRating[type] ?? -1}'>
+                        <label id='val_${index}_${type}_text' for='${type}_${index}'>-</label>
+                    </div>
+                </div>
+            `).reduce((prev: string, current: string) => prev + current)
+
+
             return `
-            <div class='div_snip tgt_snip_p2'>${value}</div>
+            <div class='div_snip tgt_snip_p2' mtname='${mtName}'>${value}</div>
 
             <div class='waiter_p2_response'>
-                <div class='waiter_p2_response_single'>
-                    <div>Fluency:</div>
-                    <input id='val_${index}_fluency' index='${index}' ${mtRating.fluency == undefined ? '' : 'trigger'} class='synctext' type='range' min='0' , max='1' , step='0.1' value='${mtRating.fluency ?? -1}'>
-                    <label for'val_${index}_fluency' id='val_${index}_fluency_text'>-</label>
-                </div>
-                
-                <div class='waiter_p2_response_single'>
-                    <div>Adequacy:</div>
-                    <input id='val_${index}_adequacy' index='${index}' ${mtRating.adequacy == undefined ? '' : 'trigger'} class='synctext' type='range' min='0' , max='1' , step='0.1' value='${mtRating.adequacy ?? -1}'>
-                    <label for='val_${index}_adequacy' id='val_${index}_adequacy_text'>-</label>
+                <div class='waiter_p2_error_header'>
+                    <label>Error type:</label>
+                    <label>Severity:</label>
                 </div>
 
-                <div>
-                <div>Error type:</div>
                 <div class='waiter_p2_error_type'>
-                    <input type='checkbox' id='nontranslated_${index}'>
-                    <label for='nontranslated_${index}'>Not translated</label>
-                    <input type='checkbox' id='tootranslated_${index}'>
-                    <label for='tootranslated_${index}'>Over-translated</label>
-                    <br>
-
-                    <input type='checkbox' id='terminology_${index}'>
-                    <label for='terminology_${index}'>Terminology</label>
-                    <input type='checkbox' id='style_${index}'>
-                    <label for='style_${index}'>Style</label>
-                    <br>
-
-                    <input type='checkbox' id='sense_${index}'>
-                    <label for='sense_${index}'>Distorted sense</label>
-                    <input type='checkbox' id='typography_${index}'>
-                    <label for='typography_${index}'>Typography</label>
-
-                    <br>
-                    <input type='checkbox' id='grammar_${index}'>
-                    <label for='grammar_${index}'>Grammar</label>
-                    <input type='checkbox' id='conflict_${index}'>
-                    <label for='conflict_${index}'>Conflict</label>
+                    ${errorContent}
                 </div>
                 </div>
             </div>
 
             <br>
         `
-        }).shuffle().reduce((prev: string, current: string) => prev + current)
+        }).reduce((prev: string, current: string) => prev + current)
 
         return output
     }

@@ -64,6 +64,7 @@ def loginP2():
     content['progress'] = queues[AID]['progress']
     content['queue_doc'] = queues[AID]['queue_doc']
     content['queue_mkb'] = queues[AID]['queue_mkb']
+    content['queue_mt'] = queues[AID]['queue_mt']
     content['ratings'] = rating_obj
     return json.jsonify(content)
 
@@ -91,7 +92,8 @@ def saveRatingP2():
 
     docName = request.json['current']['doc_name']
     mkbName = request.json['current']['mkb_name']
-    section = request.json['current']['sec']
+    section = str(request.json['current']['sec'])
+    
     location_signature = f"{docName}-{mkbName}"
     rating_obj.setdefault(location_signature, {})[section] = request.json['rating']
     rating_obj[location_signature][section]['time'] = timeNow()

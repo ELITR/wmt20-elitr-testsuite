@@ -22,6 +22,7 @@ if __name__ == '__main__':
     def_markables = def_experiment['markables']
     def_docs = def_experiment['docs']
     def_users = def_experiment['users']
+    def_mts = def_experiment['mts']
 
     content = {}
     doc_markables = {}
@@ -43,6 +44,10 @@ if __name__ == '__main__':
         for doc in def_docs:
             target_markables = doc_markables[doc]
             obj['queue_mkb'][doc] = random.sample(target_markables, len(target_markables))
+
+        obj['queue_mt'] = {}
+        for doc in def_docs:
+            obj['queue_mt'][doc] = random.sample(def_mts, len(def_mts))
 
         content[user] = obj
 

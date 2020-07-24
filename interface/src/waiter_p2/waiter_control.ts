@@ -7,7 +7,7 @@ import { PageUtils } from "../misc/page_utils"
 import { UserProgress } from "./document_loader"
 import { BASEURL } from "../main"
 
-export type QuestionType = 'translated' | 'fluency' | 'adequacy' | 'errors'
+export type QuestionType = string
 
 export class WaiterControl {
     private waiter_frame: JQuery<HTMLDivElement> = $('#waiter_p2_frame')
@@ -58,21 +58,17 @@ export class WaiterControl {
 
     public display_current() {
         this.update_stats()
-        let docName: string = this.manager.data.queue_doc[this.driver.progress.doc]
-        let mkbName: string = this.manager.data.queue_mkb.get(docName)![this.driver.progress.mkb]
-
-        this.model = new ModelSegement(this.manager)
-
-        let rating = this.manager.data.rating.get(docName, mkbName, this.driver.progress.sec)
+        this.model = new ModelSegement(this.manager, this.driver.progress)
+        let docName = this.manager.data.queue_doc[this.driver.progress.doc]
+        let current_src = this.driver.currentDoc()
+        let mkbName = this.driver.currentMarkableName()
         console.log(`Currently displaying: ${docName}-${mkbName}-${this.driver.progress.sec}`)
 
-        let markableName = this.driver.currentMarkableName()
+        let rating = this.manager.data.rating.get(docName, mkbName, this.driver.progress.sec)
+        this.waiter_src_snip.html(current_src.display(mkbName, this.driver.progress.sec))
 
-        let current_src = this.driver.currentDoc()
-        this.waiter_src_snip.html(current_src.display(markableName, this.driver.progress.sec))
-
-        let snippets: Array<[string, string]> = this.manager.getAllMT(docName).map(
-            ([key, doc]) => [key, doc.displayMarkable(current_src, markableName, this.driver.progress.sec)]
+        let snippets: Array<[string, string]> = this.manager.getMTs(docName).map(
+            ([key, doc]) => [key, doc.displayMarkable(current_src, mkbName, this.driver.progress.sec)]
         )
 
         let content = WaiterDisplayer.generateElements(snippets, rating)
@@ -186,17 +182,8 @@ export class WaiterControl {
         this.display_current()
     }
 
-    public input_info(type: QuestionType, index: number, value: boolean | number | string) {
-        if (type == 'translated') {
-            this.model.mtModels[index].translated = value as boolean
-        } else if (type == 'adequacy') {
-            this.model.mtModels[index].adequacy = value as number
-        } else if (type == 'fluency') {
-            this.model.mtModels[index].fluency = value as number
-        } else if (type == 'errors') {
-            this.model.mtModels[index].errors = value as string
-        }
-
+    public input_info(type: QuestionType, index: number, value: number | undefined) {
+        this.model.mtModels[index].data[type] = value
         this.sync_next_button()
     }
 

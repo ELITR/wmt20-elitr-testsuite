@@ -13,7 +13,7 @@ export class WaiterDriver {
         return this.manager.data.queue_doc[this.progress.doc]
     }
 
-    public current_doc(): DocSrc {
+    public currentDoc(): DocSrc {
         return this.manager.data.content_src.get(this.manager.data.queue_doc[this.progress.doc])!
     }
 
@@ -26,6 +26,6 @@ export class WaiterDriver {
     }
 
     public end_sent() {
-        return this.progress.sent >= this.current_doc().lines - 1
+        return this.progress.sent >= this.currentDoc().lines - 1
     }
 }

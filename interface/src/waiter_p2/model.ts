@@ -29,8 +29,9 @@ export class RatingDatabase {
 export class ModelSegement {
     public mtModels: Array<ModelMT>
 
-    public constructor(private manager: DocumentManager) {
-        this.mtModels = this.manager.data.names_mt.map((mtName: string) => new ModelMT(mtName))
+    public constructor(private manager: DocumentManager, current: UserProgress) {
+        let docName = this.manager.data.queue_doc[current.doc]
+        this.mtModels = this.manager.data.queue_mt.get(docName)!.map((mtName: string) => new ModelMT(mtName))
     }
 
     public save(AID: string, current: UserProgress) {
@@ -65,33 +66,34 @@ export class ModelSegement {
 }
 
 export class ModelMT {
-    public translated?: boolean
-    public adequacy?: number
-    public fluency?: number
-    public errors: string = ''
+    public static ERROR_TYPES: Array<[string, string, string]> = [
+        ['nontranslated', 'Not translated', 'The markable of part of it was not translated.'],
+        ['tootranslated', 'Over-translated', "The markable was translated, but should not be."],
+        ['terminology', 'Terminology', 'Misleading terminology is used.'],
+        ['style', 'Style', 'Inappropriate style is used.'],
+        ['sense', 'Sense', 'The meaning is different than intended.'],
+        ['typography', 'Typography', 'Including wrong capitalization.'],
+        ['role', 'Semantic role', 'The roles of objects/actors were altered.'],
+        ['grammar', 'Other gramamar', 'Grammar errors other than wrong semantic roles'],
+        ['inconsistency', 'Inconsistency', 'Different word choice than in the previous occurences.'],
+        ['conflict', 'Conflict', 'Is in conflict with other markable.'],
+        ['disappearance', 'Disappearance', 'The source markable is not present in the translation.']
+    ]
+    public data: { [key: string]: number | undefined } = {}
 
     public name: string
-
     public constructor(name: string) {
         this.name = name
     }
 
     public resolved(): boolean {
-        if (DEVMODE)
-            return true
-        else
-            return (this.adequacy != undefined && this.fluency != undefined)
+        return true
     }
 
     public toObject(): RatingObject {
         // if (!this.resolved()) {
         //     throw new Error('Attempted to serialize an unresolved model object')
         // }
-        return {
-            translated: this.translated as boolean,
-            adequacy: this.adequacy as number,
-            fluency: this.fluency as number,
-            errors: this.errors as string
-        }
+        return this.data
     }
 }

@@ -14,7 +14,7 @@ export class DocumentManager {
         return progress
     }
 
-    public getAllMT(docName: string): DocTgtArray {
-        return this.data.names_mt.map((value: string, index: number) => [value, this.data.content_mt.get(docName)!.get(value)!])
+    public getMTs(docName: string): DocTgtArray {
+        return this.data.queue_mt.get(docName)!.map((value: string, index: number) => [value, this.data.content_mt.get(docName)!.get(value)!])
     }
 }

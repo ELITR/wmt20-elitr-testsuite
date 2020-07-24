@@ -6,6 +6,7 @@ import { RatingDatabase } from './model'
 export interface UserIntroSync {
     queue_doc: Readonly<Array<string>>,
     queue_mkb: Readonly<Map<string, Array<string>>>,
+    queue_mt: Readonly<Map<string, Array<string>>>,
     names_mt: Readonly<Array<string>>,
     content_src: Readonly<Map<string, DocSrc>>,
     content_mt: Readonly<Map<string, Map<string, DocTgt>>>,
@@ -39,6 +40,9 @@ export class DocumentLoader {
                 queue_doc: data.queue_doc,
                 queue_mkb: new Map<string, string[]>(Object.keys(data.queue_mkb).map(
                     (key: string) => [key, data.queue_mkb[key]]
+                )),
+                queue_mt: new Map<string, Array<string>>(Object.keys(data.queue_mt).map(
+                    (key: string) => [key, data.queue_mt[key]]
                 )),
                 names_mt: data.names_mt,
                 content_src: new Map<string, DocSrc>(Object.keys(data.content_src).map(

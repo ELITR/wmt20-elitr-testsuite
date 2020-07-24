@@ -89,5 +89,5 @@ The `newstest2020 online` models were stripped of all the language codes so that
 ### Miscellaneous commands
 
 ```
-scp testsuite:wmt20-elitr-testsuite/backend/logs/p1/ratings/*.json wmt_ratings/
+scp testsuite:wmt20-elitr-testsuite/backend/logs/p1/ratings/*.json ~/wmt20/data/p1/
 ```

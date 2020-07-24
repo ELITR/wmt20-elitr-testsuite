@@ -95,46 +95,73 @@ body {
     display: inline-block;
 }
 
-.waiter_p1_response div, .waiter_p2_response div {
+/* P1 specific */
+
+.waiter_p1_response div {
     text-align: left;
 }
 
-.waiter_p1_response_single, .waiter_p2_response_single {
+.waiter_p1_response_single {
     margin-left: auto;
     margin-bottom: 20px;
     width: 100%;
     text-align: right !important;
 }
 
-input[type=range] {
+.waiter_p1_response_single input[type=range] {
     width: 150px
 }
-.waiter_p1_response_single div:first-child, .waiter_p2_response_single div:first-child {
+
+.waiter_p1_response_single div:first-child {
     float: left;
 }
 
-.waiter_p1_response_single label:last-child, .waiter_p2_response_single label:last-child {
+.waiter_p1_response_single label:last-child {
     width: 20px;
     display: inline-block !important;
     text-align: right;
     user-select: none;
 }
 
-.waiter_p1_response_single textarea, .waiter_p2_response_single textarea {
+.waiter_p1_response_single textarea {
     width: 300px;
     height: 50px;
 }
 
-.waiter_p2_error_type {
-    height: 100px;
-    width: max-content;
-    overflow-y: scroll;
-    margin-left: auto;
-    border: 1px solid #c9c9c9;
-    padding: 4px;
+/* P2 specific */
+
+.waiter_p2_error_type input[type=range] {
+    width: 120px
 }
 
-.waiter_p2_error_type label {
-    width: 160px;
+.waiter_p2_response {
+    text-align: left;
+}
+
+.waiter_p2_error_line div:first-child {
     display: inline-block;
+    width: 180px;
+}
+.waiter_p2_error_line div:first-child label {
+    user-select: none;
+}
+
+.waiter_p2_error_line div:last-child {
+    margin-left: 40px;
+    display: inline-block;
+}
+
+.waiter_p2_error_line div:last-child label {
+    width: 40px;
+    display: inline-block !important;
+    text-align: right;
+}
+
+.waiter_p2_error_header label:first-child {
+    font-weight: bold;
+}
+
+.waiter_p2_error_header label:last-child {
+    margin-left: 120px;
+    font-weight: bold;
 }

@@ -57,15 +57,15 @@ export class WaiterControl {
 
     public display_current() {
         this.update_stats()
+        this.model = new ModelDocument(this.manager, this.driver.progress)
         let docName = this.manager.data.queue_doc[this.driver.progress.doc]
-        let current_src = this.driver.current_doc()
+        let current_src = this.driver.currentDoc()
+        console.log(`Currently displaying: ${docName}-${this.driver.progress.sent}`)
+        
+        let rating = this.manager.data.rating.get(docName, this.driver.progress.sent)
         this.waiter_src_snip.html(current_src.displayLine(this.driver.progress.sent))
 
-        this.model = new ModelDocument(this.manager, this.driver.progress)
-        console.log(`Currently displaying: ${docName}-${this.driver.progress.sent}`)
-        let rating = this.manager.data.rating.get(docName, this.driver.progress.sent)
-
-        let snippets: Array<[string, string]> = this.manager.getAllMT(docName).map(
+        let snippets: Array<[string, string]> = this.manager.getMTs(docName).map(
             ([key, doc]) => [key, doc.displayLine(this.driver.progress.sent)]
         )
 
@@ -81,7 +81,7 @@ export class WaiterControl {
 
     private update_stats() {
         $('#totl_doc_p1').text(`${this.driver.progress.doc + 1}/${this.manager.data.queue_doc.length}`)
-        $('#totl_sent_p1').text(`${this.driver.progress.sent + 1}/${this.driver.current_doc().lines}`)
+        $('#totl_sent_p1').text(`${this.driver.progress.sent + 1}/${this.driver.currentDoc().lines}`)
 
         this.prev_button.prop('disabled', this.driver.progress.beginning())
     }
@@ -141,7 +141,7 @@ export class WaiterControl {
         if (this.driver.progress.sent == 0) {
             if (this.driver.progress.doc > 0) {
                 this.driver.progress.doc -= 1
-                this.driver.progress.sent = this.driver.current_doc().lines - 1
+                this.driver.progress.sent = this.driver.currentDoc().lines - 1
             }
         } else {
             this.driver.progress.sent -= 1

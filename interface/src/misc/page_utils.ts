@@ -56,14 +56,29 @@ export class PageUtils {
 
             let true_index: number = +(element_val.attr('index')!)
             element_val.on('input', () => {
-                if (element.id.endsWith('fluency')) {
-                    controller.input_info('fluency', true_index, element_val.val() as number)
-                } else if (element.id.endsWith('adequacy')) {
-                    controller.input_info('adequacy', true_index, element_val.val() as number)
-                } else if (element.id.endsWith('errors')) {
-                    controller.input_info('errors', true_index, element_val.val() as string)
-                } else if (element.id.endsWith('trans')) {
-                    controller.input_info('translated', true_index, element_val.prop('checked') as boolean)
+                let type = element.id.split('_').pop()
+                controller.input_info(type as string, true_index, element_val.val() as number)
+            })
+
+            if (element_val.attr('trigger') != undefined) {
+                element_val.trigger('input')
+            }
+        })
+
+
+        $('.syncdisabled').each((index: number, element: HTMLElement) => {
+            let element_val = $(element)
+            let type = element.id.split('_')[0]
+            let true_index: number = +(element_val.attr('index')!)
+            
+            element_val.on('input', () => {
+                if(element_val.is(':checked')) {
+                    $(`#val_${true_index}_${type}`).prop("disabled", false)
+                } else {
+                    $(`#val_${true_index}_${type}`).prop("disabled", true)
+                    $(`#val_${true_index}_${type}`).val(-1)
+                    $(`#val_${true_index}_${type}_text`).text('-')
+                    controller.input_info(type as string, true_index, undefined)
                 }
             })
 
