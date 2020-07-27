@@ -8,14 +8,14 @@ import re
 from pathlib import Path
 
 def load_single():
-    parser = argparse.ArgumentParser(description='Loads ')
+    parser = argparse.ArgumentParser(description='Loads data.')
     parser.add_argument('rating_file', help='Path to the logged user JSONfile')
     args = parser.parse_known_args()[0]
 
     return list(load_files([args.rating_file]).values())[0]
 
 def load_all():
-    parser = argparse.ArgumentParser(description='Loads ')
+    parser = argparse.ArgumentParser(description='Loads data.')
     parser.add_argument(
         'rating_dir', help='Path to the logged user JSONfile directory')
     args = parser.parse_known_args()[0]

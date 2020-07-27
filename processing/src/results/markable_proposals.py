@@ -12,7 +12,7 @@ for user in data.values():
                 if name == 'time':
                     continue
                 if model['errors'] != '':
-                    errors += [x.strip() for x in model['errors'].lower().split(', ')]
+                    errors += [x.strip() for x in model['errors'].lower().replace('.', '').replace(')', '').replace('(', '').split(',')]
             
 
 errors = set(errors)

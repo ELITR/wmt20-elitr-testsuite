@@ -21,8 +21,8 @@ docs:
   - euroe
   - broukc
   - brouke
-  - hrnekc
-  - hrneke
+  # - hrnekc
+  # - hrneke
 
 users:
   - vilda
@@ -32,145 +32,19 @@ users:
   - martin
 
 markables:
-  # au1tc
   - 
-    - automobil
-    - auto
+    - brno
   - 
-    - den
-    - dne
-    - dnů
-    - dnem
-    - dni
-  - 
-    - dohodnutý
-    - dohodnutý
-    - dohodnutých
-    - dohodnutou
-  - 
-    - doporučovat
-    - doporučovat
-    - doporučuje
-  -
-    - evidence
-    - evidence
-    - evidenci
-  -
-    - jenž
-    - jenž
-    - jejichž
-    - nichž
-  -
-    - který
-    - která
-  - 
-    - kupní
-  -
-    - nemohl
-    - nemohla
-    - mohl
-    - mohla
-    - může
-  - 
-    - podpis
-    - podpisu
-    - podpisy
-    - podpisem
-  -
-    - prodej
-    - prodeji
-  -
-    - prohlašuje
-    - prohlašuji
-  - 
-    - průkaz
-    - průkazu
-  -
-    - předmět
-    - předmětu
-    - předmětem
-  -
-    - smlouva
-    - smlouvy
-    - smlouvou
-    - smlouvu
-  -
-    - strana
-    - straně
-    - stranami
-    - straně
-    - strany
-    - stranami
-    - stran
-  -
-    - uvedený
-    - uvedeného
-    - uvedené
-  - 
-    - vada
-    - vady
-    - vad
-  -
-    - všechny
-    - všemi
-    - všechen
-    - vše
-  -
-    - zaplacení
-    - zaplacením
-  -
-    - zejména
-  -
-    - článek
-    - článku
-    - čl
-  -
-    - číslo
-    - č
-  # au2tc
-  - 
-    - jeho
-    - její
-    - jehož
-    - jejich
-    - jejím
-  -
-    - motorového
-    - motorové
-    - motor
-  -
-    - smluvní
-    - smluvních
-  -
-    - vlastnictví
-    - vlastnictvích
-  - 
-    - vozidla
-    - vozidlo
-    - vozidle
-    - vozidlem
-  -
-    - zaplacení
-    - zaplacen
-    - zaplaceno
-    - zaplacením
-  -
-    - závadu
-    - závada
-    - závady
-  - 
-    - část
-    - části
-    - částí
-  -
-    - žádný
-    - žádná
-    - žádnou
-    - žádného
-    - žádným
+    - kontrola
+    - kontroly
+    - kontrolou
   -
     - audit
   -
-    - speech
+    - emission
+    - emissions
+  -
+    - dodatek
+    - dodatku
   -
     - supplement

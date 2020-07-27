@@ -3,4 +3,6 @@
 backend/logs/*
 nohup.out
 processing/data/**/*.txt
+processing/data/**/*.a
+processing/data/**/*.tok
 data/*
