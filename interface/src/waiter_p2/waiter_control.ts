@@ -87,7 +87,6 @@ export class WaiterControl {
         $('#totl_mkb_p2').text(`${this.driver.progress.mkb + 1}/${currentMarkables.length}`)
 
         let currentSections = this.driver.currentDoc().sections(this.driver.currentMarkableName())
-        console.log(this.driver.currentDoc())
         $('#totl_sec_p2').text(`${this.driver.progress.sec + 1}/${currentSections.length}`)
         $('#text_mkb').text(`Markable (${currentMarkables[this.driver.progress.mkb]}):`)
 

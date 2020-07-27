@@ -55,10 +55,10 @@ export class DocSrc {
 export class DocTgt {
     constructor(public raw: string) { }
     private static MIN_CHAR_CONTEXT = 10
-    private static MAX_WORD_COUNT = 2
+    private static MIN_WORD_COUNT = 1
 
     public displayMarkable(doc_src: DocSrc, markable: string, index: number): string {
-        let lineSectionIndex: { [key: number]: [number, number] } = {}
+        let lineSectionIndex: { [key: number]: Array<[number, number]> } = {}
         let lineHighlightIndex: number
 
         doc_src.sections(markable).forEach((indicies, indiciesIndex) => {
@@ -67,36 +67,59 @@ export class DocTgt {
                 lineHighlightIndex = mkbLine
             }
             if (lineSectionIndex[mkbLine] != undefined) {
-                lineSectionIndex[mkbLine] = indicies
-                // throw new Error("Two markables on one line")
+                lineSectionIndex[mkbLine].push(indicies)
             } else {
-                lineSectionIndex[mkbLine] = indicies
+                lineSectionIndex[mkbLine] = [indicies]
             }
+        })
+
+        // Assert ordering and non-overlaping
+        Object.keys(lineSectionIndex).map(Number).forEach((key, index, value) => {
+            // sort by the first key
+            lineSectionIndex[key] = lineSectionIndex[key].sort(([a1, a2]: [number, number], [b1, b2]: [number, number]) => a1 - b1)
+
+            // assert they do not overlap
+            lineSectionIndex[key].forEach(([a1, a2]: [number, number], index: number) => {
+                if (index == 0)
+                    return
+                if (a2 < lineSectionIndex[key][index-1][1])
+                    throw new Error('Sorted markable indicies overlap')
+            })
         })
 
         let srcLines = doc_src.raw.split('\n')
         let tgtLines = this.raw.split('\n')
         let output: Array<string> = []
-        let offset = 0
         let lineSum = 0
 
         tgtLines.forEach((tgtLine: string, curLineIndex: number) => {
             let srcLine = srcLines[curLineIndex]
-            let [newLine, newOffset] = ['', 0]
             if (lineSectionIndex[curLineIndex] != undefined) {
-                let indicies = lineSectionIndex[curLineIndex]
-                let posA = indicies[0] - lineSum
-                let posB = indicies[1] - lineSum
-                if (curLineIndex == lineHighlightIndex) {
-                    [newLine, newOffset] = this.displayMarkableLineFull([posA, posB], srcLine, tgtLine)
-                } else {
-                    [newLine, newOffset] = this.displayMarkableLineEmpty([posA, posB], srcLine, tgtLine)
+                let lineOffset = 0
+                let tmpLine = tgtLine
+                let newOffset: number
+
+                for (let indicies of lineSectionIndex[curLineIndex]) {
+                    let posA = indicies[0] - lineSum + lineOffset
+                    let posB = indicies[1] - lineSum + lineOffset
+
+                    if (curLineIndex == lineHighlightIndex) {
+                        [tmpLine, newOffset] = this.displayMarkableLineFull([posA, posB], srcLine, tmpLine)
+                    } else {
+                        [tmpLine, newOffset] = this.displayMarkableLineEmpty([posA, posB], srcLine, tmpLine)
+                    }
+                    lineOffset += newOffset
                 }
+
+                if (curLineIndex == lineHighlightIndex) {
+                    output.push(this.wrapLine(tmpLine)[0])
+                } else {
+                    output.push(tmpLine)
+                }
+
             } else {
-                newLine = tgtLine
+                output.push(tgtLine)
             }
-            output.push(newLine)
-            offset += newOffset
             lineSum += srcLine.length + 1
         })
 
@@ -115,7 +138,7 @@ export class DocTgt {
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt_alone'>"
         const MKB_STYLE_B = "</span>"
 
-        let [mkbPosA, mkbPosB] = TextUtils.contextWord(line, alignment, DocTgt.MIN_CHAR_CONTEXT, DocTgt.MAX_WORD_COUNT)
+        let [mkbPosA, mkbPosB] = TextUtils.contextWord(line, alignment, DocTgt.MIN_CHAR_CONTEXT, DocTgt.MIN_WORD_COUNT)
 
         line =
             line.slice(0, mkbPosA) +
@@ -138,21 +161,27 @@ export class DocTgt {
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt'>"
         const MKB_STYLE_B = "</span>"
-        const LINE_STYLE_A = "<span class='waiter_highlight_line'>"
-        const LINE_STYLE_B = "</span>"
 
-        let [mkbPosA, mkbPosB] = TextUtils.contextWord(line, alignment, DocTgt.MIN_CHAR_CONTEXT, DocTgt.MAX_WORD_COUNT)
+        let [mkbPosA, mkbPosB] = TextUtils.contextWord(line, alignment, DocTgt.MIN_CHAR_CONTEXT, DocTgt.MIN_WORD_COUNT)
 
         line =
-            LINE_STYLE_A + line.slice(0, mkbPosA) +
+            line.slice(0, mkbPosA) +
             MKB_STYLE_A + line.slice(mkbPosA, mkbPosB) + MKB_STYLE_B +
-            line.slice(mkbPosB) + LINE_STYLE_B
+            line.slice(mkbPosB)
 
         let offset =
-            MKB_STYLE_A.length + MKB_STYLE_B.length +
-            LINE_STYLE_A.length + LINE_STYLE_B.length
+            MKB_STYLE_A.length + MKB_STYLE_B.length
 
         return [line, offset]
+    }
+
+    public wrapLine(line: string): [string, number] {
+        const LINE_STYLE_A = "<span class='waiter_highlight_line'>"
+        const LINE_STYLE_B = "</span>"
+        let offset = LINE_STYLE_A.length + LINE_STYLE_B.length
+
+        let output = LINE_STYLE_A + line + LINE_STYLE_B
+        return [output, offset]
     }
 
     public displayLine(line: number, raw: string = this.raw): string {

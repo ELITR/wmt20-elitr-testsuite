@@ -33,11 +33,13 @@ export class TextUtils {
         return [position - minCharContext - offsetA, position + minCharContext + offsetB]
     }
 
-    public static contextWord(raw: string, position: number, minCharContext: number = 150, maxWordCount: number = 1): [number, number] {
+    public static contextWord(raw: string, position: number, minCharContext: number = 150, minWordCount: number = 1): [number, number] {
+        
+
         let offsetA = 0
-        let wordCountA = maxWordCount
+        let wordCountA = minWordCount
         for (; position - minCharContext - offsetA >= 0; offsetA++) {
-            if (raw.substr(position - minCharContext - offsetA, 1).match(/\W/)) {
+            if (raw.substr(position - minCharContext - offsetA, 1).match(/[^\p{L}]/u)) {
                 wordCountA -= 1
             }
             if (wordCountA == 0) {
@@ -49,9 +51,9 @@ export class TextUtils {
         }
 
         let offsetB = 0
-        let wordCountB = maxWordCount
+        let wordCountB = minWordCount
         for (; position + minCharContext + offsetB < raw.length; offsetB++) {
-            if (raw.substr(position + minCharContext + offsetB, 1).match(/\W/)) {
+            if (raw.substr(position + minCharContext + offsetB, 1).match(/[^\p{L}]/u)) {
                 wordCountB -= 1
             }
             if (wordCountB == 0) {
