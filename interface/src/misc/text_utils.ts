@@ -39,7 +39,7 @@ export class TextUtils {
         let offsetA = 0
         let wordCountA = minWordCount
         for (; position - minCharContext - offsetA >= 0; offsetA++) {
-            if (raw.substr(position - minCharContext - offsetA, 1).match(/[^\p{L}]/u)) {
+            if (raw.substr(position - minCharContext - offsetA, 1).match(/[^\p{L}\d]/u)) {
                 wordCountA -= 1
             }
             if (wordCountA == 0) {
@@ -53,7 +53,7 @@ export class TextUtils {
         let offsetB = 0
         let wordCountB = minWordCount
         for (; position + minCharContext + offsetB < raw.length; offsetB++) {
-            if (raw.substr(position + minCharContext + offsetB, 1).match(/[^\p{L}]/u)) {
+            if (raw.substr(position + minCharContext + offsetB, 1).match(/[^\p{L}\d]/u)) {
                 wordCountB -= 1
             }
             if (wordCountB == 0) {

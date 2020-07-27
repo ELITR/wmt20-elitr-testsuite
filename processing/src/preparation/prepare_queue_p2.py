@@ -43,7 +43,7 @@ if __name__ == '__main__':
         obj['queue_mkb'] = {}
         for doc in def_docs:
             target_markables = doc_markables[doc]
-            obj['queue_mkb'][doc] = list(target_markables) # random.sample(target_markables, len(target_markables))
+            obj['queue_mkb'][doc] = random.sample(target_markables, len(target_markables))
 
         obj['queue_mt'] = {}
         for doc in def_docs:

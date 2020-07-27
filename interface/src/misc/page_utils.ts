@@ -97,7 +97,7 @@ export class PageUtils {
                 element.scrollIntoView(false)
                 let parentEl = $(element.parentElement!)
                 if (parentEl.scrollTop()! > 0)
-                    parentEl.scrollTop(parentEl.scrollTop()! + 100)
+                    parentEl.scrollTop(parentEl.scrollTop()! + 50)
             }
         )
 

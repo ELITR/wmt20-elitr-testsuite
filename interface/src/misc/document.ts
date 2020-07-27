@@ -139,7 +139,7 @@ export class DocTgt {
 
         let srcLineLength = srcLine.length
         let tgtLineLength = tgtLine.length
-        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.9
+        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.88
         let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength) + lineOffset
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt_alone'>"
@@ -163,7 +163,7 @@ export class DocTgt {
 
         let srcLineLength = srcLine.length
         let tgtLineLength = tgtLine.length
-        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.9
+        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.88
         let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength) + lineOffset
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt'>"

@@ -32,72 +32,83 @@ users:
   - martin
 
 markables:
-  # -
-  #   - "S:BIG_NUMBERS"
-  #   - "mld"
-  #   - "million"
-  #   - "millions"
-  #   - "milionů"
-  #   - "miliard"
-  #   - "miliony"
-  #   - "milionu"
-  #   - "billion"
-  #   - "miliard"
-  # -
-  #   - "S:CURRENCY"
-  #   - "CZK"
-  #   - "EUR"
-  #   - "kč"
-  #   - "€"
-  #   - "korun"
-  # - 
-  #   - "S:PERCENT"
-  #   - "37 %"
-  #   - "85 %"
-  #   - "60 %"
-  #   - "41 %"
-  #   - "37%"
-  #   - "85%"
-  #   - "60%"
-  #   - "41%"
-  #   - "42,13 %"
-  #   - "5 %"
-  #   - "27,4 %"
-  #   - "42.13 %"
-  #   - "5%"
-  #   - "27.4%"
-  # - 
-  #   - "S:YEAR"
-  #   - "1990"
-  #   - "1992"
-  #   - "1993"
-  #   - "1999"
-  #   - "2000"
-  #   - "2001"
-  #   - "2003"
-  #   - "2004"
-  #   - "2005"
-  #   - "2006"
-  #   - "2007"
-  #   - "2008"
-  #   - "2010"
-  #   - "2012"
-  #   - "2013"
-  #   - "2015"
-  #   - "2016"
-  #   - "2017"
-  #   - "2018"
-  #   - "2019"
-  #   - "2020"
-  #   - "2030"
-  # - 
-  #   - "nku"
-  #   - "nků"
-  # -
-  #   - "nik"
+  # autoc
   - 
-    - "zip"
-    - "psč"
+    - "cena"
+    - "price"
+  -
+    - "Filipa Hrůzy"
+  -
+    - "zalistovacího"
+    - "zalistovací"
+
+  # euroe
+  -
+    - "skipped"
+  -
+    - "climate"
+  -
+    - "dare"
+  -
+    - "strike"
+  # kufr
+  -
+    - "party"
+    - "parties"
+    - "stranami"
+    - "strana"
+    - "strany"
+    - "účastníci"
+  -
+    - "nájmu"
+    - "lease"
+  -
+    - "podnájmu"
+    - "sublease"
+  -
+    - "vybavení a příslušenství"
+    - "equipment and amenities"
+  -
+    - "nájemkyně"
+    - "nájemkyní"
+    - "tenant"
+  -
+    - "podnájemkyně"
+    - "podnájemkyní"
+    - "podnájemkyni"
+    - "subtenant"
+    - "lessee"
+  -
+    - "předmětný"
+    - "předmětného"
+    - "apartment in question"
+  -
+    - "III"
+  -
+    - "II"
+  -
+    - "čl"
+    - "art"
+  -
+    - "slovy"
+    - "words"
+  -
+    - "cooperative"
+    - "družstvo"
+  -
+    - "team of owners"
+  -
+    - "supplement"
+    - "dodatek"
+    - "dodatku"
+    - "dodatkem"
+  -
+    - "Karolína Černá"
+  -
+    - "Marta Burešová"
+  -
+    - "Martin Bureš"
+  # Markables below not processed
   - 
     - "supreme"
     - "nejvyšší"
@@ -109,20 +120,9 @@ markables:
   -
     - "doporučení"
     - "recommendations"
-  # -
-  #   - audit
-  #   - auditu
-  #   - audity
-  #   - audits
-  -
-    - "slovy"
-    - "words"
   -
     - "bilateral"
     - "bilaterálních"
-  - 
-    - "cena"
-    - "price"
   -
     - "rodné číslo"
     - "r\\. č\\."
@@ -130,61 +130,10 @@ markables:
     - "OPPS"
     - "OP CBC"
   -
-    - "owner"
-    - "owners"
-    - "vlastníkem"
-    - "vlastník"
-  -
-    - "cooperative"
-    - "družstvo"
-  -
     - "term"
     - "terms"
   -
-    - "čl"
-    - "art"
-  -
     - "BRH"
-  - 
-    - "apartment"
-    - "bytem"
-    - "bytu"
-    - "byt"
-  -
-    - "party"
-    - "parties"
-    - "stranami"
-    - "strana"
-    - "strany"
-  -
-    - "nájemkyně"
-    - "tenant"
-  -
-    - "podnájemkyně"
-    - "podnájemkyní"
-    - "subtenant"
-  -
-    - "nájmu"
-    - "lease"
-  -
-    - "podnájmu"
-    - "sublease"
-  -
-    - "supplement"
-    - "dodatek"
-    - "dodatku"
-    - "dodatkem"
-  -
-    - "vybavení"
-    - "příslušenství"
-    - "amenities"
-    - "equipment"
-  -
-    - "Karolína Černá"
-  -
-    - "Marta Burešová"
-  -
-    - "Martin Bureš"
   -
     - "kontrola"
     - "kontroly"
