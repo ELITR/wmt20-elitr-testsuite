@@ -76,10 +76,21 @@ body {
     border: 1px solid black;
 }
 
-.waiter_highlight_line {
+.waiter_highlight_markable_tgt {
     /* text-decoration: underline;
     text-decoration-style: dotted; */
+    background-color: #7aa9dec0;
+    border-radius: 3px;
+}
+
+.waiter_highlight_markable_tgt_alone {
+    background-color: #668b4d98;
+    border-radius: 3px;
+}
+
+.waiter_highlight_line {
     background-color: #7aa9de60;
+    border-radius: 3px;
 }
 
 .waiter_p1_response, .waiter_p2_response {

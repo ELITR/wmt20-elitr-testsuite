@@ -33,9 +33,9 @@ export class TextUtils {
         return [position - minCharContext - offsetA, position + minCharContext + offsetB]
     }
 
-    public static contextWord(raw: string, position: number, minCharContext: number = 150, wordCount: number = 1): [number, number] {
+    public static contextWord(raw: string, position: number, minCharContext: number = 150, maxWordCount: number = 1): [number, number] {
         let offsetA = 0
-        let wordCountA = wordCount
+        let wordCountA = maxWordCount
         for (; position - minCharContext - offsetA >= 0; offsetA++) {
             if (raw.substr(position - minCharContext - offsetA, 1).match(/\W/)) {
                 wordCountA -= 1
@@ -49,7 +49,7 @@ export class TextUtils {
         }
 
         let offsetB = 0
-        let wordCountB = wordCount
+        let wordCountB = maxWordCount
         for (; position + minCharContext + offsetB < raw.length; offsetB++) {
             if (raw.substr(position + minCharContext + offsetB, 1).match(/\W/)) {
                 wordCountB -= 1
@@ -62,6 +62,8 @@ export class TextUtils {
             // offsetB -= 1
         }
 
-        return [position - offsetA - minCharContext, position + offsetB + minCharContext]
+        let finalA = Math.max(position - offsetA - minCharContext, 0)
+        let finalB = Math.min(position + offsetB + minCharContext, raw.length)
+        return [finalA, finalB]
     }
 }
