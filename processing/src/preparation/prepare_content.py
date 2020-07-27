@@ -30,6 +30,8 @@ if __name__ == '__main__':
     content['content_mt'] = {}
     content['indicies_src'] = {}
 
+    totalCount = 0
+
     for doc in def_docs:
         content['content_mt'][doc] = {}
 
@@ -37,10 +39,11 @@ if __name__ == '__main__':
         with open(filename, 'r') as f:
             lines_src = list(filter(lambda x: not re.match('^\s+$', x), f.readlines()))
         text = ''.join(lines_src)
-        indicies = markables.indicies(text, def_markables)
+        indicies, newCount = markables.indicies(text, def_markables)
+        totalCount += newCount
         content['content_src'][doc] = text
         content['indicies_src'][doc] = indicies
-        print(f'{doc} lines', len(lines_src))
+        print(f'{doc:6.6} lines {len(lines_src):3.0f}, markable occurences: {newCount:3.0f}')
 
         # ALIGNMENT ATTEMPT
         # if doc.endswith('c'):
@@ -94,6 +97,7 @@ if __name__ == '__main__':
             content['content_mt'][doc][mt] = text
             assert(len(lines_src) == len(lines_mt))
 
+    print(f'Total src occurences: {totalCount}')
 
     with open(args.out_content, 'w') as f:
         json.dump(content, f, ensure_ascii=False)

@@ -30,7 +30,7 @@ def indicies(text, markables, sensitive=False):
 
     markableMap = {k:v for k,v in markableMap.items() if len(v) != 0}
     # TODO: deduplicate
-    return markableMap
+    return markableMap, sum([len(v) for v in markableMap.values()])
 
 def indicies_visible(text, markables, sensitive=False):
-    return indicies(text, markables, sensitive).keys()
+    return indicies(text, markables, sensitive)[0].keys()

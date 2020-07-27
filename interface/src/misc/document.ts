@@ -60,16 +60,18 @@ export class DocTgt {
     public displayMarkable(doc_src: DocSrc, markable: string, index: number): string {
         let lineSectionIndex: { [key: number]: Array<[number, number]> } = {}
         let lineHighlightIndex: number
+        let lineHighlightIndexCount: number = 0
 
         doc_src.sections(markable).forEach((indicies, indiciesIndex) => {
             let mkbLine = doc_src.raw.substr(0, indicies[0]).linesCount()
-            if (index == indiciesIndex) {
-                lineHighlightIndex = mkbLine
-            }
             if (lineSectionIndex[mkbLine] != undefined) {
                 lineSectionIndex[mkbLine].push(indicies)
             } else {
                 lineSectionIndex[mkbLine] = [indicies]
+            }
+            if (index == indiciesIndex) {
+                lineHighlightIndex = mkbLine
+                lineHighlightIndexCount = lineSectionIndex[mkbLine].length
             }
         })
 
@@ -82,7 +84,7 @@ export class DocTgt {
             lineSectionIndex[key].forEach(([a1, a2]: [number, number], index: number) => {
                 if (index == 0)
                     return
-                if (a2 < lineSectionIndex[key][index-1][1])
+                if (a2 < lineSectionIndex[key][index - 1][1])
                     throw new Error('Sorted markable indicies overlap')
             })
         })
@@ -100,13 +102,18 @@ export class DocTgt {
                 let newOffset: number
 
                 for (let indicies of lineSectionIndex[curLineIndex]) {
-                    let posA = indicies[0] - lineSum + lineOffset
-                    let posB = indicies[1] - lineSum + lineOffset
+                    let posA = indicies[0] - lineSum
+                    let posB = indicies[1] - lineSum
 
                     if (curLineIndex == lineHighlightIndex) {
-                        [tmpLine, newOffset] = this.displayMarkableLineFull([posA, posB], srcLine, tmpLine)
+                        lineHighlightIndexCount -= 1;
+                        if (lineHighlightIndexCount == 0) {
+                            [tmpLine, newOffset] = this.displayMarkableLineFull([posA, posB], lineOffset, srcLine, tmpLine)
+                        } else {
+                            [tmpLine, newOffset] = this.displayMarkableLineEmpty([posA, posB], lineOffset, srcLine, tmpLine)
+                        }
                     } else {
-                        [tmpLine, newOffset] = this.displayMarkableLineEmpty([posA, posB], srcLine, tmpLine)
+                        [tmpLine, newOffset] = this.displayMarkableLineEmpty([posA, posB], lineOffset, srcLine, tmpLine)
                     }
                     lineOffset += newOffset
                 }
@@ -127,13 +134,13 @@ export class DocTgt {
     }
 
 
-    public displayMarkableLineEmpty(indicies: [number, number], srcLine: string, tgtLine: string): [string, number] {
+    public displayMarkableLineEmpty(indicies: [number, number], lineOffset: number, srcLine: string, tgtLine: string): [string, number] {
         let line = tgtLine.toString()
 
         let srcLineLength = srcLine.length
         let tgtLineLength = tgtLine.length
-        let avgIndicies = (indicies[0] + indicies[1]) / 2
-        let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength)
+        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.9
+        let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength) + lineOffset
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt_alone'>"
         const MKB_STYLE_B = "</span>"
@@ -151,13 +158,13 @@ export class DocTgt {
         return [line, offset]
     }
 
-    public displayMarkableLineFull(indicies: [number, number], srcLine: string, tgtLine: string): [string, number] {
+    public displayMarkableLineFull(indicies: [number, number], lineOffset: number, srcLine: string, tgtLine: string): [string, number] {
         let line = tgtLine.toString()
 
         let srcLineLength = srcLine.length
         let tgtLineLength = tgtLine.length
-        let avgIndicies = (indicies[0] + indicies[1]) / 2
-        let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength)
+        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.9
+        let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength) + lineOffset
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt'>"
         const MKB_STYLE_B = "</span>"

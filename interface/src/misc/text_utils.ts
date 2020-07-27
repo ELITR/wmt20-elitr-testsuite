@@ -34,7 +34,7 @@ export class TextUtils {
     }
 
     public static contextWord(raw: string, position: number, minCharContext: number = 150, minWordCount: number = 1): [number, number] {
-        
+        position = Math.min(position, raw.length-1)
 
         let offsetA = 0
         let wordCountA = minWordCount

@@ -6,13 +6,13 @@ data = load_all()
 errors = []
 
 for user in data.values():
-    for document in user.values():
+    for docName, document in user.items():
         for line in document.values():
             for (name, model) in line.items():
                 if name == 'time':
                     continue
                 if model['errors'] != '':
-                    errors += [x.strip() for x in model['errors'].lower().replace('.', '').replace(')', '').replace('(', '').split(',')]
+                    errors += [docName + ': ' + x.strip() for x in model['errors'].lower().replace('.', '').replace(')', '').replace('(', '').split(',')]
             
 
 errors = set(errors)
