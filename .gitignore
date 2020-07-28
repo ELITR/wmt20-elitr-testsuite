@@ -6,3 +6,4 @@ processing/data/**/*.txt
 processing/data/**/*.a
 processing/data/**/*.tok
 data/*
+processing/**/nc*

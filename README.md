@@ -74,16 +74,18 @@ The `newstest2020 online` models were stripped of all the language codes so that
 
 ### Data types
 
-| Document | Direction | Lines | Description | Source |
-|----------|-----------|-------|-------------|--------|
-| kufrc | cs->en | 29 | nájemní smlouva | SMLprodl |
-| kufre | en->cs | 29 | nájemní smlouva | SMLprodl |
-| autoc | cs->en | 18 | článek o motorkách | denik.cz.201550+blesk.cz.189684 |
-| euroe | en->cs | 13 | článek o Gretě | rt.com.113881 |
-| broukc | cs->en | 90 | audit | KA_13_04 |
-| brouke | en->cs | 90 | audit | KA_13_04 |
-| hrnekc | cs->en | 197 | audit | KA_06_03 |
-| hrneke | en->cs | 197 | audit | KA_06_03 |
+| Document | Direction | Lines | Markable Occurences | Description | Source |
+|----------|-----------|-------|---------------------|-------------|--------|
+| kufrc | cs->en | 29 | 73 | nájemní smlouva | SMLprodl |
+| kufre | en->cs | 29 | 70 | nájemní smlouva | SMLprodl |
+| autoc | cs->en | 18 | 11 | článek o motorkách | denik.cz.201550+blesk.cz.189684 |
+| euroe | en->cs | 13 | 15 | článek o Gretě | rt.com.113881 |
+| broukc | cs->en | 90 | 28 | audit | KA_13_04 |
+| brouke | en->cs | 90 | 18 | audit | KA_13_04 |
+| __Total__ | - | __269__ | __215__ | - | - |
+
+<!-- | hrnekc | cs->en | 197 | - | audit | KA_06_03 |
+| hrneke | en->cs | 197 | - | audit | KA_06_03 | -->
 
 
 ### Miscellaneous commands

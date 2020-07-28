@@ -54,7 +54,7 @@ export class DocSrc {
 
 export class DocTgt {
     constructor(public raw: string) { }
-    private static MIN_CHAR_CONTEXT = 10
+    private static MIN_CHAR_CONTEXT = 5
     private static MIN_WORD_COUNT = 1
 
     public displayMarkable(doc_src: DocSrc, markable: string, index: number): string {
@@ -62,7 +62,10 @@ export class DocTgt {
         let lineHighlightIndex: number
         let lineHighlightIndexCount: number = 0
 
-        doc_src.sections(markable).forEach((indicies, indiciesIndex) => {
+        let sections = doc_src.sections(markable)
+        sections.sort(([a1, a2]: [number, number], [b1, b2]: [number, number]) => a1 - b1)
+
+        sections.forEach((indicies, indiciesIndex) => {
             let mkbLine = doc_src.raw.substr(0, indicies[0]).linesCount()
             if (lineSectionIndex[mkbLine] != undefined) {
                 lineSectionIndex[mkbLine].push(indicies)
@@ -139,7 +142,7 @@ export class DocTgt {
 
         let srcLineLength = srcLine.length
         let tgtLineLength = tgtLine.length
-        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.88
+        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.9
         let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength) + lineOffset
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt_alone'>"
@@ -163,7 +166,7 @@ export class DocTgt {
 
         let srcLineLength = srcLine.length
         let tgtLineLength = tgtLine.length
-        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.88
+        let avgIndicies = (indicies[0] + indicies[1]) / 2 * 0.9
         let alignment = Math.round(avgIndicies * tgtLineLength / srcLineLength) + lineOffset
 
         const MKB_STYLE_A = "<span class='waiter_highlight_markable_tgt'>"

@@ -67,7 +67,7 @@ export class ModelSegement {
 
 export class ModelMT {
     public static ERROR_TYPES: Array<[string, string, string]> = [
-        ['nontranslated', 'Not translated', 'The markable of part of it was not translated.'],
+        ['nontranslated', 'Not translated', 'The markable ofrpart of it was not translated.'],
         ['tootranslated', 'Over-translated', "The markable was translated, but should not be."],
         ['terminology', 'Terminology', 'Misleading terminology is used.'],
         ['style', 'Style', 'Inappropriate style is used.'],

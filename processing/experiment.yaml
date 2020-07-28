@@ -41,7 +41,12 @@ markables:
   -
     - "zalistovacího"
     - "zalistovací"
-
+  - 
+    - "aktuální stav"
+  -
+    - "nezabírají kamery"
+  -
+    - "přecenění"
   # euroe
   -
     - "skipped"
@@ -51,6 +56,9 @@ markables:
     - "dare"
   -
     - "strike"
+  -
+    - "leader"
+    - "leaders"
   # kufr
   -
     - "party"
