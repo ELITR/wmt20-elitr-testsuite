@@ -76,12 +76,12 @@ The `newstest2020 online` models were stripped of all the language codes so that
 
 | Document | Direction | Lines | Markable Occurences | Description | Source |
 |----------|-----------|-------|---------------------|-------------|--------|
-| kufrc | cs->en | 29 | 73 | nájemní smlouva | SMLprodl |
-| kufre | en->cs | 29 | 70 | nájemní smlouva | SMLprodl |
-| autoc | cs->en | 18 | 11 | článek o motorkách | denik.cz.201550+blesk.cz.189684 |
-| euroe | en->cs | 13 | 15 | článek o Gretě | rt.com.113881 |
-| broukc | cs->en | 90 | 28 | audit | KA_13_04 |
-| brouke | en->cs | 90 | 18 | audit | KA_13_04 |
+| kufrc | cs->en | 29 | 73 | housing lease agreement | SMLprodl |
+| kufre | en->cs | 29 | 70 | housing lease agreement | SMLprodl |
+| autoc | cs->en | 18 | 11 | Brno Grand Prix article, highway accident report | denik.cz.201550+blesk.cz.189684 |
+| euroe | en->cs | 13 | 15 | Greta Thunberg's U.N. speech article | rt.com.113881 |
+| broukc | cs->en | 90 | 28 | Supreme Audit Office audit report | KA_13_04 |
+| brouke | en->cs | 90 | 18 | Supreme Audit Office audit report | KA_13_04 |
 | __Total__ | - | __269__ | __215__ | - | - |
 
 <!-- | hrnekc | cs->en | 197 | - | audit | KA_06_03 |
@@ -92,4 +92,5 @@ The `newstest2020 online` models were stripped of all the language codes so that
 
 ```
 scp testsuite:wmt20-elitr-testsuite/backend/logs/p1/ratings/*.json ~/wmt20/data/p1/
+scp testsuite:wmt20-elitr-testsuite/backend/logs/p2/ratings/*.json ~/wmt20/data/p2/
 ```

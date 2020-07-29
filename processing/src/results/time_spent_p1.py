@@ -16,7 +16,11 @@ def average_models(rating):
     out = [(float(x['fluency'])*float(x['adequacy'])) for x in rating.values()]
     return np.average(out)
 
+totalFaulty = 0
+totalEntries = 0
+
 def time_single(name, data):
+    global totalEntries, totalFaulty
     times = []
     ratingMult = []
     ratingFluency = []
@@ -32,11 +36,14 @@ def time_single(name, data):
                 ratingAdequacy.append(np.average([float(x['adequacy']) for x in secsent.values()]))
                 ratingConflict.append(np.average([1-1*x['conflicting'] for x in secsent.values()]))
             except Exception:
-                print(secsent)
+                # print(secsent)
+                totalFaulty += 1
     # times.sort()
 
+    totalEntries += len(times)
+
     if len(times) <= 1:
-        print(f'{name}: {len(times)} entry')
+        print(f'{name}: {len(times)} entries')
         print('Too little number of entries')
         return 0
 
@@ -58,6 +65,7 @@ def time_single(name, data):
 
     print(f'{name}: {len(times)} entries, {blocks} blocks')
     print(f'Block avg: {displayTime(np.average(blockTimes))}')
+    print(f'Entry avg: {displayTime(np.average(spentTime//len(times)))}')
     print(f'Total:     {displayTime(spentTime)}')
 
     if not args.no_graphs:
@@ -79,4 +87,7 @@ for (name, data) in dataAll.items():
     total += time_single(name, data)
     print()
 
-print(f'Total:     {displayTime(total)}')
+print(f'Total:')
+print(f'Time:     {displayTime(total)}')
+print(f'Entries:  {totalEntries}')
+print(f'Faulty:   {totalFaulty}')

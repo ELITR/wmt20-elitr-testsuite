@@ -67,9 +67,13 @@ if __name__ == '__main__':
             }
             obj['queue_doc'] = [doc]
             target_markables = doc_markables[doc]
-            obj['queue_mkb'] = { doc: random.sample(target_markables, len(target_markables)) }
+            obj['queue_mkb'] = {
+                doc: random.sample(target_markables, len(target_markables))
+            }
 
-            obj['queue_mt'] = {doc: random.sample(def_mts, len(def_mts))}
+            obj['queue_mt'] = {
+                doc: random.sample(def_mts, len(def_mts))
+            }
             content[name] = obj
             print(name)
 
