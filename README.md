@@ -84,10 +84,6 @@ The `newstest2020 online` models were stripped of all the language codes so that
 | brouke | en->cs | 90 | 18 | Supreme Audit Office audit report | KA_13_04 |
 | __Total__ | - | __269__ | __215__ | - | - |
 
-<!-- | hrnekc | cs->en | 197 | - | audit | KA_06_03 |
-| hrneke | en->cs | 197 | - | audit | KA_06_03 | -->
-
-
 ### Miscellaneous commands
 
 ```

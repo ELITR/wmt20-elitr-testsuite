@@ -69,6 +69,7 @@ def time_single(name, data):
     print(f'Total:     {displayTime(spentTime)}')
 
     if not args.no_graphs:
+        pass
         # plt.plot(ratingMult,     label='Fluency*Adequacy')
         # plt.plot(ratingFluency,  label='Fluency')
         # plt.plot(ratingAdequacy, label='Adequacy')

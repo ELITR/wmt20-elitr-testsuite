@@ -24,7 +24,6 @@ for user in data.values():
                     results.setdefault(docName, []).append(
                         (float(model['fluency']), float(model['adequacy'])))
         markables[docName] = len(docMkbs)/len(document.values())
-        # print(docMkbs)
 
 
 def avg_fluency(arr): return np.average([x[0] for x in arr])
@@ -36,10 +35,17 @@ results = {k: avg_all(arr) for (k, arr) in results.items()}
 results = {k: (x[0], x[1], x[0]*x[1]) for (k, x) in results.items()}
 resultsItems = sorted(results.items(), key=lambda x: x[1][2], reverse=True)
 
-print(f'{"Document":<10} & {"Fluency":<10} & {"Adequacy":<10} & {"Wrong markables":<10} & {"multiply (sort)":<10} \\\\')
+print(f'{"Document":<10} & {"Fluency":<10} & {"Adequacy":<10} & {"Multiply (sort)":<10} & {"Wrong markables":<10} \\\\')
 for name, result in resultsItems:
-    print(
-        f'{name:<10} & {result[0]:.2f} & {result[1]:10.2f} & {markables[name]:10.2f} & {result[2]:10.2f} \\\\')
+    print(f'{name:<10} & {result[0]:.2f} & {result[1]:10.2f} & {result[2]:10.2f} & {markables[name]:10.2f}  \\\\')
+
+fluencyTotal = np.average([x[1][0] for x in resultsItems])
+adequacyTotal = np.average([x[1][1] for x in resultsItems])
+multiTotal = np.average([x[1][2] for x in resultsItems])
+markablesTotal = np.average([markables[x[0]] for x in resultsItems])
+
+print(f'Average    & {fluencyTotal:.2f} & {adequacyTotal:10.2f} & {multiTotal:10.2f} & {markablesTotal:10.2f}  \\\\')
+
 
 resultsFluency = [x[1][0] for x in resultsItems]
 resultsAdequacy = [x[1][1] for x in resultsItems]

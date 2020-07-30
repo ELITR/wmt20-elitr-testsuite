@@ -7,3 +7,4 @@ processing/data/**/*.a
 processing/data/**/*.tok
 data/*
 processing/**/nc*
+.vscode/*
