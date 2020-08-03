@@ -106,7 +106,7 @@ for model in models:
 print('}')
 
 
-print('\n%----------')
+print('\n%%%'*4)
 
 models = sorted(models, key=lambda model: compute_bleu(tokenized.values(), model), reverse=True)
 
@@ -118,10 +118,10 @@ for model in models:
     stdT  = compute_bleu(tokenized.values(), model)[1]
 
     print(nicename(model), '\\hspace{-0.2cm}', end='')
-    print(' & ', '\\blgrwh{', f'{multT*2:.3f}', '}{0}', sep='', end='')
-    print(' & ', '\\blgrwh{', f'{multN*2:.3f}', '}{0}', sep='', end='')
-    print(' & ', '\\blgrwh{', f'{multA*2:.3f}', '}{0}', sep='', end='')
-    print(' & ', '\\blgrwh{', f'{multL*2:.3f}', '}{0}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multT*2:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multN*2:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multA*2:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multL*2:.3f}', '}', sep='', end='')
     print(' & ', f'{stdT:.2f}', sep='', end='\\\\\n')
 
-print('%----------')
+print('\n%%%'*4)

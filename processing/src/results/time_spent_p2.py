@@ -30,15 +30,7 @@ def time_single(name, data):
         for secsent in docmodel.values():
             times.append(secsent['time'])
             del secsent['time']
-            # try:
-            #     ratingMult.append(np.average([(float(x['fluency'])*float(x['adequacy'])) for x in secsent.values()]))
-            #     ratingFluency.append(np.average([float(x['fluency']) for x in secsent.values()]))
-            #     ratingAdequacy.append(np.average([float(x['adequacy']) for x in secsent.values()]))
-            #     ratingConflict.append(np.average([1-1*x['conflicting'] for x in secsent.values()]))
-            # except Exception:
-            #     # print(secsent)
-            #     totalFaulty += 1
-    # times.sort()
+    times.sort()
 
     totalEntries += len(times)
 
@@ -55,8 +47,8 @@ def time_single(name, data):
 
     for index, time in enumerate(times[1:], start=1):
         diff = time - times[index-1]
-        # 30 minutes for one view
-        if diff > 30*60*1000 or index == len(times)-1:
+        # 15 minutes for one view
+        if diff > 15*60*1000 or index == len(times)-1:
             blockTimes.append(times[index-1] - blockBegin)
             spentTime += times[index-1] - blockBegin
             blockBegin = time
@@ -68,18 +60,6 @@ def time_single(name, data):
     print(f'Entry avg: {displayTime(np.average(spentTime//len(times)))}')
     print(f'Total:     {displayTime(spentTime)}')
 
-    if not args.no_graphs:
-        pass
-        # plt.plot(ratingMult,     label='Fluency*Adequacy')
-        # plt.plot(ratingFluency,  label='Fluency')
-        # plt.plot(ratingAdequacy, label='Adequacy')
-        # plt.plot(ratingConflict, label='Non-Conflicting')
-        # # plt.plot(blockStop, [0.5]*len(blockStop), 'ro')
-        # plt.vlines(blockStop, 0.1, 1.1, linestyles='dashed', label='Block separator')
-        # plt.ylim(0,1.2)
-        # plt.legend()
-        # plt.show()
-
     return spentTime
 
 dataAll = load_all()
@@ -89,6 +69,8 @@ for (name, data) in dataAll.items():
     print()
 
 print(f'Total:')
-print(f'Time:     {displayTime(total)}')
-print(f'Entries:  {totalEntries}')
-print(f'Faulty:   {totalFaulty}')
+print(f'Time:       {displayTime(total)}')
+print(f'Entries:    {totalEntries:>7}')
+print(f'Avg.:       {displayTime(total/totalEntries)}')
+print(f'Model avg.: {displayTime(total/totalEntries/13)}')
+print(f'Faulty:     {totalFaulty:>7}')

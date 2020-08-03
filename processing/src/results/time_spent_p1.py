@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import argparse
 
 parser = argparse.ArgumentParser(description='Computes time.')
-parser.add_argument('--no-graphs', action='store_true', help='Skip displaying graphs', default=False)
+parser.add_argument('--graphs', action='store_true', help='Dispaly graphs', default=False)
 args = parser.parse_known_args()[0]
 
 def displayTime(spentTime):
@@ -68,7 +68,7 @@ def time_single(name, data):
     print(f'Entry avg: {displayTime(np.average(spentTime//len(times)))}')
     print(f'Total:     {displayTime(spentTime)}')
 
-    if not args.no_graphs:
+    if args.graphs:
         plt.plot(ratingMult,     label='Fluency*Adequacy')
         plt.plot(ratingFluency,  label='Fluency')
         plt.plot(ratingAdequacy, label='Adequacy')
@@ -88,6 +88,8 @@ for (name, data) in dataAll.items():
     print()
 
 print(f'Total:')
-print(f'Time:     {displayTime(total)}')
-print(f'Entries:  {totalEntries}')
-print(f'Faulty:   {totalFaulty}')
+print(f'Time:       {displayTime(total)}')
+print(f'Entries:    {totalEntries:>7}')
+print(f'Avg.:       {displayTime(total/totalEntries)}')
+print(f'Model avg.: {displayTime(total/totalEntries/13)}')
+print(f'Faulty:     {totalFaulty:>7}')

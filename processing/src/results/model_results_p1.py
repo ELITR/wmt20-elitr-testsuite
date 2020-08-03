@@ -92,7 +92,7 @@ for model, bleu in modelBLEU.items():
     ratings.append(multT)
 print(f'BLEU-rating correlation: {np.corrcoef(BLEUs, ratings)[0][1]:.2f}')
 
-print('\n%----------')
+print('\n%%%'*4)
 
 for model in models:
     multT = show_results(resultsDoc.values(), False)[model][2]
@@ -101,10 +101,10 @@ for model in models:
     multL = show_results([resultsDoc['kufrc'], resultsDoc['kufre']], False)[model][2]
     stdT = show_results(resultsDoc.values(), False)[model][3]
     print(nicename(model), '\\hspace{-0.2cm}', end='')
-    print(' & ', '\\blgrwh{', f'{multT:.3f}', '}{0}', sep='', end='')
-    print(' & ', '\\blgrwh{', f'{multN:.3f}', '}{0}', sep='', end='')
-    print(' & ', '\\blgrwh{', f'{multA:.3f}', '}{0}', sep='', end='')
-    print(' & ', '\\blgrwh{', f'{multL:.3f}', '}{0}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multT:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multN:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multA:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{multL:.3f}', '}', sep='', end='')
     print(' & ', f'{stdT:.2f}', sep='', end='\\\\\n')
 
-print('%----------')
+print('\n%%%'*4)
