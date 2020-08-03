@@ -8,3 +8,4 @@ processing/data/**/*.tok
 data/*
 processing/**/nc*
 tmp/*
+.vscode/*

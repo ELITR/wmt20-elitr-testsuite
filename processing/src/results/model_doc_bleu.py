@@ -118,10 +118,10 @@ for model in models:
     stdT  = compute_bleu(tokenized.values(), model)[1]
 
     print(nicename(model), '\\hspace{-0.2cm}', end='')
-    print(' & ', '\\blocksimple{', f'{multT*2:.3f}', '}', sep='', end='')
-    print(' & ', '\\blocksimple{', f'{multN*2:.3f}', '}', sep='', end='')
-    print(' & ', '\\blocksimple{', f'{multA*2:.3f}', '}', sep='', end='')
-    print(' & ', '\\blocksimple{', f'{multL*2:.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{(multT-0.2)/(0.5-0.2):.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{(multN-0.2)/(0.5-0.2):.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{(multA-0.2)/(0.5-0.2):.3f}', '}', sep='', end='')
+    print(' & ', '\\blocksimple{', f'{(multL-0.2)/(0.5-0.2):.3f}', '}', sep='', end='')
     print(' & ', f'{stdT:.2f}', sep='', end='\\\\\n')
 
 print('\n%%%'*4)

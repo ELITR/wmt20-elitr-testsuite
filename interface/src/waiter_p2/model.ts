@@ -74,7 +74,7 @@ export class ModelMT {
         ['sense', 'Sense', 'The meaning is different than intended.'],
         ['typography', 'Typography', 'Including wrong capitalization.'],
         ['role', 'Semantic role', 'The roles of objects/actors were altered.'],
-        ['grammar', 'Other gramamar', 'Grammar errors other than wrong semantic roles'],
+        ['grammar', 'Other grammar', 'Grammar errors other than wrong semantic roles'],
         ['inconsistency', 'Inconsistency', 'Different word choice than in the previous occurences.'],
         ['conflict', 'Conflict', 'Is in conflict with other markable.'],
         ['disappearance', 'Disappearance', 'The source markable is not present in the translation.']

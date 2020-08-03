@@ -1,4 +1,4 @@
-# WMT20 Elitr Annotation Frontend
+# WMT20 Markables
 
 Built with TypeScript/Webpack frontend and Python/Flask backend and processing scripts.
 

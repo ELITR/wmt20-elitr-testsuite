@@ -2,7 +2,7 @@
 
 from load import load_all
 import numpy as np
-from utils import nicename, nicephn, badline
+from utils import nicename, nicephn, badline, modelBLEUr, modelMULT
 
 data = load_all()
 resultsDoc = {}
@@ -44,6 +44,21 @@ def compute_average(userNames):
     return resultsAll
 
 
+def compute_corr(userNames, phnName):
+    phnResults = {}
+    for userName in userNames:
+        doc = resultsDoc[userName]
+        results = {model: avg_all(userName, phn) for (model, phn) in doc.items()}
+        for model, phnAvgs in results.items():
+            phnResults.setdefault(model, []).append(phnAvgs.get(phnName, (0,0))[0]*phnAvgs.get(phnName, (0,0))[1])
+
+    phnResults = {model: np.average(phnArr) for (model, phnArr) in phnResults.items()}
+    modelsFixed = list(models)
+    phnResults = [-phnResults[model] for model in models]
+    bleuResults = [modelBLEUr[model] for model in models]
+    multResults = [modelMULT[model] for model in models]
+    return np.corrcoef(phnResults, bleuResults)[0][1], np.corrcoef(phnResults, multResults)[0][1]
+
 print('\n%%%'*4)
 phnAll = sorted(
     phnAll,
@@ -51,18 +66,48 @@ phnAll = sorted(
     reverse=True
 )
 
+NEWS_NAMES = [x for x in data.keys() if x.startswith('auto') or x.startswith('euro')]
+AGGR_NAMES = [x for x in data.keys() if x.startswith('kufr')]
+AUDT_NAMES = [x for x in data.keys() if x.startswith('brouk')]
+
+# Average
+resT0 = np.average([phn_avg(data.keys(), phnName)[0] for phnName in phnAll])
+resN0 = np.average([phn_avg(NEWS_NAMES,  phnName)[0] for phnName in phnAll])
+resA0 = np.average([phn_avg(AGGR_NAMES,  phnName)[0] for phnName in phnAll])
+resL0 = np.average([phn_avg(AUDT_NAMES,  phnName)[0] for phnName in phnAll])
+
+resT1 = np.average([phn_avg(data.keys(), phnName)[1] for phnName in phnAll])
+resN1 = np.average([phn_avg(NEWS_NAMES,  phnName)[1] for phnName in phnAll])
+resA1 = np.average([phn_avg(AGGR_NAMES,  phnName)[1] for phnName in phnAll])
+resL1 = np.average([phn_avg(AUDT_NAMES,  phnName)[1] for phnName in phnAll])
+
+corr0 = np.average([compute_corr(data.keys(), phnName)[0] for phnName in phnAll])
+corr1 = np.average([compute_corr(data.keys(), phnName)[1] for phnName in phnAll])
+
+print('Average', '\\hspace{-0.2cm}', end='')
+print(' & ', '\\blockdual{', f'{resT0*2:.3f}', '}{' f'{resT1:.3f}', '}', sep='', end='')
+print(' & ', '\\blockdual{', f'{resN0*2:.3f}', '}{' f'{resN1:.3f}', '}', sep='', end='')
+print(' & ', '\\blockdual{', f'{resA0*2:.3f}', '}{' f'{resA1:.3f}', '}', sep='', end='')
+print(' & ', '\\blockdual{', f'{resL0*2:.3f}', '}{' f'{resL1:.3f}', '}', sep='', end='')
+print(' & ', f'{corr0:.2f}', sep='', end='') # bleu
+print(' & ', f'{corr1:.2f}', sep='', end='') # mult
+print('\\\\')
+
 for phnName in phnAll:
     resT = phn_avg(data.keys(), phnName)
-    # TODO: this needs to be manually updated
-    resN = phn_avg(['euroe-0'], phnName)
-    resA = phn_avg(['kufrc-1', 'kufre-0'], phnName)
-    resL = phn_avg(['broukc-0', 'brouke-0'], phnName)
+    resN = phn_avg(NEWS_NAMES, phnName)
+    resA = phn_avg(AGGR_NAMES, phnName)
+    resL = phn_avg(AUDT_NAMES, phnName)
+
+    corr = compute_corr(data.keys(), phnName)
     
     print(nicephn(phnName), '\\hspace{-0.2cm}', end='')
     print(' & ', '\\blockdual{', f'{resT[0]*2:.3f}', '}{' f'{resT[1]:.3f}', '}', sep='', end='')
     print(' & ', '\\blockdual{', f'{resN[0]*2:.3f}', '}{' f'{resN[1]:.3f}', '}', sep='', end='')
     print(' & ', '\\blockdual{', f'{resA[0]*2:.3f}', '}{' f'{resA[1]:.3f}', '}', sep='', end='')
     print(' & ', '\\blockdual{', f'{resL[0]*2:.3f}', '}{' f'{resL[1]:.3f}', '}', sep='', end='')
+    print(' & ', f'{corr[0]:.2f}', sep='', end='') # bleu
+    print(' & ', f'{corr[1]:.2f}', sep='', end='') # mult
     print('\\\\')
 
 print('\n%%%'*4)
