@@ -2,11 +2,10 @@
 
 from load import load_all
 import numpy as np
-import matplotlib.pyplot as plt
 import argparse
 
-parser = argparse.ArgumentParser(description='Computes time.')
-parser.add_argument('--no-graphs', action='store_true', help='Skip displaying graphs', default=False)
+parser = argparse.ArgumentParser()
+parser.add_argument('--rating-dir', default='../data/p2')
 args = parser.parse_known_args()[0]
 
 def displayTime(spentTime):
@@ -62,7 +61,7 @@ def time_single(name, data):
 
     return spentTime
 
-dataAll = load_all()
+dataAll = load_all(args.rating_dir)
 total = 0
 for (name, data) in dataAll.items():
     total += time_single(name, data)

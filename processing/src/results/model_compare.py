@@ -3,6 +3,8 @@
 from load import load_all
 import numpy as np
 
+raise Exception("This file does not work with the new Pandas update.")
+
 data = load_all()
 
 modelCDTn = 'CUNI-DocTransformer'

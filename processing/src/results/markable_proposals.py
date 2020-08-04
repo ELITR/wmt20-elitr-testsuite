@@ -2,6 +2,8 @@
 
 from load import load_all
 
+raise Exception("This file does not work with the new Pandas update.")
+
 data = load_all()
 errors = []
 

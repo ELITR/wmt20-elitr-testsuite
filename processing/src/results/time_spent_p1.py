@@ -2,11 +2,10 @@
 
 from load import load_all
 import numpy as np
-import matplotlib.pyplot as plt
 import argparse
 
-parser = argparse.ArgumentParser(description='Computes time.')
-parser.add_argument('--graphs', action='store_true', help='Dispaly graphs', default=False)
+parser = argparse.ArgumentParser()
+parser.add_argument('--rating-dir', default='../data/p1')
 args = parser.parse_known_args()[0]
 
 def displayTime(spentTime):
@@ -36,9 +35,8 @@ def time_single(name, data):
                 ratingAdequacy.append(np.average([float(x['adequacy']) for x in secsent.values()]))
                 ratingConflict.append(np.average([1-1*x['conflicting'] for x in secsent.values()]))
             except Exception:
-                # print(secsent)
                 totalFaulty += 1
-    # times.sort()
+    times.sort()
 
     totalEntries += len(times)
 
@@ -68,20 +66,9 @@ def time_single(name, data):
     print(f'Entry avg: {displayTime(np.average(spentTime//len(times)))}')
     print(f'Total:     {displayTime(spentTime)}')
 
-    if args.graphs:
-        plt.plot(ratingMult,     label='Fluency*Adequacy')
-        plt.plot(ratingFluency,  label='Fluency')
-        plt.plot(ratingAdequacy, label='Adequacy')
-        plt.plot(ratingConflict, label='Non-Conflicting')
-        # plt.plot(blockStop, [0.5]*len(blockStop), 'ro')
-        plt.vlines(blockStop, 0.1, 1.1, linestyles='dashed', label='Block separator')
-        plt.ylim(0,1.2)
-        plt.legend()
-        plt.show()
-
     return spentTime
 
-dataAll = load_all()
+dataAll = load_all(args.rating_dir)
 total = 0
 for (name, data) in dataAll.items():
     total += time_single(name, data)
