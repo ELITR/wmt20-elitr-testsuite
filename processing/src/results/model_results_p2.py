@@ -8,7 +8,7 @@ import pandas as pd
 data = load_all_p2(clear_badlines=True)
 
 def comp_occ(df, phnName):
-    return df.count()[phnName]/df.shape[0]
+    return df[phnName].count()/df.shape[0]
 def comp_sev(df, phnName):
     tmp = df[phnName].dropna()
     if tmp.shape[0] == 0:
@@ -18,10 +18,6 @@ def comp_sev(df, phnName):
 
 print('\n%%%'*4)
 
-print(' & ', '\\rot{Average}')
-for phnName in PHNALL:
-    print(' & ', '\\rot{', f'{nicephn(phnName)}', '}', end='')
-print('\\\\\n')
 
 modelKey = {}
 for model in data['model'].unique():
@@ -35,16 +31,20 @@ PHNALL = sorted(
     reverse=True
 )
 
+print(' & ', '\\rot{Average}')
+for phnName in PHNALL:
+    print(' & ', '\\rot{', f'{nicephn(phnName)}', '}', end='')
+print('\\\\\n')
+
 for model in sorted(data['model'].unique(), key=lambda model: modelKey[model][0]*modelKey[model][1]):
     dfModel = data[data['model'] == model]
-    phnDict = {phnName:(comp_occ(dfModel, phnName), comp_sev(dfModel, phnName)) for phnName in PHNALL}
-
     print(nicename(model), '\\hspace{-0.2cm}', end='')
-
+    
     print(' & ', '\\blockdual{', f'{modelKey[model][0]/0.2:.3f}', '}{' f'{modelKey[model][1]:.3f}', '}', sep='', end='')
     for phnName in PHNALL:
-        occurenceAvg, severityAvg = phnDict[phnName]
-        print(' & ', '\\blockdual{', f'{occurenceAvg/0.2:.3f}', '}{' f'{severityAvg:.3f}', '}', sep='', end='')
+        avgOcc = comp_occ(dfModel, phnName)
+        avgSev = comp_sev(dfModel, phnName)
+        print(' & ', '\\blockdual{', f'{avgOcc/0.2:.3f}', '}{' f'{avgSev:.3f}', '}', sep='', end='')
     print('\\\\')
 
 print('\n%%%'*4)

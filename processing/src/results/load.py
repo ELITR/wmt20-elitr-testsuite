@@ -119,6 +119,12 @@ def load_all_p2(clear_badlines=False):
     for (userName, userVal) in data.items():
         for (docMkbName, docVal) in userVal.items():
             docName, mkbName = docMkbName.split('-')
+            if docName in {'euroe', 'autoc'}:
+                domain = 'news'
+            elif docName in {'brouke', 'broukc'}:
+                domain = 'audit'
+            elif docName in {'kufre', 'kufrc'}:
+                domain = 'lease'
             for (lineKey, lineVal) in docVal.items():
                 for (modelName, modelVal) in lineVal.items():
                     if modelName == 'time':
@@ -127,6 +133,7 @@ def load_all_p2(clear_badlines=False):
                         **{
                             'user': userName,
                             'doc': docName,
+                            'domain': domain,
                             'mkb': mkbName,
                             'model': modelName,
                             'lineKey': lineKey

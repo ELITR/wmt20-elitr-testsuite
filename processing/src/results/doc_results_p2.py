@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from load import load_all_p1, load_all_p2, add_bleu
+from load import load_all_p1, load_all_p2
 from utils import nicename, nicephn, PHNALL
 
 data = load_all_p2(clear_badlines=True)
@@ -14,7 +14,7 @@ dataA = data.loc[data['domain'] == 'audit']
 dataL = data.loc[data['domain'] == 'lease']
 
 def comp_occ(df, phnName):
-    return df.count()[phnName]/df.shape[0]
+    return df[phnName].count()/df.shape[0]
 def comp_sev(df, phnName):
     tmp = df[phnName].dropna()
     if tmp.shape[0] == 0:

@@ -14,7 +14,7 @@ for model in sorted(data['model'].unique(), key=lambda modelName:data[data['mode
     dfModel = data[data['model'] == model]
 
     multT = dfModel['bleu'].mean()
-    stdT  = np.sqrt(dfModel['bleu'].std())
+    stdT  = dfModel.groupby('doc').mean()['bleu'].std()
     multN = dfModel[dfModel['domain'] ==  'news']['bleu'].mean()
     multA = dfModel[dfModel['domain'] == 'audit']['bleu'].mean()
     multL = dfModel[dfModel['domain'] == 'lease']['bleu'].mean()
