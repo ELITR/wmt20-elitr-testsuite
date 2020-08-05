@@ -13,7 +13,7 @@ modelREFn = 'ref'
 
 for (userKey, user) in data.items():
     for (docKey, document) in user.items():
-        for (lineKey, line) in document.items():
+        for (line, line) in document.items():
 
             modelCDT = line[modelCDTn]
             modelCTT = line[modelCTTn]
@@ -33,4 +33,4 @@ for (userKey, user) in data.items():
                 print(f'CDT: {float(modelCDT["fluency"]):3.2f}, {float(modelCDT["adequacy"]):3.2f}, {scoreCDT:3.2f}')
                 print(f'CTT: {float(modelCTT["fluency"]):3.2f}, {float(modelCTT["adequacy"]):3.2f}, {scoreCTT:3.2f}')
                 print(f'REF: {float(modelREF["fluency"]):3.2f}, {float(modelREF["adequacy"]):3.2f}, {scoreREF:3.2f}')
-                print(f'--  {userKey:<9} {docKey:<7} {lineKey:<4}')
+                print(f'--  {userKey:<9} {docKey:<7} {line:<4}')

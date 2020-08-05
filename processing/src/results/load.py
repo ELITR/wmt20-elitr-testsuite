@@ -44,9 +44,9 @@ def get_lines(dir, doc, model, line):
     if model in {'PROMT_NMT', 'eTranslation'}:
         model = 'PROMT_NMT-eTranslation'
     with open(f'{dir}/{doc}/{model}.txt', 'r') as f:
-        line_tgt = f.readlines()[line].rstrip('\n')
+        line_tgt = [x for x in f.readlines() if not re.match('^\s+$', x)][line].rstrip('\n')
     with open(f'{dir}/{doc}/ref.txt', 'r') as f:
-        line_ref = f.readlines()[line].rstrip('\n')
+        line_ref = [x for x in f.readlines() if not re.match('^\s+$', x)][line].rstrip('\n')
     return line_ref, line_tgt
 
 
@@ -67,8 +67,7 @@ def load_all_p1(add_bleu=False):
                     if modelName == 'time':
                         continue
                     lang = 'en' if docName.endswith('c') else 'cs'
-                    txt_ref, txt_tgt = get_lines(
-                        args.data_dir, docName, modelName, int(lineName))
+                    txt_ref, txt_tgt = get_lines(args.data_dir, docName, modelName, int(lineName))
 
                     errors = re.split(r'\W', modelVal.get('errors', ''))
                     errors = [x.lower() for x in errors if x != '' and len(x) >= 2]
@@ -107,12 +106,15 @@ def load_all_p1(add_bleu=False):
     return df
 
 
-def load_all_p2(clear_badlines=False):
+def load_all_p2(clear_badlines=False, add_bleu=False):
     print('Loading data')
     parser = argparse.ArgumentParser()
     parser.add_argument('--rating-dir', default='../data/p2/')
     parser.add_argument('--data-dir', default='./data/')
+    parser.add_argument('--line-mapping', default='./line_mapping.json')
     args = parser.parse_known_args()[0]
+
+    line_mapping = json.load(open(args.line_mapping, 'r'))
 
     data = load_all(args.rating_dir)
     processed_data = []
@@ -125,10 +127,13 @@ def load_all_p2(clear_badlines=False):
                 domain = 'audit'
             elif docName in {'kufre', 'kufrc'}:
                 domain = 'lease'
-            for (lineKey, lineVal) in docVal.items():
+            for (mkbIndex, lineVal) in docVal.items():
                 for (modelName, modelVal) in lineVal.items():
                     if modelName == 'time':
                         continue
+                    lang = 'en' if docName.endswith('c') else 'cs'
+                    lineName = line_mapping[docName][mkbName][mkbIndex]
+                    txt_ref, txt_tgt = get_lines(args.data_dir, docName, modelName, int(lineName))
                     processed_data.append({
                         **{
                             'user': userName,
@@ -136,7 +141,11 @@ def load_all_p2(clear_badlines=False):
                             'domain': domain,
                             'mkb': mkbName,
                             'model': modelName,
-                            'lineKey': lineKey
+                            'line': int(lineName),
+                            'mkbIndex': int(mkbIndex),
+                            'txt_ref': txt_ref,
+                            'txt_tgt': txt_tgt,
+                            'lang': lang,
                         },
                         **{k: float(v) for k, v in modelVal.items()}
                     })
@@ -144,10 +153,20 @@ def load_all_p2(clear_badlines=False):
     if clear_badlines:
         print('Removing bad lines')
         df = df[df.apply(lambda row: reasonable_line(df, row), axis=1)]
+
+
+    if add_bleu:
+        print('Computing BLEU')
+        def comp_bleu(row):
+            tok_ref = tokenize(row.txt_ref, row.lang)
+            tok_tgt = tokenize(row.txt_tgt, row.lang)
+            return 100*sentence_bleu([tok_ref], tok_tgt, smoothing_function=SmoothingFunction().method1)
+        df['bleu'] = df.apply(comp_bleu, axis=1)
+        
     return df
 
 def reasonable_line(df, row):
-    models = df[(df['lineKey'] == row.lineKey) & (df['mkb'] == row.mkb) & (df['user'] == row.user) & (df['doc'] == row.doc)]
+    models = df[(df['line'] == row.line) & (df['mkb'] == row.mkb) & (df['user'] == row.user) & (df['doc'] == row.doc)]
     for phName in PHNALL:
         if models[phName].isna().sum() == 0:
             return False
