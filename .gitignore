@@ -2,6 +2,7 @@
 *.swp
 backend/logs/*
 nohup.out
+processing/.ipynb_checkpoints/*
 processing/data/**/*.txt
 processing/data/**/*.a
 processing/data/**/*.tok

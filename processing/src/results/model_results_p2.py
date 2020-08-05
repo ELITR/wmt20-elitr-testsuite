@@ -16,14 +16,28 @@ def comp_sev(df, phnName):
     else:
         return tmp.mean()
 
-print('\n%%%'*4)
 
 
 modelKey = {}
+modelPhnKey = {}
+phnKey = {}
 for model in data['model'].unique():
     dfModel = data[data['model'] == model]
     phnDict = {phnName:(comp_occ(dfModel, phnName), comp_sev(dfModel, phnName)) for phnName in PHNALL}
+    modelPhnKey[model] = phnDict
     modelKey[model] = (np.average([x[0] for x in phnDict.values()]), np.average([x[1] for x in phnDict.values()]))
+
+print('Correlations')
+for phnName in PHNALL:
+    phnKey[phnName] = [modelV[phnName][0]*modelV[phnName][1] for modelV in modelPhnKey.values()]
+corrs = {}
+for (i, phnName1) in enumerate(PHNALL):
+    for phnName2 in PHNALL[(i+1):]:
+        corrs[phnName1 + '-' + phnName2] = np.corrcoef([phnKey[phnName1], phnKey[phnName2]])[0][1]
+print('\n'.join([k + ': ' + str(v) for k,v in  corrs.items() if abs(v) >= 0.6]))
+
+
+print('\n%%%'*4)
 
 PHNALL = sorted(
     PHNALL,
