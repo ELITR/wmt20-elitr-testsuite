@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from utils import nicename, nicephn, PHNALL
+from utils import niceNameModel, niceNamePhn, PHNALL
 from load import load_all_p1, load_all_p2
 import pandas as pd
 

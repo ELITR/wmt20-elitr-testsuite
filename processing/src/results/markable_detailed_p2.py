@@ -2,7 +2,7 @@
 
 from load import load_all
 import numpy as np
-from utils import nicename, nicephn
+from utils import niceNameModel, niceNamePhn
 
 raise Exception("This file does not work with the new Pandas update.")
 

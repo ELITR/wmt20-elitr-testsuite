@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from utils import nicename
+from utils import niceNameModel
 from load import load_all_p1
 import pandas as pd
 
@@ -19,7 +19,7 @@ for model in sorted(data['model'].unique(), key=lambda modelName:data[data['mode
     multA = dfModel[dfModel['domain'] == 'audit']['mult'].mean()
     multL = dfModel[dfModel['domain'] == 'lease']['mult'].mean()
 
-    print(nicename(model), '\\hspace{-0.2cm}', end='')
+    print(niceNameModel(model), '\\hspace{-0.2cm}', end='')
     print(' & ', '\\blocksimple{', f'{(multT-0.4)/(1-0.4):.3f}', '}', sep='', end='')
     print(' & ', '\\blocksimple{', f'{(multN-0.4)/(1-0.4):.3f}', '}', sep='', end='')
     print(' & ', '\\blocksimple{', f'{(multA-0.4)/(1-0.4):.3f}', '}', sep='', end='')

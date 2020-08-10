@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 from load import load_all_p1, load_all_p2
-from utils import nicename, nicephn, PHNALL
+from utils import niceNameModel, niceNamePhn, PHNALL
 
 data = load_all_p2(clear_badlines=True)
 dataP1 = load_all_p1(add_bleu=True)
@@ -77,7 +77,7 @@ for phnName in PHNALL:
     corrBLEU = corrScores['bleu']
     corrMULT = corrScores['mult']
 
-    print(nicephn(phnName), '\\hspace{-0.2cm}', end='')
+    print(niceNamePhn(phnName), '\\hspace{-0.2cm}', end='')
     print(' & \\blockdual{', f'{occT*5:.3f}', '}{' f'{sevT:.3f}', '}', sep='', end='')
     print(' & \\blockdual{', f'{occN*5:.3f}', '}{' f'{sevN:.3f}', '}', sep='', end='')
     print(' & \\blockdual{', f'{occA*5:.3f}', '}{' f'{sevA:.3f}', '}', sep='', end='')

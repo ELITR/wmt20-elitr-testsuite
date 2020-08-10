@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from utils import nicename, nicephn, PHNALL
+from utils import niceNameModel, niceNamePhn, PHNALL
 from load import load_all_p2
 import pandas as pd
 
@@ -47,12 +47,12 @@ PHNALL = sorted(
 
 print(' & ', '\\rot{Average}')
 for phnName in PHNALL:
-    print(' & ', '\\rot{', f'{nicephn(phnName)}', '}', end='')
+    print(' & ', '\\rot{', f'{niceNamePhn(phnName)}', '}', end='')
 print('\\\\\n')
 
 for model in sorted(data['model'].unique(), key=lambda model: modelKey[model][0]*modelKey[model][1]):
     dfModel = data[data['model'] == model]
-    print(nicename(model), '\\hspace{-0.2cm}', end='')
+    print(niceNameModel(model), '\\hspace{-0.2cm}', end='')
     
     print(' & ', '\\blockdual{', f'{modelKey[model][0]/0.2:.3f}', '}{' f'{modelKey[model][1]:.3f}', '}', sep='', end='')
     for phnName in PHNALL:

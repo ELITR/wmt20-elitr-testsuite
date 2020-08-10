@@ -1,7 +1,18 @@
 import numpy as np
 import mosestokenizer
 
-def nicename(model):
+def niceNameDoc(doc):
+    mapping = {
+        'brouke': 'Audit (en)',
+        'broukc': 'Audit (cs)',
+        'kufre':  'Lease (en)',
+        'kufrc':  'Lease (cs)',
+        'euroe':  'News (en)',
+        'autoc':  'News (cs)',
+    }
+    return mapping[doc] if doc in mapping else doc
+
+def niceNameModel(model):
     mapping = {
         'ref': 'Reference', 'PROMT_NMT': 'PROMT\\_NMT',
         'newstest2020-online-b.sgm': 'Online-B',
@@ -11,7 +22,7 @@ def nicename(model):
     return mapping[model] if model in mapping else model
 
 
-def nicephn(phn):
+def niceNamePhn(phn):
     mapping = {
         'grammar': 'Other grammar',
         'role': 'Semantic role',
