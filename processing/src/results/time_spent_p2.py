@@ -25,10 +25,17 @@ def time_single(name, data):
     ratingFluency = []
     ratingAdequacy = []
     ratingConflict = []
+    skip = 0
+    prevTime = 0
     for docmodel in data.values():
         for secsent in docmodel.values():
-            times.append(secsent['time'])
+            curTime = secsent['time']
             del secsent['time']
+            times.append(curTime)
+            if prevTime > curTime:
+                skip += 1
+            prevTime = curTime
+
     times.sort()
 
     totalEntries += len(times)
@@ -58,6 +65,7 @@ def time_single(name, data):
     print(f'Block avg: {displayTime(np.average(blockTimes))}')
     print(f'Entry avg: {displayTime(np.average(spentTime//len(times)))}')
     print(f'Total:     {displayTime(spentTime)}')
+    print(f'Skips:     {skip:>7}')
 
     return spentTime
 
