@@ -12,6 +12,17 @@ def niceNameDoc(doc):
     }
     return mapping[doc] if doc in mapping else doc
 
+def niceNameDocArrow(doc):
+    mapping = {
+        'brouke': 'Audit $\\rightarrow$cs',
+        'broukc': 'Audit $\\rightarrow$en',
+        'kufre':  'Lease $\\rightarrow$cs',
+        'kufrc':  'Lease $\\rightarrow$en',
+        'euroe':  'News $\\rightarrow$cs',
+        'autoc':  'News $\\rightarrow$en',
+    }
+    return mapping[doc] if doc in mapping else doc
+
 def niceNameModel(model):
     mapping = {
         'ref': 'Reference', 'PROMT_NMT': 'PROMT\\_NMT',

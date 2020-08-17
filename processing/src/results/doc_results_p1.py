@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from load import load_all_p1
-from utils import niceNameDoc
+from utils import niceNameDocArrow
 import numpy as np
 import re
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ for docName in sorted(data['doc'].unique(), key=lambda docName: data[data['doc']
     errsAvg = dfDoc['errors'].mean()
     bleuAvg = dfDoc['bleu'].mean()
     bleuStd = np.sqrt(dfDoc['bleu'].std())
-    print(f'{niceNameDoc(docName):<9} & {multAvg:10.2f} & {errsAvg:10.2f} & {bleuAvg:10.2f}', '\\pmsmall{', f'{bleuStd:4.2f}' ,'} \\\\')
+    print(f'{niceNameDocArrow(docName):<9} & {multAvg:10.2f} & {errsAvg:10.2f} & {bleuAvg:10.2f}', '\\pmsmall{', f'{bleuStd:4.2f}' ,'} \\\\')
 
 print('\\hline')
 multAvg = data.mean()['mult']

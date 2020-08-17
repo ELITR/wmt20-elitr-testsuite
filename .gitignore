@@ -1,12 +1,11 @@
 *.pyc
 *.swp
+tmp/*
 backend/logs/*
 nohup.out
 processing/.ipynb_checkpoints/*
-processing/data/**/*.txt
-processing/data/**/*.a
-processing/data/**/*.tok
-data/*
 processing/**/nc*
-tmp/*
+processing/doc_data/**/*.txt
+processing/doc_data/**/*.sgm
+collected_data/**/*.json
 .vscode/*

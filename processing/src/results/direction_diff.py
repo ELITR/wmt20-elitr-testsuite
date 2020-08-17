@@ -29,20 +29,34 @@ else:
             return tmp.mean()
 
 
-    for model in dataP2['model'].unique():
-        dataE = dataP2[(dataP2['model'] == model) & (dataP2['lang'] == 'en')]
-        dataC = dataP2[(dataP2['model'] == model) & (dataP2['lang'] == 'cs')]
+    # for model in dataP2['model'].unique():
+    model = 'CUNI-DocTransformer'
+    dataE = dataP2[(dataP2['model'] == model) & (dataP2['lang'] == 'en')]
+    dataC = dataP2[(dataP2['model'] == model) & (dataP2['lang'] == 'cs')]
 
-        occE = np.average([comp_occ(dataE, phnName) for phnName in PHNALL])
-        sevE = np.average([comp_sev(dataE, phnName) for phnName in PHNALL])
-        occC = np.average([comp_occ(dataC, phnName) for phnName in PHNALL])
-        sevC = np.average([comp_sev(dataC, phnName) for phnName in PHNALL])
+    occE = np.average([comp_occ(dataE, phnName) for phnName in PHNALL])
+    sevE = np.average([comp_sev(dataE, phnName) for phnName in PHNALL])
+    occC = np.average([comp_occ(dataC, phnName) for phnName in PHNALL])
+    sevC = np.average([comp_sev(dataC, phnName) for phnName in PHNALL])
 
-        print(model, 'en', 'cs')
-        print(occE, occC)
-        print(sevE, sevC)
-        # print(occE*sevE-occC*sevC)
+    print(model, 'en', 'cs')
+    print(occE, occC)
+    print(sevE, sevC)
+    # print(occE*sevE-occC*sevC)
+    print()
+    for phnName in PHNALL:
+        occE = comp_occ(dataE, phnName)
+        sevE = comp_sev(dataE, phnName)
+        occC = comp_occ(dataC, phnName)
+        sevC = comp_sev(dataC, phnName)
+
+        print(phnName, 'en', 'cs')
+        print(occE, occC, occE-occC)
+        print(sevE, sevC, sevE-sevC)
         print()
+            
+
+        
 
 
     dataE = dataP2[(dataP2['lang'] == 'en')]
