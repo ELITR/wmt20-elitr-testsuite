@@ -109,8 +109,8 @@ def load_all_p1(add_bleu=False):
 def load_all_p2(clear_badlines=False, add_bleu=False):
     print('Loading data')
     parser = argparse.ArgumentParser()
-    parser.add_argument('--rating-dir', default='../data/p2/')
-    parser.add_argument('--data-dir', default='./data/')
+    parser.add_argument('--rating-dir', default='../collected_data/p2/')
+    parser.add_argument('--data-dir', default='./doc_data/')
     parser.add_argument('--line-mapping', default='./line_mapping.json')
     args = parser.parse_known_args()[0]
 

@@ -3,7 +3,7 @@
 tmp/*
 backend/logs/*
 nohup.out
-processing/.ipynb_checkpoints/*
+**/.ipynb_checkpoints/*
 processing/**/nc*
 processing/doc_data/**/*.txt
 processing/doc_data/**/*.sgm
