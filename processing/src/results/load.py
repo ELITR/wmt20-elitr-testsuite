@@ -53,8 +53,8 @@ def get_lines(dir, doc, model, line):
 def load_all_p1(add_bleu=False):
     print('Loading data')
     parser = argparse.ArgumentParser()
-    parser.add_argument('--rating-dir', default='../data/p1/')
-    parser.add_argument('--data-dir', default='./data/')
+    parser.add_argument('--rating-dir', default='../collected_data/p1/')
+    parser.add_argument('--data-dir', default='./doc_data/')
     args = parser.parse_known_args()[0]
 
     data = load_all(args.rating_dir)
