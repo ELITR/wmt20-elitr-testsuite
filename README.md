@@ -1,6 +1,16 @@
 # WMT20 Markables
 
-Built with TypeScript/Webpack frontend and Python/Flask backend and processing scripts.
+Built with TypeScript/Webpack frontend and Python/Flask backend and processing scripts. Please cite as:
+
+```
+@inproceedings{zouhar2020wmt20,
+  title={WMT20 Document-Level Markable Error Exploration},
+  author={Zouhar, Vil{\'e}m and Vojt{\v{e}}chov{\'a}, Tereza and Bojar, Ond{\v{r}}ej},
+  booktitle={Proceedings of the Fifth Conference on Machine Translation},
+  pages={371--380},
+  year={2020}
+}
+```
 
 ## Development
 
