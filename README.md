@@ -1,6 +1,6 @@
 # WMT20 Markables
 
-Built with TypeScript/Webpack frontend and Python/Flask backend and processing scripts. Please cite as:
+Built with TypeScript/Webpack frontend and Python/Flask backend and processing scripts. Read the paper [here](https://aclanthology.org/2020.wmt-1.41.pdf) and please cite it as:
 
 ```
 @inproceedings{zouhar2020wmt20,
