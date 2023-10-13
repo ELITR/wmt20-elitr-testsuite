@@ -8,21 +8,19 @@ Built with TypeScript/Webpack frontend and Python/Flask backend and processing s
   author={Zouhar, Vil{\'e}m and Vojt{\v{e}}chov{\'a}, Tereza and Bojar, Ond{\v{r}}ej},
   booktitle={Proceedings of the Fifth Conference on Machine Translation},
   pages={371--380},
-  year={2020}
+  year={2020},
+  url={https://aclanthology.org/2020.wmt-1.41}
 }
 ```
 
+Published data:
+- [`processing/doc_data/doc_data.tar.xz`](processing/doc_data/doc_data.tar.xz): documents (sources and references and machine translations) 
+- [`collected_data/collected_data.tar.xz`](collected_data/collected_data.tar.xz): collected annotations 
+
 ## Development
 
-### Interface
-
-After `git clone` and `npm install` run `npm run build`, which outputs the whole frontend to `interface/dist`.
-
-Furthermore you can run `npm run dev`, which starts a local http server and serves the current project and recompiles & reloads on any code change.
-
-### Server
-
-To run the server simply execute the `run.sh`. Make sure that the url and the port matches the one specified in the interface.
+- **Interface**: After `git clone` and `npm install` run `npm run build`, which outputs the whole frontend to `interface/dist`. Furthermore you can run `npm run dev`, which starts a local http server and serves the current project and recompiles & reloads on any code change.
+- **Server**: To run the server simply execute the `run.sh`. Make sure that the url and the port matches the one specified in the interface.
 
 ## Experiment preparation
 
@@ -74,13 +72,8 @@ done
 
 ### Model renaming
 
-#### PROMT_NMT - eTranslation
-
-Since `PROMT_NMT` only does cs->en and `eTranslation` en->cs, the models were unified into one called `PROMT_NMT-eTranslation` so that it's easier to process. They should be separated in the evaluation.
-
-#### Newstest online-[abc]
-
-The `newstest2020 online` models were stripped of all the language codes so that in both directions only three models could be used: `newstest2020-online-[abc].sgm`.
+- **PROMT_NMT - eTranslation**: Since `PROMT_NMT` only does cs->en and `eTranslation` en->cs, the models were unified into one called `PROMT_NMT-eTranslation` so that it's easier to process. They should be separated in the evaluation.
+- **Newstest online-[abc]**: The `newstest2020 online` models were stripped of all the language codes so that in both directions only three models could be used: `newstest2020-online-[abc].sgm`.
 
 ### Data types
 
@@ -94,9 +87,3 @@ The `newstest2020 online` models were stripped of all the language codes so that
 | brouke | en->cs | 90 | 18 | Supreme Audit Office audit report | KA_13_04 |
 | __Total__ | - | __269__ | __215__ | - | - |
 
-### Miscellaneous commands
-
-```
-scp testsuite:wmt20-elitr-testsuite/backend/logs/p1/ratings/*.json ~/wmt20/data/p1/
-scp testsuite:wmt20-elitr-testsuite/backend/logs/p2/ratings/*.json ~/wmt20/data/p2/
-```
