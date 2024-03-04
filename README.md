@@ -13,9 +13,15 @@ Built with TypeScript/Webpack frontend and Python/Flask backend and processing s
 }
 ```
 
-Published data:
+This dataset contains human annotated translation quality of terminologies/markables:
 - [`processing/doc_data/doc_data.tar.xz`](processing/doc_data/doc_data.tar.xz): documents (sources and references and machine translations) 
 - [`collected_data/collected_data.tar.xz`](collected_data/collected_data.tar.xz): collected annotations 
+
+The easiest way of accessing the data is [via HuggingFace](https://huggingface.co/datasets/zouharvi/wmt20-markables):
+```python3
+from datasets import load_dataset
+dataset = load_dataset("zouharvi/wmt20-markables")
+```
 
 ## Development
 
